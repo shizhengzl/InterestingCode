@@ -18,16 +18,18 @@
         public DefaultSqlite()
             : base("name=DefaultSqlite")
         {
-           
+
         }
 
         //为您要在模型中包含的每种实体类型都添加 DbSet。有关配置和使用 Code First  模型
         //的详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=390109。
 
         // public virtual DbSet<MyEntity> MyEntities { get; set; }
-         public virtual DbSet<SQLConfig> SQLConfigs { get; set; }
-         public virtual DbSet<DataTypeConfig> DataTypeConfigs { get; set; }
-         public virtual DbSet<DataBaseAddress> DataBaseAddresss { get; set; }
+        public virtual DbSet<SQLConfig> SQLConfigs { get; set; }
+        public virtual DbSet<DataTypeConfig> DataTypeConfigs { get; set; }
+        public virtual DbSet<DataBaseAddress> DataBaseAddresss { get; set; }
+        public virtual DbSet<Variable> Variables { get; set; }
+        public virtual DbSet<ConnectionString> ConnectionStrings { get; set; }
     }
 
     //public class MyEntity
@@ -36,6 +38,15 @@
     //    public string Name { get; set; }
     //}
 
+    public class ConnectionString
+    {
+        [Key]
+        public Int32 Id { get; set; }
+
+        public DataBaseType Type { get; set; }
+
+        public string Connection { get; set; }
+    }
 
     public class SQLConfig
     {
@@ -67,8 +78,10 @@
         public DataBaseType Type { get; set; }
 
         public string DBType { get; set; }
-        
-        public string CSharpType { get; set; } 
+
+        public string CSharpType { get; set; }
+
+        public string SQLDBType { get; set; }
     }
 
     public class Variable
