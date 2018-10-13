@@ -27,7 +27,7 @@
         // public virtual DbSet<MyEntity> MyEntities { get; set; }
         public virtual DbSet<SQLConfig> SQLConfigs { get; set; }
         public virtual DbSet<DataTypeConfig> DataTypeConfigs { get; set; }
-        public virtual DbSet<DataBaseAddress> DataBaseAddresss { get; set; }
+        public virtual DbSet<DataBaseAddress> DataBaseAddresses { get; set; }
         public virtual DbSet<Variable> Variables { get; set; }
         public virtual DbSet<ConnectionString> ConnectionStrings { get; set; }
     }
@@ -77,7 +77,10 @@
         public Int32 Id { get; set; }
         public DataBaseType Type { get; set; }
 
-        public string DBType { get; set; }
+        public string SQLServerType { get; set; }
+        public string MySqlType { get; set; }
+        public string OracleType { get; set; }
+        public string SQLiteType { get; set; }
 
         public string CSharpType { get; set; }
 
@@ -103,10 +106,10 @@
 
     public enum DataSourceType
     {
-        DatabaseType = 1,
-        CSharpType = 2,
-        StringType = 3,
-        SQLType = 4
+        DatabaseType = 0,
+        CSharpType = 1,
+        StringType = 2,
+        SQLType = 3
     }
 
     public enum CharStatu

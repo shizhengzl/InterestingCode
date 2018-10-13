@@ -38,8 +38,8 @@ namespace VSBussinessExtenstion.Migrations
                 GetColumnSQL = ""
             });
 
-            context.DataBaseAddresss.RemoveRange(context.DataBaseAddresss.ToList());
-            context.DataBaseAddresss.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() {  Address=".", Password="95938",User="sa",DefaultDatabase= "dotnet_erp60", DBType = Core.UsuallyCommon.DataBaseType.SQLServer});
+            context.DataBaseAddresses.RemoveRange(context.DataBaseAddresses.ToList());
+            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() {  Address=".", Password="sasa",User="sa",DefaultDatabase= "", DBType = Core.UsuallyCommon.DataBaseType.SQLServer});
 
 
 

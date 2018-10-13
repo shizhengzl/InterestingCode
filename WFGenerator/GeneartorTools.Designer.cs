@@ -31,23 +31,25 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControlALL = new System.Windows.Forms.TabControl();
             this.tabPageSQLGeneartor = new System.Windows.Forms.TabPage();
+            this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
+            this.gbSnippet = new System.Windows.Forms.GroupBox();
+            this.bgselect = new System.Windows.Forms.GroupBox();
+            this.gbleft = new System.Windows.Forms.GroupBox();
+            this.gtree = new System.Windows.Forms.GroupBox();
+            this.TreeServer = new System.Windows.Forms.TreeView();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.pSearch = new System.Windows.Forms.Panel();
             this.tabPageCsharpGenerator = new System.Windows.Forms.TabPage();
             this.tabPageString = new System.Windows.Forms.TabPage();
             this.tabPageSQLCompare = new System.Windows.Forms.TabPage();
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
-            this.gbleft = new System.Windows.Forms.GroupBox();
-            this.bgselect = new System.Windows.Forms.GroupBox();
-            this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
-            this.gbSnippet = new System.Windows.Forms.GroupBox();
-            this.pSearch = new System.Windows.Forms.Panel();
-            this.gtree = new System.Windows.Forms.GroupBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.TreeServer = new System.Windows.Forms.TreeView();
+            this.tabControlSet = new System.Windows.Forms.TabControl();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
-            this.gbleft.SuspendLayout();
             this.PanSelectAndSnippet.SuspendLayout();
+            this.gbleft.SuspendLayout();
             this.gtree.SuspendLayout();
+            this.tabPageSystemConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -84,68 +86,6 @@
             this.tabPageSQLGeneartor.Text = "SQL Generoator";
             this.tabPageSQLGeneartor.UseVisualStyleBackColor = true;
             // 
-            // tabPageCsharpGenerator
-            // 
-            this.tabPageCsharpGenerator.Location = new System.Drawing.Point(4, 22);
-            this.tabPageCsharpGenerator.Name = "tabPageCsharpGenerator";
-            this.tabPageCsharpGenerator.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCsharpGenerator.Size = new System.Drawing.Size(792, 439);
-            this.tabPageCsharpGenerator.TabIndex = 1;
-            this.tabPageCsharpGenerator.Text = "CSharp Generator";
-            this.tabPageCsharpGenerator.UseVisualStyleBackColor = true;
-            // 
-            // tabPageString
-            // 
-            this.tabPageString.Location = new System.Drawing.Point(4, 22);
-            this.tabPageString.Name = "tabPageString";
-            this.tabPageString.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageString.Size = new System.Drawing.Size(792, 439);
-            this.tabPageString.TabIndex = 2;
-            this.tabPageString.Text = "String";
-            this.tabPageString.UseVisualStyleBackColor = true;
-            // 
-            // tabPageSQLCompare
-            // 
-            this.tabPageSQLCompare.Location = new System.Drawing.Point(4, 22);
-            this.tabPageSQLCompare.Name = "tabPageSQLCompare";
-            this.tabPageSQLCompare.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSQLCompare.Size = new System.Drawing.Size(792, 439);
-            this.tabPageSQLCompare.TabIndex = 3;
-            this.tabPageSQLCompare.Text = "SQL Compare";
-            this.tabPageSQLCompare.UseVisualStyleBackColor = true;
-            // 
-            // tabPageSystemConfig
-            // 
-            this.tabPageSystemConfig.Location = new System.Drawing.Point(4, 22);
-            this.tabPageSystemConfig.Name = "tabPageSystemConfig";
-            this.tabPageSystemConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSystemConfig.Size = new System.Drawing.Size(792, 439);
-            this.tabPageSystemConfig.TabIndex = 4;
-            this.tabPageSystemConfig.Text = "System Config";
-            this.tabPageSystemConfig.UseVisualStyleBackColor = true;
-            // 
-            // gbleft
-            // 
-            this.gbleft.Controls.Add(this.gtree);
-            this.gbleft.Controls.Add(this.pSearch);
-            this.gbleft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.gbleft.Location = new System.Drawing.Point(3, 3);
-            this.gbleft.Name = "gbleft";
-            this.gbleft.Size = new System.Drawing.Size(367, 632);
-            this.gbleft.TabIndex = 0;
-            this.gbleft.TabStop = false;
-            this.gbleft.Text = "DataSource";
-            // 
-            // bgselect
-            // 
-            this.bgselect.Dock = System.Windows.Forms.DockStyle.Top;
-            this.bgselect.Location = new System.Drawing.Point(0, 0);
-            this.bgselect.Name = "bgselect";
-            this.bgselect.Size = new System.Drawing.Size(313, 332);
-            this.bgselect.TabIndex = 1;
-            this.bgselect.TabStop = false;
-            this.bgselect.Text = "SelectDataSource";
-            // 
             // PanSelectAndSnippet
             // 
             this.PanSelectAndSnippet.Controls.Add(this.gbSnippet);
@@ -166,13 +106,27 @@
             this.gbSnippet.TabStop = false;
             this.gbSnippet.Text = "Snippet";
             // 
-            // pSearch
+            // bgselect
             // 
-            this.pSearch.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pSearch.Location = new System.Drawing.Point(3, 17);
-            this.pSearch.Name = "pSearch";
-            this.pSearch.Size = new System.Drawing.Size(361, 117);
-            this.pSearch.TabIndex = 1;
+            this.bgselect.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bgselect.Location = new System.Drawing.Point(0, 0);
+            this.bgselect.Name = "bgselect";
+            this.bgselect.Size = new System.Drawing.Size(313, 332);
+            this.bgselect.TabIndex = 1;
+            this.bgselect.TabStop = false;
+            this.bgselect.Text = "SelectDataSource";
+            // 
+            // gbleft
+            // 
+            this.gbleft.Controls.Add(this.gtree);
+            this.gbleft.Controls.Add(this.pSearch);
+            this.gbleft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.gbleft.Location = new System.Drawing.Point(3, 3);
+            this.gbleft.Name = "gbleft";
+            this.gbleft.Size = new System.Drawing.Size(367, 632);
+            this.gbleft.TabIndex = 0;
+            this.gbleft.TabStop = false;
+            this.gbleft.Text = "DataSource";
             // 
             // gtree
             // 
@@ -186,14 +140,6 @@
             this.gtree.TabStop = false;
             this.gtree.Text = "Tree";
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Location = new System.Drawing.Point(3, 17);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(355, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStripTree";
-            // 
             // TreeServer
             // 
             this.TreeServer.CheckBoxes = true;
@@ -205,6 +151,72 @@
             this.TreeServer.Size = new System.Drawing.Size(355, 450);
             this.TreeServer.TabIndex = 1;
             this.TreeServer.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TreeServer_BeforeExpand);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Location = new System.Drawing.Point(3, 17);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(355, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStripTree";
+            // 
+            // pSearch
+            // 
+            this.pSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pSearch.Location = new System.Drawing.Point(3, 17);
+            this.pSearch.Name = "pSearch";
+            this.pSearch.Size = new System.Drawing.Size(361, 117);
+            this.pSearch.TabIndex = 1;
+            // 
+            // tabPageCsharpGenerator
+            // 
+            this.tabPageCsharpGenerator.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCsharpGenerator.Name = "tabPageCsharpGenerator";
+            this.tabPageCsharpGenerator.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCsharpGenerator.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageCsharpGenerator.TabIndex = 1;
+            this.tabPageCsharpGenerator.Text = "CSharp Generator";
+            this.tabPageCsharpGenerator.UseVisualStyleBackColor = true;
+            // 
+            // tabPageString
+            // 
+            this.tabPageString.Location = new System.Drawing.Point(4, 22);
+            this.tabPageString.Name = "tabPageString";
+            this.tabPageString.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageString.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageString.TabIndex = 2;
+            this.tabPageString.Text = "String";
+            this.tabPageString.UseVisualStyleBackColor = true;
+            // 
+            // tabPageSQLCompare
+            // 
+            this.tabPageSQLCompare.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSQLCompare.Name = "tabPageSQLCompare";
+            this.tabPageSQLCompare.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSQLCompare.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageSQLCompare.TabIndex = 3;
+            this.tabPageSQLCompare.Text = "SQL Compare";
+            this.tabPageSQLCompare.UseVisualStyleBackColor = true;
+            // 
+            // tabPageSystemConfig
+            // 
+            this.tabPageSystemConfig.Controls.Add(this.tabControlSet);
+            this.tabPageSystemConfig.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSystemConfig.Name = "tabPageSystemConfig";
+            this.tabPageSystemConfig.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSystemConfig.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageSystemConfig.TabIndex = 4;
+            this.tabPageSystemConfig.Text = "System Config";
+            this.tabPageSystemConfig.UseVisualStyleBackColor = true;
+            // 
+            // tabControlSet
+            // 
+            this.tabControlSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlSet.Location = new System.Drawing.Point(3, 3);
+            this.tabControlSet.Name = "tabControlSet";
+            this.tabControlSet.SelectedIndex = 0;
+            this.tabControlSet.Size = new System.Drawing.Size(1201, 632);
+            this.tabControlSet.TabIndex = 0;
             // 
             // GeneartorTools
             // 
@@ -218,10 +230,11 @@
             this.Load += new System.EventHandler(this.GeneartorTools_Load);
             this.tabControlALL.ResumeLayout(false);
             this.tabPageSQLGeneartor.ResumeLayout(false);
-            this.gbleft.ResumeLayout(false);
             this.PanSelectAndSnippet.ResumeLayout(false);
+            this.gbleft.ResumeLayout(false);
             this.gtree.ResumeLayout(false);
             this.gtree.PerformLayout();
+            this.tabPageSystemConfig.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,6 +257,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Panel pSearch;
         private System.Windows.Forms.TreeView TreeServer;
+        private System.Windows.Forms.TabControl tabControlSet;
     }
 }
 
