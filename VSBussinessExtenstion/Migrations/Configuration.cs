@@ -28,7 +28,7 @@ namespace VSBussinessExtenstion.Migrations
             //
 
             context.ConnectionStrings.RemoveRange(context.ConnectionStrings.ToList());
-            context.ConnectionStrings.Add(new ConnectionString() { Type = Core.UsuallyCommon.DataBaseType.SQLServer, Connection = "SERVER={0};UID={1};PWD={2};DATABASE={3}" });
+            context.ConnectionStrings.Add(new ConnectionString() { Type = Core.UsuallyCommon.DataBaseType.SQLServer,WindowsAuthentication = false, Connection = "SERVER={0};UID={1};PWD={2};DATABASE={3}" });
 
             context.SQLConfigs.RemoveRange(context.SQLConfigs.ToList());
             context.SQLConfigs.Add(new SQLConfig() {

@@ -30,6 +30,8 @@
         public virtual DbSet<DataBaseAddress> DataBaseAddresses { get; set; }
         public virtual DbSet<Variable> Variables { get; set; }
         public virtual DbSet<ConnectionString> ConnectionStrings { get; set; }
+
+        public virtual DbSet<Snippet> Snippets { get; set; }
     }
 
     //public class MyEntity
@@ -37,6 +39,32 @@
     //    public int Id { get; set; }
     //    public string Name { get; set; }
     //}
+
+    public class Snippet
+    {
+        [Key]
+        public Int32 Id { get; set; }
+
+        public Int32 ParentId { get; set; }
+
+        public DataSourceType DataSourceType { get; set; }
+
+        public string Context { get; set; }
+
+        public string OutputPath { get; set; }
+
+        public string GeneratorFileName { get; set; }
+
+        public bool IsFloder { get; set; }
+
+        public bool IsEnabled { get; set; }
+
+        public bool IsMergin { get; set; }
+
+        public bool IsAutoFind { get; set; }
+
+        public bool IsSelectGenerator { get; set; }
+    }
 
     public class ConnectionString
     {
@@ -46,6 +74,8 @@
         public DataBaseType Type { get; set; }
 
         public string Connection { get; set; }
+
+        public bool WindowsAuthentication { get; set; }
     }
 
     public class SQLConfig

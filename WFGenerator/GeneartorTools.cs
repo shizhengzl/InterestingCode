@@ -44,25 +44,21 @@ namespace WFGenerator
                 {
                     TreeNode dbNode = new TreeNode(db.DataBaseName);
                     treeNode.Nodes.Add(dbNode);
-                    dbNode.Tag = db;
-                    dbNode.Nodes.Add(string.Empty);
+                    dbNode.Tag = db; 
+
+                    sh.InitTable(db); 
+                    foreach (var table in db.Tables)
+                    {
+                        TreeNode tableNode = new TreeNode(table.TableName);
+                        dbNode.Nodes.Add(tableNode);
+                    }
                 }
             }
         }
 
         private void TreeServer_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            var dbNote = (e.Node as TreeNode);
-            if (!(dbNote.Tag != null && dbNote.Tag is Core.UsuallyCommon.DataBase.DataBase))
-                return;
-            var db = dbNote.Tag as Core.UsuallyCommon.DataBase.DataBase;
-            sh.InitTable(db);
-            dbNote.Nodes.Clear();
-            foreach (var table in db.Tables)
-            {
-                TreeNode tableNode = new TreeNode(table.TableName);
-                dbNote.Nodes.Add(tableNode);
-            }
+          
         }
 
 
@@ -75,6 +71,7 @@ namespace WFGenerator
             InitClass<SQLConfig>();
             InitClass<Variable>();
             InitClass<DataTypeConfig>();
+            InitClass<Snippet>();
         }
 
         public void InitClass<T>() where T : class, new()
@@ -86,8 +83,47 @@ namespace WFGenerator
             PanelExtension<T> panel = new PanelExtension<T>();
             tpclass.Controls.Add(panel);
             tabControlSet.TabPages.Add(tpclass);
-        } 
+        }
         #endregion
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if(rdLikdSearch.Checked)
+            {
+                if(rdFilterTable.Checked)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+
+            if(rdFuzzySearch.Checked)
+            {
+                if (rdFilterTable.Checked)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+
+            if(rdComplete.Checked)
+            {
+                if (rdFilterTable.Checked)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+        }
     }
 
     public class ExtenstionClass
