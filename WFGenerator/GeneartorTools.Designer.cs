@@ -35,19 +35,29 @@
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
             this.bgselect = new System.Windows.Forms.GroupBox();
+            this.SelectDataTree = new System.Windows.Forms.TreeView();
+            this.treeSelectData = new System.Windows.Forms.TreeView();
             this.gbleft = new System.Windows.Forms.GroupBox();
             this.tabControlSource = new System.Windows.Forms.TabControl();
             this.tabPageConnection = new System.Windows.Forms.TabPage();
             this.gtree = new System.Windows.Forms.GroupBox();
             this.TreeServer = new System.Windows.Forms.TreeView();
             this.toolStripTreeServer = new System.Windows.Forms.ToolStrip();
+            this.tsAdd = new System.Windows.Forms.ToolStripButton();
+            this.tsRemove = new System.Windows.Forms.ToolStripButton();
+            this.tsRefresh = new System.Windows.Forms.ToolStripButton();
             this.tabPageSQL = new System.Windows.Forms.TabPage();
             this.tabPageClass = new System.Windows.Forms.TabPage();
+            this.tabPageExecl = new System.Windows.Forms.TabPage();
             this.pSearch = new System.Windows.Forms.Panel();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rdFilterTable = new System.Windows.Forms.RadioButton();
             this.rdFilterColumn = new System.Windows.Forms.RadioButton();
             this.gbSearch = new System.Windows.Forms.GroupBox();
+            this.rdComplete = new System.Windows.Forms.RadioButton();
+            this.txtFuzzyPercent = new System.Windows.Forms.TextBox();
             this.rdLikdSearch = new System.Windows.Forms.RadioButton();
             this.rdFuzzySearch = new System.Windows.Forms.RadioButton();
             this.txtSearch = new System.Windows.Forms.TextBox();
@@ -56,15 +66,6 @@
             this.tabPageSQLCompare = new System.Windows.Forms.TabPage();
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.tsAdd = new System.Windows.Forms.ToolStripButton();
-            this.tsRemove = new System.Windows.Forms.ToolStripButton();
-            this.tsRefresh = new System.Windows.Forms.ToolStripButton();
-            this.txtFuzzyPercent = new System.Windows.Forms.TextBox();
-            this.treeSelectData = new System.Windows.Forms.TreeView();
-            this.rdComplete = new System.Windows.Forms.RadioButton();
-            this.tabPageExecl = new System.Windows.Forms.TabPage();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
             this.PanSelectAndSnippet.SuspendLayout();
@@ -136,6 +137,7 @@
             // 
             // bgselect
             // 
+            this.bgselect.Controls.Add(this.SelectDataTree);
             this.bgselect.Controls.Add(this.treeSelectData);
             this.bgselect.Dock = System.Windows.Forms.DockStyle.Top;
             this.bgselect.Location = new System.Drawing.Point(0, 0);
@@ -144,6 +146,22 @@
             this.bgselect.TabIndex = 1;
             this.bgselect.TabStop = false;
             this.bgselect.Text = "SelectDataSource";
+            // 
+            // SelectDataTree
+            // 
+            this.SelectDataTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SelectDataTree.Location = new System.Drawing.Point(3, 17);
+            this.SelectDataTree.Name = "SelectDataTree";
+            this.SelectDataTree.Size = new System.Drawing.Size(307, 312);
+            this.SelectDataTree.TabIndex = 1;
+            // 
+            // treeSelectData
+            // 
+            this.treeSelectData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeSelectData.Location = new System.Drawing.Point(3, 17);
+            this.treeSelectData.Name = "treeSelectData";
+            this.treeSelectData.Size = new System.Drawing.Size(307, 312);
+            this.treeSelectData.TabIndex = 0;
             // 
             // gbleft
             // 
@@ -203,7 +221,7 @@
             this.TreeServer.Name = "TreeServer";
             this.TreeServer.Size = new System.Drawing.Size(341, 342);
             this.TreeServer.TabIndex = 1;
-            this.TreeServer.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TreeServer_BeforeExpand);
+            this.TreeServer.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TreeServer_AfterCheck);
             // 
             // toolStripTreeServer
             // 
@@ -216,6 +234,30 @@
             this.toolStripTreeServer.Size = new System.Drawing.Size(341, 25);
             this.toolStripTreeServer.TabIndex = 0;
             this.toolStripTreeServer.Text = "toolStripTree";
+            // 
+            // tsAdd
+            // 
+            this.tsAdd.Image = ((System.Drawing.Image)(resources.GetObject("tsAdd.Image")));
+            this.tsAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsAdd.Name = "tsAdd";
+            this.tsAdd.Size = new System.Drawing.Size(117, 22);
+            this.tsAdd.Text = "AddConnection";
+            // 
+            // tsRemove
+            // 
+            this.tsRemove.Image = ((System.Drawing.Image)(resources.GetObject("tsRemove.Image")));
+            this.tsRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsRemove.Name = "tsRemove";
+            this.tsRemove.Size = new System.Drawing.Size(75, 22);
+            this.tsRemove.Text = "Remove";
+            // 
+            // tsRefresh
+            // 
+            this.tsRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsRefresh.Image")));
+            this.tsRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsRefresh.Name = "tsRefresh";
+            this.tsRefresh.Size = new System.Drawing.Size(72, 22);
+            this.tsRefresh.Text = "Refresh";
             // 
             // tabPageSQL
             // 
@@ -237,6 +279,16 @@
             this.tabPageClass.Text = "Class";
             this.tabPageClass.UseVisualStyleBackColor = true;
             // 
+            // tabPageExecl
+            // 
+            this.tabPageExecl.Location = new System.Drawing.Point(4, 22);
+            this.tabPageExecl.Name = "tabPageExecl";
+            this.tabPageExecl.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageExecl.Size = new System.Drawing.Size(353, 393);
+            this.tabPageExecl.TabIndex = 3;
+            this.tabPageExecl.Text = "FromExecl";
+            this.tabPageExecl.UseVisualStyleBackColor = true;
+            // 
             // pSearch
             // 
             this.pSearch.Controls.Add(this.btnClear);
@@ -249,6 +301,26 @@
             this.pSearch.Name = "pSearch";
             this.pSearch.Size = new System.Drawing.Size(361, 193);
             this.pSearch.TabIndex = 1;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(228, 155);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(53, 32);
+            this.btnClear.TabIndex = 6;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(298, 155);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(53, 32);
+            this.btnSearch.TabIndex = 5;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // groupBox1
             // 
@@ -264,22 +336,22 @@
             // rdFilterTable
             // 
             this.rdFilterTable.AutoSize = true;
+            this.rdFilterTable.Checked = true;
             this.rdFilterTable.Location = new System.Drawing.Point(8, 13);
             this.rdFilterTable.Name = "rdFilterTable";
             this.rdFilterTable.Size = new System.Drawing.Size(89, 16);
             this.rdFilterTable.TabIndex = 1;
+            this.rdFilterTable.TabStop = true;
             this.rdFilterTable.Text = "FilterTable";
             this.rdFilterTable.UseVisualStyleBackColor = true;
             // 
             // rdFilterColumn
             // 
             this.rdFilterColumn.AutoSize = true;
-            this.rdFilterColumn.Checked = true;
             this.rdFilterColumn.Location = new System.Drawing.Point(8, 35);
             this.rdFilterColumn.Name = "rdFilterColumn";
             this.rdFilterColumn.Size = new System.Drawing.Size(95, 16);
             this.rdFilterColumn.TabIndex = 2;
-            this.rdFilterColumn.TabStop = true;
             this.rdFilterColumn.Text = "FilterColumn";
             this.rdFilterColumn.UseVisualStyleBackColor = true;
             // 
@@ -295,6 +367,26 @@
             this.gbSearch.TabIndex = 3;
             this.gbSearch.TabStop = false;
             this.gbSearch.Text = "MatchMode";
+            // 
+            // rdComplete
+            // 
+            this.rdComplete.AutoSize = true;
+            this.rdComplete.Checked = true;
+            this.rdComplete.Location = new System.Drawing.Point(8, 34);
+            this.rdComplete.Name = "rdComplete";
+            this.rdComplete.Size = new System.Drawing.Size(71, 16);
+            this.rdComplete.TabIndex = 4;
+            this.rdComplete.TabStop = true;
+            this.rdComplete.Text = "Complete";
+            this.rdComplete.UseVisualStyleBackColor = true;
+            // 
+            // txtFuzzyPercent
+            // 
+            this.txtFuzzyPercent.Location = new System.Drawing.Point(59, 55);
+            this.txtFuzzyPercent.Name = "txtFuzzyPercent";
+            this.txtFuzzyPercent.Size = new System.Drawing.Size(32, 21);
+            this.txtFuzzyPercent.TabIndex = 3;
+            this.txtFuzzyPercent.Text = "90";
             // 
             // rdLikdSearch
             // 
@@ -374,87 +466,6 @@
             this.tabControlSet.Size = new System.Drawing.Size(1201, 632);
             this.tabControlSet.TabIndex = 0;
             // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(298, 155);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(53, 32);
-            this.btnSearch.TabIndex = 5;
-            this.btnSearch.Text = "Search";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // btnClear
-            // 
-            this.btnClear.Location = new System.Drawing.Point(228, 155);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(53, 32);
-            this.btnClear.TabIndex = 6;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            // 
-            // tsAdd
-            // 
-            this.tsAdd.Image = ((System.Drawing.Image)(resources.GetObject("tsAdd.Image")));
-            this.tsAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsAdd.Name = "tsAdd";
-            this.tsAdd.Size = new System.Drawing.Size(117, 22);
-            this.tsAdd.Text = "AddConnection";
-            // 
-            // tsRemove
-            // 
-            this.tsRemove.Image = ((System.Drawing.Image)(resources.GetObject("tsRemove.Image")));
-            this.tsRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsRemove.Name = "tsRemove";
-            this.tsRemove.Size = new System.Drawing.Size(75, 22);
-            this.tsRemove.Text = "Remove";
-            // 
-            // tsRefresh
-            // 
-            this.tsRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsRefresh.Image")));
-            this.tsRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsRefresh.Name = "tsRefresh";
-            this.tsRefresh.Size = new System.Drawing.Size(72, 22);
-            this.tsRefresh.Text = "Refresh";
-            // 
-            // txtFuzzyPercent
-            // 
-            this.txtFuzzyPercent.Location = new System.Drawing.Point(59, 55);
-            this.txtFuzzyPercent.Name = "txtFuzzyPercent";
-            this.txtFuzzyPercent.Size = new System.Drawing.Size(32, 21);
-            this.txtFuzzyPercent.TabIndex = 3;
-            this.txtFuzzyPercent.Text = "90";
-            // 
-            // treeSelectData
-            // 
-            this.treeSelectData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeSelectData.Location = new System.Drawing.Point(3, 17);
-            this.treeSelectData.Name = "treeSelectData";
-            this.treeSelectData.Size = new System.Drawing.Size(307, 312);
-            this.treeSelectData.TabIndex = 0;
-            // 
-            // rdComplete
-            // 
-            this.rdComplete.AutoSize = true;
-            this.rdComplete.Checked = true;
-            this.rdComplete.Location = new System.Drawing.Point(8, 34);
-            this.rdComplete.Name = "rdComplete";
-            this.rdComplete.Size = new System.Drawing.Size(71, 16);
-            this.rdComplete.TabIndex = 4;
-            this.rdComplete.TabStop = true;
-            this.rdComplete.Text = "Complete";
-            this.rdComplete.UseVisualStyleBackColor = true;
-            // 
-            // tabPageExecl
-            // 
-            this.tabPageExecl.Location = new System.Drawing.Point(4, 22);
-            this.tabPageExecl.Name = "tabPageExecl";
-            this.tabPageExecl.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageExecl.Size = new System.Drawing.Size(353, 393);
-            this.tabPageExecl.TabIndex = 3;
-            this.tabPageExecl.Text = "FromExecl";
-            this.tabPageExecl.UseVisualStyleBackColor = true;
-            // 
             // GeneartorTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -526,6 +537,7 @@
         private System.Windows.Forms.TabPage tabPageExecl;
         private System.Windows.Forms.RadioButton rdComplete;
         private System.Windows.Forms.TextBox txtFuzzyPercent;
+        private System.Windows.Forms.TreeView SelectDataTree;
     }
 }
 

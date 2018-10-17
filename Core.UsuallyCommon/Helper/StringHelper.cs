@@ -4,10 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.UsuallyCommon.Helper
+namespace Core.UsuallyCommon
 {
     public class StringHelper
-    {
-        public List<string> SearchSplit = new List<string>() { "\r\n","\r","\n","," "，"};
+    { 
+        public static List<String> GetStringSingleColumn(string context)
+        { 
+            string[] separatingChars = new string[] { "\r\n", "\n", "\r", "\t" };
+            string[] linedatas = context.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries); 
+            return linedatas.ToList<string>(); 
+        }
     }
 }

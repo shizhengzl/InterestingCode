@@ -20,10 +20,19 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         public void InitDatabase(DataBaseAddress baseAddress)
         {
-            ChangeDataBase(baseAddress);
-            string getDatabaseSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == baseAddress.DBType).GetDataBaseSQL;
-            baseAddress.DataBases = DatabaseHelper.ExecuteQuery(getDatabaseSql).Tables[0].ToList<DataBase>().Where(x =>
-            string.IsNullOrEmpty(baseAddress.DefaultDatabase) || x.DataBaseName == baseAddress.DefaultDatabase).ToList<DataBase>();
+            try
+            {
+                ChangeDataBase(baseAddress);
+                string getDatabaseSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == baseAddress.DBType).GetDataBaseSQL;
+                baseAddress.DataBases = DatabaseHelper.ExecuteQuery(getDatabaseSql).Tables[0].ToList<DataBase>().Where(x =>
+                string.IsNullOrEmpty(baseAddress.DefaultDatabase) || x.DataBaseName == baseAddress.DefaultDatabase).ToList<DataBase>();
+                baseAddress.DataBases.ForEach(x => x.Address = baseAddress.Address);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+          
         }
 
         public void InitTable(DataBase dataBase)
@@ -31,6 +40,8 @@ namespace VSBussinessExtenstion.DataBaseHelper
             ChangeDataBase(dataBase);
             string getDataTableSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == dataBase.DBType).GetTableSQL.Replace("@DataBaseName",dataBase.DataBaseName) ;
             dataBase.Tables = DatabaseHelper.ExecuteQuery(getDataTableSql).Tables[0].ToList<Table>();
+            dataBase.Tables.ForEach(x => x.Address = dataBase.Address);
+            dataBase.Tables.ForEach(x => x.DataBaseName = dataBase.DataBaseName);
         }
 
         public void InitColumn(Table table)

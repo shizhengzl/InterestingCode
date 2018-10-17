@@ -30,37 +30,14 @@ namespace WFGenerator
 
         public DefaultSqlite sqlite = new DefaultSqlite();
         public ServicesAddressHelper sh = new ServicesAddressHelper();
+        public List<Table> listSelectTalbe = new List<Table>();
+        public List<Table> listAllTalbe = new List<Table>();
+
+
         private void GeneartorTools_Load(object sender, EventArgs e)
         {
-            var address = sqlite.DataBaseAddresses.ToList();
-
-            foreach (var item in address)
-            {
-                TreeNode treeNode = new TreeNode(item.Address);
-                TreeServer.Nodes.Add(treeNode);
-                sh.Init(item);
-
-                foreach (var db in item.DataBases)
-                {
-                    TreeNode dbNode = new TreeNode(db.DataBaseName);
-                    treeNode.Nodes.Add(dbNode);
-                    dbNode.Tag = db; 
-
-                    sh.InitTable(db); 
-                    foreach (var table in db.Tables)
-                    {
-                        TreeNode tableNode = new TreeNode(table.TableName);
-                        dbNode.Nodes.Add(tableNode);
-                    }
-                }
-            }
+            InitAddressServerTree();
         }
-
-        private void TreeServer_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-        {
-          
-        }
-
 
         #region SystemConfig
 
@@ -86,21 +63,98 @@ namespace WFGenerator
         }
         #endregion
 
+
+        #region DataBaseTree
+
+        public void RefreshDataBaseAddressTree()
+        {
+            InitSelectDataTree();
+            InitAddressServerTree();
+        }
+
+        public void InitSelectDataTree()
+        {
+            SelectDataTree.Nodes.Clear();
+
+            var selectAddres = listSelectTalbe.GroupBy(x => x.Address).Select(y => y.Key);
+            var selectDataBase = listSelectTalbe.GroupBy(x => new { x.Address, x.DataBaseName }).Select(y => y.Key.DataBaseName);
+            foreach (var address in selectAddres)
+            {
+                TreeNode treeNode = new TreeNode() { Name = address, Text = address };
+
+                foreach (var db in selectDataBase)
+                {
+                    TreeNode treedb = new TreeNode() { Name = db, Text = db };
+                    var tables = listSelectTalbe.Where(x => x.Address == address && x.DataBaseName == db).ToList();
+                    tables.ForEach(x => treedb.Nodes.Add(new TreeNode() { Name = x.TableName, Text = x.TableName, Tag = x }));
+                    treeNode.Nodes.Add(treedb);
+                }
+                SelectDataTree.Nodes.Add(treeNode);
+            }
+            SelectDataTree.ExpandAll();
+
+        }
+
+        public void InitAddressServerTree()
+        {
+            listAllTalbe.Clear();
+            TreeServer.Nodes.Clear();
+            var address = sqlite.DataBaseAddresses.ToList();
+            foreach (var item in address)
+            {
+                TreeNode treeNode = new TreeNode(item.Address);
+                TreeServer.Nodes.Add(treeNode);
+                try
+                {
+                    sh.Init(item);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    continue;
+                }
+
+                foreach (var db in item.DataBases)
+                {
+                    TreeNode dbNode = new TreeNode(db.DataBaseName);
+                    treeNode.Nodes.Add(dbNode);
+                    dbNode.Tag = db;
+
+                    // init table
+                    sh.InitTable(db);
+                    foreach (var table in db.Tables)
+                    {
+                        TreeNode tableNode = new TreeNode()
+                        {
+                            Text = table.TableName,
+                            Name = table.TableName,
+                            Tag = table
+                        };
+                        dbNode.Nodes.Add(tableNode);
+                        listAllTalbe.Add(table);
+                    }
+
+                    // init view
+
+                    // init index
+
+                }
+            }
+        }
+
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if(rdLikdSearch.Checked)
+
+            var context = txtSearch.Text;
+            var listdata = StringHelper.GetStringSingleColumn(context);
+            if (listdata.Count > 0)
             {
-                if(rdFilterTable.Checked)
-                {
+                listSelectTalbe.Clear();
 
-                }
-                else
-                {
-
-                }
+                listSelectTalbe.AddRange(listAllTalbe.Where(x => listdata.Any(y=>y.ToUpper() == x.TableName.ToUpper())).ToList<Table>());
             }
 
-            if(rdFuzzySearch.Checked)
+            if (rdLikdSearch.Checked)
             {
                 if (rdFilterTable.Checked)
                 {
@@ -112,7 +166,7 @@ namespace WFGenerator
                 }
             }
 
-            if(rdComplete.Checked)
+            if (rdFuzzySearch.Checked)
             {
                 if (rdFilterTable.Checked)
                 {
@@ -123,6 +177,94 @@ namespace WFGenerator
 
                 }
             }
+
+            if (rdComplete.Checked)
+            {
+                if (rdFilterTable.Checked)
+                {
+                    InitSelectDataTree();
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        #endregion
+
+        private void TreeServer_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action != TreeViewAction.Unknown)
+            {
+                SetNodeCheckStatus(e.Node, e.Node.Checked);
+                SetNodeStyle(e.Node);
+            }
+        }
+
+        private void SetNodeCheckStatus(TreeNode tn, bool Checked)
+        {
+            if (tn == null) return;
+            foreach (TreeNode tnChild in tn.Nodes)
+            {
+                tnChild.Checked = Checked;
+                SetNodeCheckStatus(tnChild, Checked);
+            }
+            var obj = tn.Tag;
+            if (obj is Table)
+            {
+                var table = ((Table)obj);
+                if (tn.Checked)
+                {
+                    if (!listSelectTalbe.Any(x => x.TableName == table.TableName))
+                        listSelectTalbe.Add(table);
+                }
+                else
+                {
+                    listSelectTalbe.Where(x => x.TableName == table.TableName).ToList().ForEach(x => listSelectTalbe.Remove(x));
+                }
+                InitSelectDataTree();
+            }
+        }
+
+        private void SetNodeStyle(TreeNode Node)
+        {
+            int nNodeCount = 0;
+            if (Node.Nodes.Count != 0)
+            {
+                foreach (TreeNode tnTemp in Node.Nodes)
+                {
+                    if (tnTemp.Checked == true)
+                        nNodeCount++;
+                }
+
+                if (nNodeCount == Node.Nodes.Count)
+                {
+                    Node.Checked = true;
+                    //Node.ExpandAll();
+                    Node.ForeColor = Color.Black;
+                }
+                else if (nNodeCount == 0)
+                {
+                    Node.Checked = false;
+                    //Node.Collapse();
+                    Node.ForeColor = Color.Black;
+                }
+                else
+                {
+                    Node.Checked = true;
+                    Node.ForeColor = Color.Gray;
+                }
+            }
+            //当前节点选择完后，判断父节点的状态，调用此方法递归。  
+            if (Node.Parent != null)
+                SetNodeStyle(Node.Parent);
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            listSelectTalbe.Clear();
+            InitSelectDataTree();
         }
     }
 
@@ -147,5 +289,5 @@ namespace WFGenerator
 
             return tables.FirstOrDefault(x => x.Name == typeof(T).Name).Table;
         }
-    } 
+    }
 }

@@ -39,7 +39,7 @@ namespace VSBussinessExtenstion.Migrations
             });
 
             context.DataBaseAddresses.RemoveRange(context.DataBaseAddresses.ToList());
-            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() {  Address=".", Password="sasa",User="sa",DefaultDatabase= "", DBType = Core.UsuallyCommon.DataBaseType.SQLServer});
+            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() {  Address=".", Password="95938",User="sa",DefaultDatabase= "", DBType = Core.UsuallyCommon.DataBaseType.SQLServer});
 
 
 
