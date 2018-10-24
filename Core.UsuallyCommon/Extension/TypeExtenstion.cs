@@ -187,5 +187,17 @@ namespace Core.UsuallyCommon
         {
             return EnumParse<T>(value, ignoreCase);
         }
+
+
+        #region TypeConvert
+        // dll .cs
+        // xml 
+        // json
+        // sql sqladdress
+
+        // data and constract
+        // string file
+       
+        #endregion
     }
 }

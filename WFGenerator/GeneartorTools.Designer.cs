@@ -34,9 +34,13 @@
             this.tabPageSQLGeneartor = new System.Windows.Forms.TabPage();
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
+            this.TreeSnippet = new System.Windows.Forms.TreeView();
             this.bgselect = new System.Windows.Forms.GroupBox();
-            this.SelectDataTree = new System.Windows.Forms.TreeView();
-            this.treeSelectData = new System.Windows.Forms.TreeView();
+            this.tabControlSelect = new System.Windows.Forms.TabControl();
+            this.tabPageSelectSQL = new System.Windows.Forms.TabPage();
+            this.tabPageSelectClass = new System.Windows.Forms.TabPage();
+            this.tabPageSelectXML = new System.Windows.Forms.TabPage();
+            this.TreeViewXML = new System.Windows.Forms.TreeView();
             this.gbleft = new System.Windows.Forms.GroupBox();
             this.tabControlSource = new System.Windows.Forms.TabControl();
             this.tabPageConnection = new System.Windows.Forms.TabPage();
@@ -49,6 +53,11 @@
             this.tabPageSQL = new System.Windows.Forms.TabPage();
             this.tabPageClass = new System.Windows.Forms.TabPage();
             this.tabPageExecl = new System.Windows.Forms.TabPage();
+            this.tpXml = new System.Windows.Forms.TabPage();
+            this.btnxmlString = new System.Windows.Forms.Button();
+            this.btnSelectFolder = new System.Windows.Forms.Button();
+            this.txtXmlSelect = new System.Windows.Forms.TextBox();
+            this.btnXmlSelectFile = new System.Windows.Forms.Button();
             this.pSearch = new System.Windows.Forms.Panel();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -61,20 +70,24 @@
             this.rdLikdSearch = new System.Windows.Forms.RadioButton();
             this.rdFuzzySearch = new System.Windows.Forms.RadioButton();
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.tabPageCsharpGenerator = new System.Windows.Forms.TabPage();
             this.tabPageString = new System.Windows.Forms.TabPage();
             this.tabPageSQLCompare = new System.Windows.Forms.TabPage();
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
+            this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
             this.PanSelectAndSnippet.SuspendLayout();
+            this.gbSnippet.SuspendLayout();
             this.bgselect.SuspendLayout();
+            this.tabControlSelect.SuspendLayout();
+            this.tabPageSelectXML.SuspendLayout();
             this.gbleft.SuspendLayout();
             this.tabControlSource.SuspendLayout();
             this.tabPageConnection.SuspendLayout();
             this.gtree.SuspendLayout();
             this.toolStripTreeServer.SuspendLayout();
+            this.tpXml.SuspendLayout();
             this.pSearch.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbSearch.SuspendLayout();
@@ -92,7 +105,6 @@
             // tabControlALL
             // 
             this.tabControlALL.Controls.Add(this.tabPageSQLGeneartor);
-            this.tabControlALL.Controls.Add(this.tabPageCsharpGenerator);
             this.tabControlALL.Controls.Add(this.tabPageString);
             this.tabControlALL.Controls.Add(this.tabPageSQLCompare);
             this.tabControlALL.Controls.Add(this.tabPageSystemConfig);
@@ -127,6 +139,7 @@
             // 
             // gbSnippet
             // 
+            this.gbSnippet.Controls.Add(this.TreeSnippet);
             this.gbSnippet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbSnippet.Location = new System.Drawing.Point(0, 332);
             this.gbSnippet.Name = "gbSnippet";
@@ -135,10 +148,18 @@
             this.gbSnippet.TabStop = false;
             this.gbSnippet.Text = "Snippet";
             // 
+            // TreeSnippet
+            // 
+            this.TreeSnippet.CheckBoxes = true;
+            this.TreeSnippet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TreeSnippet.Location = new System.Drawing.Point(3, 17);
+            this.TreeSnippet.Name = "TreeSnippet";
+            this.TreeSnippet.Size = new System.Drawing.Size(307, 280);
+            this.TreeSnippet.TabIndex = 0;
+            // 
             // bgselect
             // 
-            this.bgselect.Controls.Add(this.SelectDataTree);
-            this.bgselect.Controls.Add(this.treeSelectData);
+            this.bgselect.Controls.Add(this.tabControlSelect);
             this.bgselect.Dock = System.Windows.Forms.DockStyle.Top;
             this.bgselect.Location = new System.Drawing.Point(0, 0);
             this.bgselect.Name = "bgselect";
@@ -147,21 +168,58 @@
             this.bgselect.TabStop = false;
             this.bgselect.Text = "SelectDataSource";
             // 
-            // SelectDataTree
+            // tabControlSelect
             // 
-            this.SelectDataTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SelectDataTree.Location = new System.Drawing.Point(3, 17);
-            this.SelectDataTree.Name = "SelectDataTree";
-            this.SelectDataTree.Size = new System.Drawing.Size(307, 312);
-            this.SelectDataTree.TabIndex = 1;
+            this.tabControlSelect.Controls.Add(this.tabPageSelectSQL);
+            this.tabControlSelect.Controls.Add(this.tabPageSelectClass);
+            this.tabControlSelect.Controls.Add(this.tabPageSelectXML);
+            this.tabControlSelect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlSelect.Location = new System.Drawing.Point(3, 17);
+            this.tabControlSelect.Name = "tabControlSelect";
+            this.tabControlSelect.SelectedIndex = 0;
+            this.tabControlSelect.Size = new System.Drawing.Size(307, 312);
+            this.tabControlSelect.TabIndex = 0;
             // 
-            // treeSelectData
+            // tabPageSelectSQL
             // 
-            this.treeSelectData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeSelectData.Location = new System.Drawing.Point(3, 17);
-            this.treeSelectData.Name = "treeSelectData";
-            this.treeSelectData.Size = new System.Drawing.Size(307, 312);
-            this.treeSelectData.TabIndex = 0;
+            this.tabPageSelectSQL.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSelectSQL.Name = "tabPageSelectSQL";
+            this.tabPageSelectSQL.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSelectSQL.Size = new System.Drawing.Size(299, 286);
+            this.tabPageSelectSQL.TabIndex = 0;
+            this.tabPageSelectSQL.Text = "SQL";
+            this.tabPageSelectSQL.UseVisualStyleBackColor = true;
+            // 
+            // tabPageSelectClass
+            // 
+            this.tabPageSelectClass.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSelectClass.Name = "tabPageSelectClass";
+            this.tabPageSelectClass.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSelectClass.Size = new System.Drawing.Size(299, 286);
+            this.tabPageSelectClass.TabIndex = 1;
+            this.tabPageSelectClass.Text = "Class";
+            this.tabPageSelectClass.UseVisualStyleBackColor = true;
+            // 
+            // tabPageSelectXML
+            // 
+            this.tabPageSelectXML.Controls.Add(this.TreeViewXML);
+            this.tabPageSelectXML.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSelectXML.Name = "tabPageSelectXML";
+            this.tabPageSelectXML.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSelectXML.Size = new System.Drawing.Size(299, 286);
+            this.tabPageSelectXML.TabIndex = 2;
+            this.tabPageSelectXML.Text = "XML";
+            this.tabPageSelectXML.UseVisualStyleBackColor = true;
+            // 
+            // TreeViewXML
+            // 
+            this.TreeViewXML.CheckBoxes = true;
+            this.TreeViewXML.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TreeViewXML.Location = new System.Drawing.Point(3, 3);
+            this.TreeViewXML.Name = "TreeViewXML";
+            this.TreeViewXML.ShowNodeToolTips = true;
+            this.TreeViewXML.Size = new System.Drawing.Size(293, 280);
+            this.TreeViewXML.TabIndex = 0;
             // 
             // gbleft
             // 
@@ -181,12 +239,14 @@
             this.tabControlSource.Controls.Add(this.tabPageSQL);
             this.tabControlSource.Controls.Add(this.tabPageClass);
             this.tabControlSource.Controls.Add(this.tabPageExecl);
+            this.tabControlSource.Controls.Add(this.tpXml);
             this.tabControlSource.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlSource.Location = new System.Drawing.Point(3, 210);
             this.tabControlSource.Name = "tabControlSource";
             this.tabControlSource.SelectedIndex = 0;
             this.tabControlSource.Size = new System.Drawing.Size(361, 419);
             this.tabControlSource.TabIndex = 2;
+            this.tabControlSource.SelectedIndexChanged += new System.EventHandler(this.tabControlSource_SelectedIndexChanged);
             // 
             // tabPageConnection
             // 
@@ -288,6 +348,56 @@
             this.tabPageExecl.TabIndex = 3;
             this.tabPageExecl.Text = "FromExecl";
             this.tabPageExecl.UseVisualStyleBackColor = true;
+            // 
+            // tpXml
+            // 
+            this.tpXml.Controls.Add(this.btnxmlString);
+            this.tpXml.Controls.Add(this.btnSelectFolder);
+            this.tpXml.Controls.Add(this.txtXmlSelect);
+            this.tpXml.Controls.Add(this.btnXmlSelectFile);
+            this.tpXml.Location = new System.Drawing.Point(4, 22);
+            this.tpXml.Name = "tpXml";
+            this.tpXml.Padding = new System.Windows.Forms.Padding(3);
+            this.tpXml.Size = new System.Drawing.Size(353, 393);
+            this.tpXml.TabIndex = 4;
+            this.tpXml.Text = "FromXml";
+            this.tpXml.UseVisualStyleBackColor = true;
+            // 
+            // btnxmlString
+            // 
+            this.btnxmlString.Location = new System.Drawing.Point(234, 119);
+            this.btnxmlString.Name = "btnxmlString";
+            this.btnxmlString.Size = new System.Drawing.Size(88, 23);
+            this.btnxmlString.TabIndex = 3;
+            this.btnxmlString.Text = "Xml String";
+            this.btnxmlString.UseVisualStyleBackColor = true;
+            this.btnxmlString.Click += new System.EventHandler(this.btnxmlString_Click);
+            // 
+            // btnSelectFolder
+            // 
+            this.btnSelectFolder.Location = new System.Drawing.Point(129, 119);
+            this.btnSelectFolder.Name = "btnSelectFolder";
+            this.btnSelectFolder.Size = new System.Drawing.Size(99, 23);
+            this.btnSelectFolder.TabIndex = 2;
+            this.btnSelectFolder.Text = "Select Folder";
+            this.btnSelectFolder.UseVisualStyleBackColor = true;
+            // 
+            // txtXmlSelect
+            // 
+            this.txtXmlSelect.Location = new System.Drawing.Point(6, 6);
+            this.txtXmlSelect.Multiline = true;
+            this.txtXmlSelect.Name = "txtXmlSelect";
+            this.txtXmlSelect.Size = new System.Drawing.Size(341, 91);
+            this.txtXmlSelect.TabIndex = 1;
+            // 
+            // btnXmlSelectFile
+            // 
+            this.btnXmlSelectFile.Location = new System.Drawing.Point(18, 119);
+            this.btnXmlSelectFile.Name = "btnXmlSelectFile";
+            this.btnXmlSelectFile.Size = new System.Drawing.Size(105, 23);
+            this.btnXmlSelectFile.TabIndex = 0;
+            this.btnXmlSelectFile.Text = "Select File";
+            this.btnXmlSelectFile.UseVisualStyleBackColor = true;
             // 
             // pSearch
             // 
@@ -416,16 +526,6 @@
             this.txtSearch.Size = new System.Drawing.Size(219, 184);
             this.txtSearch.TabIndex = 0;
             // 
-            // tabPageCsharpGenerator
-            // 
-            this.tabPageCsharpGenerator.Location = new System.Drawing.Point(4, 22);
-            this.tabPageCsharpGenerator.Name = "tabPageCsharpGenerator";
-            this.tabPageCsharpGenerator.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCsharpGenerator.Size = new System.Drawing.Size(1207, 638);
-            this.tabPageCsharpGenerator.TabIndex = 1;
-            this.tabPageCsharpGenerator.Text = "CSharp Generator";
-            this.tabPageCsharpGenerator.UseVisualStyleBackColor = true;
-            // 
             // tabPageString
             // 
             this.tabPageString.Location = new System.Drawing.Point(4, 22);
@@ -466,6 +566,11 @@
             this.tabControlSet.Size = new System.Drawing.Size(1201, 632);
             this.tabControlSet.TabIndex = 0;
             // 
+            // openFile
+            // 
+            this.openFile.FileName = "openFileDialog1";
+            this.openFile.Multiselect = true;
+            // 
             // GeneartorTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -479,7 +584,10 @@
             this.tabControlALL.ResumeLayout(false);
             this.tabPageSQLGeneartor.ResumeLayout(false);
             this.PanSelectAndSnippet.ResumeLayout(false);
+            this.gbSnippet.ResumeLayout(false);
             this.bgselect.ResumeLayout(false);
+            this.tabControlSelect.ResumeLayout(false);
+            this.tabPageSelectXML.ResumeLayout(false);
             this.gbleft.ResumeLayout(false);
             this.tabControlSource.ResumeLayout(false);
             this.tabPageConnection.ResumeLayout(false);
@@ -487,6 +595,8 @@
             this.gtree.PerformLayout();
             this.toolStripTreeServer.ResumeLayout(false);
             this.toolStripTreeServer.PerformLayout();
+            this.tpXml.ResumeLayout(false);
+            this.tpXml.PerformLayout();
             this.pSearch.ResumeLayout(false);
             this.pSearch.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -504,7 +614,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TabControl tabControlALL;
         private System.Windows.Forms.TabPage tabPageSQLGeneartor;
-        private System.Windows.Forms.TabPage tabPageCsharpGenerator;
         private System.Windows.Forms.TabPage tabPageString;
         private System.Windows.Forms.TabPage tabPageSQLCompare;
         private System.Windows.Forms.TabPage tabPageSystemConfig;
@@ -533,11 +642,21 @@
         private System.Windows.Forms.ToolStripButton tsAdd;
         private System.Windows.Forms.ToolStripButton tsRemove;
         private System.Windows.Forms.ToolStripButton tsRefresh;
-        private System.Windows.Forms.TreeView treeSelectData;
         private System.Windows.Forms.TabPage tabPageExecl;
         private System.Windows.Forms.RadioButton rdComplete;
         private System.Windows.Forms.TextBox txtFuzzyPercent;
-        private System.Windows.Forms.TreeView SelectDataTree;
+        private System.Windows.Forms.TabPage tpXml;
+        private System.Windows.Forms.OpenFileDialog openFile;
+        private System.Windows.Forms.Button btnSelectFolder;
+        private System.Windows.Forms.TextBox txtXmlSelect;
+        private System.Windows.Forms.Button btnXmlSelectFile;
+        private System.Windows.Forms.TreeView TreeSnippet;
+        private System.Windows.Forms.TabControl tabControlSelect;
+        private System.Windows.Forms.TabPage tabPageSelectSQL;
+        private System.Windows.Forms.TabPage tabPageSelectClass;
+        private System.Windows.Forms.TabPage tabPageSelectXML;
+        private System.Windows.Forms.Button btnxmlString;
+        private System.Windows.Forms.TreeView TreeViewXML;
     }
 }
 

@@ -14,6 +14,9 @@ namespace WFGenerator
         [STAThread]
         static void Main()
         {
+
+              
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new GeneartorTools());

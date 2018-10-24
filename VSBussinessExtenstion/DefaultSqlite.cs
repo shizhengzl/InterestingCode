@@ -45,6 +45,8 @@
         [Key]
         public Int32 Id { get; set; }
 
+        public string Name { get; set; }
+
         public Int32 ParentId { get; set; }
 
         public DataSourceType DataSourceType { get; set; }
@@ -138,8 +140,8 @@
     {
         DatabaseType = 0,
         CSharpType = 1,
-        StringType = 2,
-        SQLType = 3
+        XMLType = 2,
+        StringType = 3
     }
 
     public enum CharStatu

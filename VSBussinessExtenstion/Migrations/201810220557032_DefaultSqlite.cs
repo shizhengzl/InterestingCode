@@ -51,6 +51,7 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
                         ParentId = c.Int(nullable: false),
                         DataSourceType = c.Int(nullable: false),
                         Context = c.String(),

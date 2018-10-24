@@ -41,8 +41,31 @@ namespace VSBussinessExtenstion.Migrations
             context.DataBaseAddresses.RemoveRange(context.DataBaseAddresses.ToList());
             context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() {  Address=".", Password="95938",User="sa",DefaultDatabase= "", DBType = Core.UsuallyCommon.DataBaseType.SQLServer});
 
+            context.Snippets.RemoveRange(context.Snippets.ToList());
+
+            var databasedemo = new Snippet() { DataSourceType = DataSourceType.DatabaseType, IsFloder = true, Name = "DataBase Demo Folder" };
+            context.Snippets.Add(databasedemo);
+            context.SaveChanges();
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.DatabaseType, IsFloder = false, Name = "DataBase Demo", GeneratorFileName="@TableName.cs", IsEnabled=true, ParentId = databasedemo.Id,Context = @"public class @TableName{
+                <%! public @CsharpType @ColumnName 
+                !%> 
+            }"});
+
+            var csharpdemo = new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = true, Name = "Csharp Demo Folder" };
+            context.Snippets.Add(csharpdemo); 
+            context.SaveChanges();
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = false, Name = "Csharp Demo", GeneratorFileName = "@ClassName.cs", IsEnabled = true, ParentId = csharpdemo.Id, Context = @" this is className:@ClassName 
+            this is Propertys <%! @PropertyName !%>"});
 
 
-            }
+            var xmldemo = new Snippet() { DataSourceType = DataSourceType.XMLType, IsFloder = true, Name = "XML Demo Folder" };
+            context.Snippets.Add(xmldemo);
+            context.SaveChanges();
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.XMLType, IsFloder = false, Name = "XML Demo", GeneratorFileName = "@DocumentName.cs", IsEnabled = true, ParentId = xmldemo.Id, Context = @" this is className:@ClassName 
+            this is Propertys <%! @PropertyName !%>" });
+
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.StringType, IsFloder = true, Name = "String Demo" });
+
+        }
     }
 }
