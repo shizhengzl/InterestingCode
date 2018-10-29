@@ -47,8 +47,12 @@
     <Compile Include="DataBase\DataBaseAddress.cs" />
     <Compile Include="DataBase\Table.cs" />
     <Compile Include="Extension\TypeExtenstion.cs" />
+    <Compile Include="Helper\CSharpParser.cs" />
+    <Compile Include="Helper\HtmlParser.cs" />
+    <Compile Include="Helper\JsonParser.cs" />
+    <Compile Include="Helper\SQLParser.cs" />
     <Compile Include="Helper\StringHelper.cs" />
-    <Compile Include="Helper\XMLHelper.cs" />
+    <Compile Include="Helper\XmlParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
