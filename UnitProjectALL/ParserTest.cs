@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Core.UsuallyCommon;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,14 @@ namespace UnitProjectALL
         [TestMethod]
         public void TestConnectin()
         {
-            //Assert.
+            var context = "public class API{public string Name {get;set;}}";
+
+            CSharpParser parser = new CSharpParser(context);
+
+            var classs = parser.GetClass();
+           
+                Assert.AreEqual(classs.FirstOrDefault().Name, "API");
+            
         }
     }
 }
