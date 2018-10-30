@@ -13,18 +13,36 @@ namespace WFGenerator
 {
     public class ToolScriptExtension<T> : ToolStrip where T : class, new()
     {
+      
         public PanelExtension<T> Panel { get; set; }
         public ToolScriptExtension(PanelExtension<T> panel)
-        {
+        { 
             Panel = panel;
-            this.Dock = DockStyle.Fill;
-
+            this.Dock = DockStyle.Fill;  
             List<string> btn = Core.UsuallyCommon.Extensions.EnumToList<ToolScriptButton>();
             foreach (var item in btn)
             {
                 // add button 
                 ToolStripButton button = new ToolStripButton() { Text = item, Name = $"btn{item}" };
                 button.Click += Button_Click;
+               
+                var btnenum = item.ToEnum<ToolScriptButton>();
+
+                switch (btnenum)
+                {
+                    case ToolScriptButton.Insert:
+                        //button.Image = imageListone.Images[(int)ImageEnum.Add]; 
+                        break;
+                    case ToolScriptButton.Update:
+                        //button.Image = imageListone.Images[(int)ImageEnum.Edit]; 
+                        break;
+                    case ToolScriptButton.Delete:
+                        //button.Image = imageListone.Images[(int)ImageEnum.Remove]; 
+                        break;
+                    case ToolScriptButton.Refresh:
+                        //button.Image = imageListone.Images[(int)ImageEnum.Refresh]; 
+                        break;
+                }
                 this.Items.Add(button);
             }
         }
@@ -62,5 +80,7 @@ namespace WFGenerator
             }
             Panel.gridView.DataSource = ExtenstionClass.GetList<T>(new DefaultSqlite());
         }
+
+   
     }
 }

@@ -28,28 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneartorTools));
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStripMessage = new System.Windows.Forms.StatusStrip();
             this.tabControlALL = new System.Windows.Forms.TabControl();
             this.tabPageSQLGeneartor = new System.Windows.Forms.TabPage();
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
-            this.TreeSnippet = new System.Windows.Forms.TreeView();
+            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.bgselect = new System.Windows.Forms.GroupBox();
             this.tabControlSelect = new System.Windows.Forms.TabControl();
             this.tabPageSelectSQL = new System.Windows.Forms.TabPage();
+            this.gtree = new System.Windows.Forms.GroupBox();
+            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.toolStripTreeServer = new System.Windows.Forms.ToolStrip();
+            this.tsAdd = new System.Windows.Forms.ToolStripButton();
+            this.tsRemove = new System.Windows.Forms.ToolStripButton();
+            this.tsRefresh = new System.Windows.Forms.ToolStripButton();
             this.tabPageSelectClass = new System.Windows.Forms.TabPage();
             this.tabPageSelectXML = new System.Windows.Forms.TabPage();
             this.TreeViewXML = new System.Windows.Forms.TreeView();
             this.gbleft = new System.Windows.Forms.GroupBox();
             this.tabControlSource = new System.Windows.Forms.TabControl();
-            this.tabPageConnection = new System.Windows.Forms.TabPage();
-            this.gtree = new System.Windows.Forms.GroupBox();
-            this.TreeServer = new System.Windows.Forms.TreeView();
-            this.toolStripTreeServer = new System.Windows.Forms.ToolStrip();
-            this.tsAdd = new System.Windows.Forms.ToolStripButton();
-            this.tsRemove = new System.Windows.Forms.ToolStripButton();
-            this.tsRefresh = new System.Windows.Forms.ToolStripButton();
             this.tabPageSQL = new System.Windows.Forms.TabPage();
             this.tabPageClass = new System.Windows.Forms.TabPage();
             this.tabPageExecl = new System.Windows.Forms.TabPage();
@@ -74,33 +74,46 @@
             this.tabPageSQLCompare = new System.Windows.Forms.TabPage();
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.openFile = new System.Windows.Forms.OpenFileDialog();
+            this.groupGenerator = new System.Windows.Forms.GroupBox();
+            this.tabControlGeneartor = new System.Windows.Forms.TabControl();
+            this.tabPageStruct = new System.Windows.Forms.TabPage();
+            this.tabPageData = new System.Windows.Forms.TabPage();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.txtGenerator = new System.Windows.Forms.TextBox();
+            this.tGenerator = new System.Windows.Forms.ToolStripButton();
+            this.tGeneratorFile = new System.Windows.Forms.ToolStripButton();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
             this.PanSelectAndSnippet.SuspendLayout();
             this.gbSnippet.SuspendLayout();
             this.bgselect.SuspendLayout();
             this.tabControlSelect.SuspendLayout();
+            this.tabPageSelectSQL.SuspendLayout();
+            this.gtree.SuspendLayout();
+            this.toolStripTreeServer.SuspendLayout();
             this.tabPageSelectXML.SuspendLayout();
             this.gbleft.SuspendLayout();
             this.tabControlSource.SuspendLayout();
-            this.tabPageConnection.SuspendLayout();
-            this.gtree.SuspendLayout();
-            this.toolStripTreeServer.SuspendLayout();
             this.tpXml.SuspendLayout();
             this.pSearch.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbSearch.SuspendLayout();
             this.tabPageSystemConfig.SuspendLayout();
+            this.groupGenerator.SuspendLayout();
+            this.tabControlGeneartor.SuspendLayout();
+            this.tabPageStruct.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // statusStrip1
+            // statusStripMessage
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 664);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1215, 22);
-            this.statusStrip1.TabIndex = 0;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStripMessage.Location = new System.Drawing.Point(0, 664);
+            this.statusStripMessage.Name = "statusStripMessage";
+            this.statusStripMessage.Size = new System.Drawing.Size(1215, 22);
+            this.statusStripMessage.TabIndex = 0;
+            this.statusStripMessage.Text = "statusStrip1";
             // 
             // tabControlALL
             // 
@@ -109,6 +122,7 @@
             this.tabControlALL.Controls.Add(this.tabPageSQLCompare);
             this.tabControlALL.Controls.Add(this.tabPageSystemConfig);
             this.tabControlALL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlALL.ImageList = this.imageList;
             this.tabControlALL.Location = new System.Drawing.Point(0, 0);
             this.tabControlALL.Name = "tabControlALL";
             this.tabControlALL.SelectedIndex = 0;
@@ -117,12 +131,14 @@
             // 
             // tabPageSQLGeneartor
             // 
+            this.tabPageSQLGeneartor.Controls.Add(this.groupGenerator);
             this.tabPageSQLGeneartor.Controls.Add(this.PanSelectAndSnippet);
             this.tabPageSQLGeneartor.Controls.Add(this.gbleft);
-            this.tabPageSQLGeneartor.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSQLGeneartor.ImageIndex = 4;
+            this.tabPageSQLGeneartor.Location = new System.Drawing.Point(4, 23);
             this.tabPageSQLGeneartor.Name = "tabPageSQLGeneartor";
             this.tabPageSQLGeneartor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSQLGeneartor.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageSQLGeneartor.Size = new System.Drawing.Size(1207, 637);
             this.tabPageSQLGeneartor.TabIndex = 0;
             this.tabPageSQLGeneartor.Text = "SQL Generoator";
             this.tabPageSQLGeneartor.UseVisualStyleBackColor = true;
@@ -134,28 +150,32 @@
             this.PanSelectAndSnippet.Dock = System.Windows.Forms.DockStyle.Left;
             this.PanSelectAndSnippet.Location = new System.Drawing.Point(370, 3);
             this.PanSelectAndSnippet.Name = "PanSelectAndSnippet";
-            this.PanSelectAndSnippet.Size = new System.Drawing.Size(313, 632);
+            this.PanSelectAndSnippet.Size = new System.Drawing.Size(313, 631);
             this.PanSelectAndSnippet.TabIndex = 2;
             // 
             // gbSnippet
             // 
-            this.gbSnippet.Controls.Add(this.TreeSnippet);
+            this.gbSnippet.Controls.Add(this.SnippetTree);
             this.gbSnippet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbSnippet.Location = new System.Drawing.Point(0, 332);
             this.gbSnippet.Name = "gbSnippet";
-            this.gbSnippet.Size = new System.Drawing.Size(313, 300);
+            this.gbSnippet.Size = new System.Drawing.Size(313, 299);
             this.gbSnippet.TabIndex = 2;
             this.gbSnippet.TabStop = false;
             this.gbSnippet.Text = "Snippet";
             // 
-            // TreeSnippet
+            // SnippetTree
             // 
-            this.TreeSnippet.CheckBoxes = true;
-            this.TreeSnippet.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TreeSnippet.Location = new System.Drawing.Point(3, 17);
-            this.TreeSnippet.Name = "TreeSnippet";
-            this.TreeSnippet.Size = new System.Drawing.Size(307, 280);
-            this.TreeSnippet.TabIndex = 0;
+            this.SnippetTree.CheckBoxes = true;
+            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SnippetTree.listSnippet = null;
+            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
+            this.SnippetTree.Name = "SnippetTree";
+            this.SnippetTree.sh = null;
+            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
+            this.SnippetTree.sqlite = null;
+            this.SnippetTree.TabIndex = 0;
+            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // bgselect
             // 
@@ -182,6 +202,7 @@
             // 
             // tabPageSelectSQL
             // 
+            this.tabPageSelectSQL.Controls.Add(this.gtree);
             this.tabPageSelectSQL.Location = new System.Drawing.Point(4, 22);
             this.tabPageSelectSQL.Name = "tabPageSelectSQL";
             this.tabPageSelectSQL.Padding = new System.Windows.Forms.Padding(3);
@@ -189,6 +210,67 @@
             this.tabPageSelectSQL.TabIndex = 0;
             this.tabPageSelectSQL.Text = "SQL";
             this.tabPageSelectSQL.UseVisualStyleBackColor = true;
+            // 
+            // gtree
+            // 
+            this.gtree.Controls.Add(this.ServerTree);
+            this.gtree.Controls.Add(this.toolStripTreeServer);
+            this.gtree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gtree.Location = new System.Drawing.Point(3, 3);
+            this.gtree.Name = "gtree";
+            this.gtree.Size = new System.Drawing.Size(293, 280);
+            this.gtree.TabIndex = 2;
+            this.gtree.TabStop = false;
+            this.gtree.Text = "Tree";
+            // 
+            // ServerTree
+            // 
+            this.ServerTree.CheckBoxes = true;
+            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ServerTree.listSnippet = null;
+            this.ServerTree.Location = new System.Drawing.Point(3, 42);
+            this.ServerTree.Name = "ServerTree";
+            this.ServerTree.sh = null;
+            this.ServerTree.Size = new System.Drawing.Size(287, 235);
+            this.ServerTree.sqlite = null;
+            this.ServerTree.TabIndex = 1;
+            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
+            // toolStripTreeServer
+            // 
+            this.toolStripTreeServer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsAdd,
+            this.tsRemove,
+            this.tsRefresh});
+            this.toolStripTreeServer.Location = new System.Drawing.Point(3, 17);
+            this.toolStripTreeServer.Name = "toolStripTreeServer";
+            this.toolStripTreeServer.Size = new System.Drawing.Size(287, 25);
+            this.toolStripTreeServer.TabIndex = 0;
+            this.toolStripTreeServer.Text = "toolStripTree";
+            // 
+            // tsAdd
+            // 
+            this.tsAdd.Image = ((System.Drawing.Image)(resources.GetObject("tsAdd.Image")));
+            this.tsAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsAdd.Name = "tsAdd";
+            this.tsAdd.Size = new System.Drawing.Size(117, 22);
+            this.tsAdd.Text = "AddConnection";
+            // 
+            // tsRemove
+            // 
+            this.tsRemove.Image = ((System.Drawing.Image)(resources.GetObject("tsRemove.Image")));
+            this.tsRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsRemove.Name = "tsRemove";
+            this.tsRemove.Size = new System.Drawing.Size(75, 22);
+            this.tsRemove.Text = "Remove";
+            // 
+            // tsRefresh
+            // 
+            this.tsRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsRefresh.Image")));
+            this.tsRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsRefresh.Name = "tsRefresh";
+            this.tsRefresh.Size = new System.Drawing.Size(72, 22);
+            this.tsRefresh.Text = "Refresh";
             // 
             // tabPageSelectClass
             // 
@@ -228,14 +310,13 @@
             this.gbleft.Dock = System.Windows.Forms.DockStyle.Left;
             this.gbleft.Location = new System.Drawing.Point(3, 3);
             this.gbleft.Name = "gbleft";
-            this.gbleft.Size = new System.Drawing.Size(367, 632);
+            this.gbleft.Size = new System.Drawing.Size(367, 631);
             this.gbleft.TabIndex = 0;
             this.gbleft.TabStop = false;
             this.gbleft.Text = "DataSource";
             // 
             // tabControlSource
             // 
-            this.tabControlSource.Controls.Add(this.tabPageConnection);
             this.tabControlSource.Controls.Add(this.tabPageSQL);
             this.tabControlSource.Controls.Add(this.tabPageClass);
             this.tabControlSource.Controls.Add(this.tabPageExecl);
@@ -244,87 +325,15 @@
             this.tabControlSource.Location = new System.Drawing.Point(3, 210);
             this.tabControlSource.Name = "tabControlSource";
             this.tabControlSource.SelectedIndex = 0;
-            this.tabControlSource.Size = new System.Drawing.Size(361, 419);
+            this.tabControlSource.Size = new System.Drawing.Size(361, 418);
             this.tabControlSource.TabIndex = 2;
-            this.tabControlSource.SelectedIndexChanged += new System.EventHandler(this.tabControlSource_SelectedIndexChanged);
-            // 
-            // tabPageConnection
-            // 
-            this.tabPageConnection.Controls.Add(this.gtree);
-            this.tabPageConnection.Location = new System.Drawing.Point(4, 22);
-            this.tabPageConnection.Name = "tabPageConnection";
-            this.tabPageConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageConnection.Size = new System.Drawing.Size(353, 393);
-            this.tabPageConnection.TabIndex = 0;
-            this.tabPageConnection.Text = "SQLConnection";
-            this.tabPageConnection.UseVisualStyleBackColor = true;
-            // 
-            // gtree
-            // 
-            this.gtree.Controls.Add(this.TreeServer);
-            this.gtree.Controls.Add(this.toolStripTreeServer);
-            this.gtree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gtree.Location = new System.Drawing.Point(3, 3);
-            this.gtree.Name = "gtree";
-            this.gtree.Size = new System.Drawing.Size(347, 387);
-            this.gtree.TabIndex = 2;
-            this.gtree.TabStop = false;
-            this.gtree.Text = "Tree";
-            // 
-            // TreeServer
-            // 
-            this.TreeServer.CheckBoxes = true;
-            this.TreeServer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TreeServer.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.TreeServer.LineColor = System.Drawing.Color.GreenYellow;
-            this.TreeServer.Location = new System.Drawing.Point(3, 42);
-            this.TreeServer.Name = "TreeServer";
-            this.TreeServer.Size = new System.Drawing.Size(341, 342);
-            this.TreeServer.TabIndex = 1;
-            this.TreeServer.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TreeServer_AfterCheck);
-            // 
-            // toolStripTreeServer
-            // 
-            this.toolStripTreeServer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsAdd,
-            this.tsRemove,
-            this.tsRefresh});
-            this.toolStripTreeServer.Location = new System.Drawing.Point(3, 17);
-            this.toolStripTreeServer.Name = "toolStripTreeServer";
-            this.toolStripTreeServer.Size = new System.Drawing.Size(341, 25);
-            this.toolStripTreeServer.TabIndex = 0;
-            this.toolStripTreeServer.Text = "toolStripTree";
-            // 
-            // tsAdd
-            // 
-            this.tsAdd.Image = ((System.Drawing.Image)(resources.GetObject("tsAdd.Image")));
-            this.tsAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsAdd.Name = "tsAdd";
-            this.tsAdd.Size = new System.Drawing.Size(117, 22);
-            this.tsAdd.Text = "AddConnection";
-            // 
-            // tsRemove
-            // 
-            this.tsRemove.Image = ((System.Drawing.Image)(resources.GetObject("tsRemove.Image")));
-            this.tsRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsRemove.Name = "tsRemove";
-            this.tsRemove.Size = new System.Drawing.Size(75, 22);
-            this.tsRemove.Text = "Remove";
-            // 
-            // tsRefresh
-            // 
-            this.tsRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsRefresh.Image")));
-            this.tsRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsRefresh.Name = "tsRefresh";
-            this.tsRefresh.Size = new System.Drawing.Size(72, 22);
-            this.tsRefresh.Text = "Refresh";
             // 
             // tabPageSQL
             // 
             this.tabPageSQL.Location = new System.Drawing.Point(4, 22);
             this.tabPageSQL.Name = "tabPageSQL";
             this.tabPageSQL.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSQL.Size = new System.Drawing.Size(353, 393);
+            this.tabPageSQL.Size = new System.Drawing.Size(353, 392);
             this.tabPageSQL.TabIndex = 1;
             this.tabPageSQL.Text = "SQL";
             this.tabPageSQL.UseVisualStyleBackColor = true;
@@ -334,7 +343,7 @@
             this.tabPageClass.Location = new System.Drawing.Point(4, 22);
             this.tabPageClass.Name = "tabPageClass";
             this.tabPageClass.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageClass.Size = new System.Drawing.Size(353, 393);
+            this.tabPageClass.Size = new System.Drawing.Size(353, 392);
             this.tabPageClass.TabIndex = 2;
             this.tabPageClass.Text = "Class";
             this.tabPageClass.UseVisualStyleBackColor = true;
@@ -344,7 +353,7 @@
             this.tabPageExecl.Location = new System.Drawing.Point(4, 22);
             this.tabPageExecl.Name = "tabPageExecl";
             this.tabPageExecl.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageExecl.Size = new System.Drawing.Size(353, 393);
+            this.tabPageExecl.Size = new System.Drawing.Size(353, 392);
             this.tabPageExecl.TabIndex = 3;
             this.tabPageExecl.Text = "FromExecl";
             this.tabPageExecl.UseVisualStyleBackColor = true;
@@ -358,7 +367,7 @@
             this.tpXml.Location = new System.Drawing.Point(4, 22);
             this.tpXml.Name = "tpXml";
             this.tpXml.Padding = new System.Windows.Forms.Padding(3);
-            this.tpXml.Size = new System.Drawing.Size(353, 393);
+            this.tpXml.Size = new System.Drawing.Size(353, 392);
             this.tpXml.TabIndex = 4;
             this.tpXml.Text = "FromXml";
             this.tpXml.UseVisualStyleBackColor = true;
@@ -528,20 +537,22 @@
             // 
             // tabPageString
             // 
-            this.tabPageString.Location = new System.Drawing.Point(4, 22);
+            this.tabPageString.ImageIndex = 4;
+            this.tabPageString.Location = new System.Drawing.Point(4, 23);
             this.tabPageString.Name = "tabPageString";
             this.tabPageString.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageString.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageString.Size = new System.Drawing.Size(1207, 637);
             this.tabPageString.TabIndex = 2;
             this.tabPageString.Text = "String";
             this.tabPageString.UseVisualStyleBackColor = true;
             // 
             // tabPageSQLCompare
             // 
-            this.tabPageSQLCompare.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSQLCompare.ImageIndex = 4;
+            this.tabPageSQLCompare.Location = new System.Drawing.Point(4, 23);
             this.tabPageSQLCompare.Name = "tabPageSQLCompare";
             this.tabPageSQLCompare.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSQLCompare.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageSQLCompare.Size = new System.Drawing.Size(1207, 637);
             this.tabPageSQLCompare.TabIndex = 3;
             this.tabPageSQLCompare.Text = "SQL Compare";
             this.tabPageSQLCompare.UseVisualStyleBackColor = true;
@@ -549,10 +560,11 @@
             // tabPageSystemConfig
             // 
             this.tabPageSystemConfig.Controls.Add(this.tabControlSet);
-            this.tabPageSystemConfig.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSystemConfig.ImageIndex = 4;
+            this.tabPageSystemConfig.Location = new System.Drawing.Point(4, 23);
             this.tabPageSystemConfig.Name = "tabPageSystemConfig";
             this.tabPageSystemConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSystemConfig.Size = new System.Drawing.Size(1207, 638);
+            this.tabPageSystemConfig.Size = new System.Drawing.Size(1207, 637);
             this.tabPageSystemConfig.TabIndex = 4;
             this.tabPageSystemConfig.Text = "System Config";
             this.tabPageSystemConfig.UseVisualStyleBackColor = true;
@@ -560,16 +572,113 @@
             // tabControlSet
             // 
             this.tabControlSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlSet.ImageList = this.imageList;
             this.tabControlSet.Location = new System.Drawing.Point(3, 3);
             this.tabControlSet.Name = "tabControlSet";
             this.tabControlSet.SelectedIndex = 0;
-            this.tabControlSet.Size = new System.Drawing.Size(1201, 632);
+            this.tabControlSet.Size = new System.Drawing.Size(1201, 631);
             this.tabControlSet.TabIndex = 0;
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "add_edit_24px.png");
+            this.imageList.Images.SetKeyName(1, "database_24px.png");
+            this.imageList.Images.SetKeyName(2, "edit_24px.png");
+            this.imageList.Images.SetKeyName(3, "folder_24px.png");
+            this.imageList.Images.SetKeyName(4, "generate_tables_24px.png");
+            this.imageList.Images.SetKeyName(5, "refresh_24px.png");
+            this.imageList.Images.SetKeyName(6, "remove_24px.png");
+            this.imageList.Images.SetKeyName(7, "server_24px.png");
+            this.imageList.Images.SetKeyName(8, "table_24px.png");
+            this.imageList.Images.SetKeyName(9, "dialog_ok_24px.png");
+            this.imageList.Images.SetKeyName(10, "error_24px.png");
             // 
             // openFile
             // 
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
+            // 
+            // groupGenerator
+            // 
+            this.groupGenerator.Controls.Add(this.tabControlGeneartor);
+            this.groupGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupGenerator.Location = new System.Drawing.Point(683, 3);
+            this.groupGenerator.Name = "groupGenerator";
+            this.groupGenerator.Size = new System.Drawing.Size(521, 631);
+            this.groupGenerator.TabIndex = 4;
+            this.groupGenerator.TabStop = false;
+            this.groupGenerator.Text = "GroupGenerator";
+            // 
+            // tabControlGeneartor
+            // 
+            this.tabControlGeneartor.Controls.Add(this.tabPageStruct);
+            this.tabControlGeneartor.Controls.Add(this.tabPageData);
+            this.tabControlGeneartor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlGeneartor.Location = new System.Drawing.Point(3, 17);
+            this.tabControlGeneartor.Name = "tabControlGeneartor";
+            this.tabControlGeneartor.SelectedIndex = 0;
+            this.tabControlGeneartor.Size = new System.Drawing.Size(515, 611);
+            this.tabControlGeneartor.TabIndex = 0;
+            // 
+            // tabPageStruct
+            // 
+            this.tabPageStruct.Controls.Add(this.txtGenerator);
+            this.tabPageStruct.Controls.Add(this.toolStrip1);
+            this.tabPageStruct.Location = new System.Drawing.Point(4, 22);
+            this.tabPageStruct.Name = "tabPageStruct";
+            this.tabPageStruct.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageStruct.Size = new System.Drawing.Size(507, 585);
+            this.tabPageStruct.TabIndex = 0;
+            this.tabPageStruct.Text = "Struct Generator";
+            this.tabPageStruct.UseVisualStyleBackColor = true;
+            // 
+            // tabPageData
+            // 
+            this.tabPageData.Location = new System.Drawing.Point(4, 22);
+            this.tabPageData.Name = "tabPageData";
+            this.tabPageData.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageData.Size = new System.Drawing.Size(507, 585);
+            this.tabPageData.TabIndex = 1;
+            this.tabPageData.Text = "Data Generator";
+            this.tabPageData.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tGenerator,
+            this.tGeneratorFile});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(501, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // txtGenerator
+            // 
+            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenerator.Location = new System.Drawing.Point(3, 28);
+            this.txtGenerator.Multiline = true;
+            this.txtGenerator.Name = "txtGenerator";
+            this.txtGenerator.Size = new System.Drawing.Size(501, 554);
+            this.txtGenerator.TabIndex = 1;
+            // 
+            // tGenerator
+            // 
+            this.tGenerator.Image = ((System.Drawing.Image)(resources.GetObject("tGenerator.Image")));
+            this.tGenerator.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tGenerator.Name = "tGenerator";
+            this.tGenerator.Size = new System.Drawing.Size(87, 22);
+            this.tGenerator.Text = "Generator";
+            // 
+            // tGeneratorFile
+            // 
+            this.tGeneratorFile.Image = ((System.Drawing.Image)(resources.GetObject("tGeneratorFile.Image")));
+            this.tGeneratorFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tGeneratorFile.Name = "tGeneratorFile";
+            this.tGeneratorFile.Size = new System.Drawing.Size(106, 22);
+            this.tGeneratorFile.Text = "GeneratorFile";
             // 
             // GeneartorTools
             // 
@@ -577,7 +686,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1215, 686);
             this.Controls.Add(this.tabControlALL);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStripMessage);
             this.Name = "GeneartorTools";
             this.Text = "GeneratorTools";
             this.Load += new System.EventHandler(this.GeneartorTools_Load);
@@ -587,14 +696,14 @@
             this.gbSnippet.ResumeLayout(false);
             this.bgselect.ResumeLayout(false);
             this.tabControlSelect.ResumeLayout(false);
-            this.tabPageSelectXML.ResumeLayout(false);
-            this.gbleft.ResumeLayout(false);
-            this.tabControlSource.ResumeLayout(false);
-            this.tabPageConnection.ResumeLayout(false);
+            this.tabPageSelectSQL.ResumeLayout(false);
             this.gtree.ResumeLayout(false);
             this.gtree.PerformLayout();
             this.toolStripTreeServer.ResumeLayout(false);
             this.toolStripTreeServer.PerformLayout();
+            this.tabPageSelectXML.ResumeLayout(false);
+            this.gbleft.ResumeLayout(false);
+            this.tabControlSource.ResumeLayout(false);
             this.tpXml.ResumeLayout(false);
             this.tpXml.PerformLayout();
             this.pSearch.ResumeLayout(false);
@@ -604,6 +713,12 @@
             this.gbSearch.ResumeLayout(false);
             this.gbSearch.PerformLayout();
             this.tabPageSystemConfig.ResumeLayout(false);
+            this.groupGenerator.ResumeLayout(false);
+            this.tabControlGeneartor.ResumeLayout(false);
+            this.tabPageStruct.ResumeLayout(false);
+            this.tabPageStruct.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -611,7 +726,7 @@
 
         #endregion
 
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStripMessage;
         private System.Windows.Forms.TabControl tabControlALL;
         private System.Windows.Forms.TabPage tabPageSQLGeneartor;
         private System.Windows.Forms.TabPage tabPageString;
@@ -624,7 +739,6 @@
         private System.Windows.Forms.GroupBox gtree;
         private System.Windows.Forms.ToolStrip toolStripTreeServer;
         private System.Windows.Forms.Panel pSearch;
-        private System.Windows.Forms.TreeView TreeServer;
         private System.Windows.Forms.TabControl tabControlSet;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.RadioButton rdFuzzySearch;
@@ -634,7 +748,6 @@
         private System.Windows.Forms.RadioButton rdFilterTable;
         private System.Windows.Forms.RadioButton rdFilterColumn;
         private System.Windows.Forms.TabControl tabControlSource;
-        private System.Windows.Forms.TabPage tabPageConnection;
         private System.Windows.Forms.TabPage tabPageSQL;
         private System.Windows.Forms.TabPage tabPageClass;
         private System.Windows.Forms.Button btnClear;
@@ -650,13 +763,23 @@
         private System.Windows.Forms.Button btnSelectFolder;
         private System.Windows.Forms.TextBox txtXmlSelect;
         private System.Windows.Forms.Button btnXmlSelectFile;
-        private System.Windows.Forms.TreeView TreeSnippet;
         private System.Windows.Forms.TabControl tabControlSelect;
         private System.Windows.Forms.TabPage tabPageSelectSQL;
         private System.Windows.Forms.TabPage tabPageSelectClass;
         private System.Windows.Forms.TabPage tabPageSelectXML;
         private System.Windows.Forms.Button btnxmlString;
         private System.Windows.Forms.TreeView TreeViewXML;
+        private System.Windows.Forms.ImageList imageList;
+        private WinfromControl.DatabaseTree ServerTree;
+        private WinfromControl.DatabaseTree SnippetTree;
+        private System.Windows.Forms.GroupBox groupGenerator;
+        private System.Windows.Forms.TabControl tabControlGeneartor;
+        private System.Windows.Forms.TabPage tabPageStruct;
+        private System.Windows.Forms.TabPage tabPageData;
+        private System.Windows.Forms.TextBox txtGenerator;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton tGenerator;
+        private System.Windows.Forms.ToolStripButton tGeneratorFile;
     }
 }
 

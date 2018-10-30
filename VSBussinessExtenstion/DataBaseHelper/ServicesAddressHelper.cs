@@ -47,7 +47,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
         public void InitColumn(Table table)
         {
             ChangeDataBase(table);
-            string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL;
+            string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL.Replace("@DataBaseName", table.DataBaseName).Replace("@TableName", table.TableName);
             table.Columns = DatabaseHelper.ExecuteQuery(getColumnSql).Tables[0].ToList<Column>();
         }
 

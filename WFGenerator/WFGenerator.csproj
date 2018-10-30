@@ -58,9 +58,13 @@
     <Compile Include="GeneartorTools.Designer.cs">
       <DependentUpon>GeneartorTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageEnum.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinfromControl\CommenEnum.cs" />
+    <Compile Include="WinfromControl\DatabaseTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinfromControl\GridViewExtension.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -86,6 +90,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="WinfromControl\ToolScriptExtension.resx">
+      <DependentUpon>ToolScriptExtension.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -109,6 +116,19 @@
       <Project>{64892DBC-9FE7-4DDE-9CFC-A692969F5636}</Project>
       <Name>VSBussinessExtenstion</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="img\add_edit_24px.png" />
+    <Content Include="img\database_24px.png" />
+    <Content Include="img\dialog_ok_24px.png" />
+    <Content Include="img\edit_24px.png" />
+    <Content Include="img\error_24px.png" />
+    <Content Include="img\folder_24px.png" />
+    <Content Include="img\generate_tables_24px.png" />
+    <Content Include="img\refresh_24px.png" />
+    <Content Include="img\remove_24px.png" />
+    <Content Include="img\server_24px.png" />
+    <Content Include="img\table_24px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

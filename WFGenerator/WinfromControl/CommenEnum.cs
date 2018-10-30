@@ -19,4 +19,10 @@ namespace WFGenerator
         Save = 0,
         Canel = 1
     }
+
+    public enum TreeType
+    {
+        DataBase = 0 ,
+        Snippte = 1
+    }
 }

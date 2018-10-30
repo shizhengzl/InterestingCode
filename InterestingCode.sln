@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFGenerator", "WFGenerator\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitProjectALL", "UnitProjectALL\UnitProjectALL.csproj", "{8BC8017B-AD3D-42FE-981D-3E1027C32E47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Console", "Core.Console\Core.Console.csproj", "{F9C90837-B90C-40CB-A827-1F32FA2B276A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{8BC8017B-AD3D-42FE-981D-3E1027C32E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BC8017B-AD3D-42FE-981D-3E1027C32E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BC8017B-AD3D-42FE-981D-3E1027C32E47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9C90837-B90C-40CB-A827-1F32FA2B276A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9C90837-B90C-40CB-A827-1F32FA2B276A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9C90837-B90C-40CB-A827-1F32FA2B276A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9C90837-B90C-40CB-A827-1F32FA2B276A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
