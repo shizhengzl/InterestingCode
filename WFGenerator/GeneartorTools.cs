@@ -49,7 +49,7 @@ namespace WFGenerator
             SnippetTree.treeType = TreeType.Snippte;
             SnippetTree.Refresh();
         }
- 
+         
 
         #region SystemConfig
 
@@ -131,7 +131,6 @@ namespace WFGenerator
             
         }
          
-
          
 
         private void btnxmlString_Click(object sender, EventArgs e)
@@ -185,6 +184,55 @@ namespace WFGenerator
                     LoadChild(xmlNote, item.ChildNodes);
                 }
             }
+        } 
+
+        GeneratorClass generatorClass = new GeneratorClass();
+
+        private void tsRefresh_Click(object sender, EventArgs e)
+        {
+            ServerTree.Refresh();
+        }
+
+        private void tGenerator_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SnippetTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            var snippet = e.Node.Tag as Snippet;
+            if (snippet.IsFloder)
+                return;
+            txtGenerator.Text = string.Empty;
+            foreach(TreeNode note in ServerTree.listSelect)
+            {
+                List<Column> listColumns = new List<Column>();
+                if(string.IsNullOrEmpty(note.Nodes[0].Text))
+                {
+                    Table table = note.Tag as Table;
+                    sh.InitColumn(table);
+                    listColumns.AddRange(table.Columns);
+                }
+                else
+                {
+                    foreach (TreeNode childs in note.Nodes)
+                    {
+                        if(childs.Checked)
+                            listColumns.Add(childs.Tag as Column);
+                    }
+                }
+                var code = generatorClass.GetGenerator(snippet, listColumns);
+
+                txtGenerator.AppendText(code);
+
+                 
+            }
+
+        }
+
+        private void tGeneratorFile_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

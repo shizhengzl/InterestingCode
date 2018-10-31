@@ -39,7 +39,7 @@ namespace Core.UsuallyCommon
             return result;
         }
 
-        public static List<String> GetPropertyList<T>(this object objects) 
+        public static List<String> GetPropertyList(this object objects) 
         {
             PropertyInfo[] propertys = objects.GetType().GetProperties();
 

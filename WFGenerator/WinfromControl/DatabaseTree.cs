@@ -17,6 +17,8 @@ namespace WFGenerator.WinfromControl
         public ServicesAddressHelper sh { get; set; }
         public List<Snippet> listSnippet { get; set; }
         public TreeType treeType { get; set; }
+
+        public List<TreeNode> listSelect = new List<TreeNode>();
         public DatabaseTree()
         {
             this.CheckBoxes = true;
@@ -69,6 +71,28 @@ namespace WFGenerator.WinfromControl
                 tnChild.Checked = Checked;
                 SetNodeCheckStatus(tnChild, Checked);
             }
+
+            GetCheckNode(tn, Checked);
+        }
+
+        public void GetCheckNode(TreeNode tn,bool Checked)
+        {
+            var table = tn.Tag as Table;
+            if (table == null)
+                return;
+            if (table.GetType().Name == typeof(Table).Name)
+            {
+                if (Checked)
+                {
+                    if (!listSelect.Any(x => x.Equals(tn)))
+                        listSelect.Add(tn);
+                }
+                else
+                {
+                    if (listSelect.Any(x => x.Equals(tn.Tag)))
+                        listSelect.Remove(tn);
+                }
+            }
         }
 
         private void SetNodeStyle(TreeNode Node)
@@ -102,13 +126,17 @@ namespace WFGenerator.WinfromControl
             }
             //当前节点选择完后，判断父节点的状态，调用此方法递归。  
             if (Node.Parent != null)
+            {
                 SetNodeStyle(Node.Parent);
+                GetCheckNode(Node, Node.Checked);
+            }
         }
 
 
         public override void Refresh()
         {
             this.Nodes.Clear();
+            this.listSelect.Clear();
             switch (treeType)
             {
                 case TreeType.DataBase:
@@ -159,7 +187,6 @@ namespace WFGenerator.WinfromControl
                 GetChildSnippet(treeNode, snippet);
             }
         }
-
         public void LoadDataBase()
         {
             var address = sqlite.DataBaseAddresses.ToList();

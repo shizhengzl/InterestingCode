@@ -25,7 +25,7 @@ namespace WFGenerator
         {
             IsInsert = isInsert;
             objectself = objects;
-            var list = objects.GetPropertyList<T>();
+            var list = objects.GetPropertyList();
 
             var propretylist = objects.GetType().GetProperties();
 

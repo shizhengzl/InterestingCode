@@ -33,6 +33,14 @@
             this.statusStripMessage = new System.Windows.Forms.StatusStrip();
             this.tabControlALL = new System.Windows.Forms.TabControl();
             this.tabPageSQLGeneartor = new System.Windows.Forms.TabPage();
+            this.groupGenerator = new System.Windows.Forms.GroupBox();
+            this.tabControlGeneartor = new System.Windows.Forms.TabControl();
+            this.tabPageStruct = new System.Windows.Forms.TabPage();
+            this.txtGenerator = new System.Windows.Forms.TextBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tGenerator = new System.Windows.Forms.ToolStripButton();
+            this.tGeneratorFile = new System.Windows.Forms.ToolStripButton();
+            this.tabPageData = new System.Windows.Forms.TabPage();
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
             this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
@@ -76,16 +84,12 @@
             this.tabControlSet = new System.Windows.Forms.TabControl();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.openFile = new System.Windows.Forms.OpenFileDialog();
-            this.groupGenerator = new System.Windows.Forms.GroupBox();
-            this.tabControlGeneartor = new System.Windows.Forms.TabControl();
-            this.tabPageStruct = new System.Windows.Forms.TabPage();
-            this.tabPageData = new System.Windows.Forms.TabPage();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.txtGenerator = new System.Windows.Forms.TextBox();
-            this.tGenerator = new System.Windows.Forms.ToolStripButton();
-            this.tGeneratorFile = new System.Windows.Forms.ToolStripButton();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
+            this.groupGenerator.SuspendLayout();
+            this.tabControlGeneartor.SuspendLayout();
+            this.tabPageStruct.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.PanSelectAndSnippet.SuspendLayout();
             this.gbSnippet.SuspendLayout();
             this.bgselect.SuspendLayout();
@@ -101,10 +105,6 @@
             this.groupBox1.SuspendLayout();
             this.gbSearch.SuspendLayout();
             this.tabPageSystemConfig.SuspendLayout();
-            this.groupGenerator.SuspendLayout();
-            this.tabControlGeneartor.SuspendLayout();
-            this.tabPageStruct.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripMessage
@@ -143,6 +143,88 @@
             this.tabPageSQLGeneartor.Text = "SQL Generoator";
             this.tabPageSQLGeneartor.UseVisualStyleBackColor = true;
             // 
+            // groupGenerator
+            // 
+            this.groupGenerator.Controls.Add(this.tabControlGeneartor);
+            this.groupGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupGenerator.Location = new System.Drawing.Point(683, 3);
+            this.groupGenerator.Name = "groupGenerator";
+            this.groupGenerator.Size = new System.Drawing.Size(521, 631);
+            this.groupGenerator.TabIndex = 4;
+            this.groupGenerator.TabStop = false;
+            this.groupGenerator.Text = "GroupGenerator";
+            // 
+            // tabControlGeneartor
+            // 
+            this.tabControlGeneartor.Controls.Add(this.tabPageStruct);
+            this.tabControlGeneartor.Controls.Add(this.tabPageData);
+            this.tabControlGeneartor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlGeneartor.Location = new System.Drawing.Point(3, 17);
+            this.tabControlGeneartor.Name = "tabControlGeneartor";
+            this.tabControlGeneartor.SelectedIndex = 0;
+            this.tabControlGeneartor.Size = new System.Drawing.Size(515, 611);
+            this.tabControlGeneartor.TabIndex = 0;
+            // 
+            // tabPageStruct
+            // 
+            this.tabPageStruct.Controls.Add(this.txtGenerator);
+            this.tabPageStruct.Controls.Add(this.toolStrip1);
+            this.tabPageStruct.Location = new System.Drawing.Point(4, 22);
+            this.tabPageStruct.Name = "tabPageStruct";
+            this.tabPageStruct.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageStruct.Size = new System.Drawing.Size(507, 585);
+            this.tabPageStruct.TabIndex = 0;
+            this.tabPageStruct.Text = "Struct Generator";
+            this.tabPageStruct.UseVisualStyleBackColor = true;
+            // 
+            // txtGenerator
+            // 
+            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenerator.Location = new System.Drawing.Point(3, 28);
+            this.txtGenerator.Multiline = true;
+            this.txtGenerator.Name = "txtGenerator";
+            this.txtGenerator.Size = new System.Drawing.Size(501, 554);
+            this.txtGenerator.TabIndex = 1;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tGenerator,
+            this.tGeneratorFile});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(501, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tGenerator
+            // 
+            this.tGenerator.Image = ((System.Drawing.Image)(resources.GetObject("tGenerator.Image")));
+            this.tGenerator.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tGenerator.Name = "tGenerator";
+            this.tGenerator.Size = new System.Drawing.Size(87, 22);
+            this.tGenerator.Text = "Generator";
+            this.tGenerator.Click += new System.EventHandler(this.tGenerator_Click);
+            // 
+            // tGeneratorFile
+            // 
+            this.tGeneratorFile.Image = ((System.Drawing.Image)(resources.GetObject("tGeneratorFile.Image")));
+            this.tGeneratorFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tGeneratorFile.Name = "tGeneratorFile";
+            this.tGeneratorFile.Size = new System.Drawing.Size(106, 22);
+            this.tGeneratorFile.Text = "GeneratorFile";
+            this.tGeneratorFile.Click += new System.EventHandler(this.tGeneratorFile_Click);
+            // 
+            // tabPageData
+            // 
+            this.tabPageData.Location = new System.Drawing.Point(4, 22);
+            this.tabPageData.Name = "tabPageData";
+            this.tabPageData.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageData.Size = new System.Drawing.Size(507, 585);
+            this.tabPageData.TabIndex = 1;
+            this.tabPageData.Text = "Data Generator";
+            this.tabPageData.UseVisualStyleBackColor = true;
+            // 
             // PanSelectAndSnippet
             // 
             this.PanSelectAndSnippet.Controls.Add(this.gbSnippet);
@@ -176,6 +258,7 @@
             this.SnippetTree.sqlite = null;
             this.SnippetTree.TabIndex = 0;
             this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
+            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
             // 
             // bgselect
             // 
@@ -253,8 +336,8 @@
             this.tsAdd.Image = ((System.Drawing.Image)(resources.GetObject("tsAdd.Image")));
             this.tsAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsAdd.Name = "tsAdd";
-            this.tsAdd.Size = new System.Drawing.Size(117, 22);
-            this.tsAdd.Text = "AddConnection";
+            this.tsAdd.Size = new System.Drawing.Size(52, 22);
+            this.tsAdd.Text = "Add";
             // 
             // tsRemove
             // 
@@ -271,6 +354,7 @@
             this.tsRefresh.Name = "tsRefresh";
             this.tsRefresh.Size = new System.Drawing.Size(72, 22);
             this.tsRefresh.Text = "Refresh";
+            this.tsRefresh.Click += new System.EventHandler(this.tsRefresh_Click);
             // 
             // tabPageSelectClass
             // 
@@ -600,86 +684,6 @@
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
             // 
-            // groupGenerator
-            // 
-            this.groupGenerator.Controls.Add(this.tabControlGeneartor);
-            this.groupGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupGenerator.Location = new System.Drawing.Point(683, 3);
-            this.groupGenerator.Name = "groupGenerator";
-            this.groupGenerator.Size = new System.Drawing.Size(521, 631);
-            this.groupGenerator.TabIndex = 4;
-            this.groupGenerator.TabStop = false;
-            this.groupGenerator.Text = "GroupGenerator";
-            // 
-            // tabControlGeneartor
-            // 
-            this.tabControlGeneartor.Controls.Add(this.tabPageStruct);
-            this.tabControlGeneartor.Controls.Add(this.tabPageData);
-            this.tabControlGeneartor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlGeneartor.Location = new System.Drawing.Point(3, 17);
-            this.tabControlGeneartor.Name = "tabControlGeneartor";
-            this.tabControlGeneartor.SelectedIndex = 0;
-            this.tabControlGeneartor.Size = new System.Drawing.Size(515, 611);
-            this.tabControlGeneartor.TabIndex = 0;
-            // 
-            // tabPageStruct
-            // 
-            this.tabPageStruct.Controls.Add(this.txtGenerator);
-            this.tabPageStruct.Controls.Add(this.toolStrip1);
-            this.tabPageStruct.Location = new System.Drawing.Point(4, 22);
-            this.tabPageStruct.Name = "tabPageStruct";
-            this.tabPageStruct.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageStruct.Size = new System.Drawing.Size(507, 585);
-            this.tabPageStruct.TabIndex = 0;
-            this.tabPageStruct.Text = "Struct Generator";
-            this.tabPageStruct.UseVisualStyleBackColor = true;
-            // 
-            // tabPageData
-            // 
-            this.tabPageData.Location = new System.Drawing.Point(4, 22);
-            this.tabPageData.Name = "tabPageData";
-            this.tabPageData.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageData.Size = new System.Drawing.Size(507, 585);
-            this.tabPageData.TabIndex = 1;
-            this.tabPageData.Text = "Data Generator";
-            this.tabPageData.UseVisualStyleBackColor = true;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tGenerator,
-            this.tGeneratorFile});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(501, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // txtGenerator
-            // 
-            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtGenerator.Location = new System.Drawing.Point(3, 28);
-            this.txtGenerator.Multiline = true;
-            this.txtGenerator.Name = "txtGenerator";
-            this.txtGenerator.Size = new System.Drawing.Size(501, 554);
-            this.txtGenerator.TabIndex = 1;
-            // 
-            // tGenerator
-            // 
-            this.tGenerator.Image = ((System.Drawing.Image)(resources.GetObject("tGenerator.Image")));
-            this.tGenerator.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tGenerator.Name = "tGenerator";
-            this.tGenerator.Size = new System.Drawing.Size(87, 22);
-            this.tGenerator.Text = "Generator";
-            // 
-            // tGeneratorFile
-            // 
-            this.tGeneratorFile.Image = ((System.Drawing.Image)(resources.GetObject("tGeneratorFile.Image")));
-            this.tGeneratorFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tGeneratorFile.Name = "tGeneratorFile";
-            this.tGeneratorFile.Size = new System.Drawing.Size(106, 22);
-            this.tGeneratorFile.Text = "GeneratorFile";
-            // 
             // GeneartorTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -692,6 +696,12 @@
             this.Load += new System.EventHandler(this.GeneartorTools_Load);
             this.tabControlALL.ResumeLayout(false);
             this.tabPageSQLGeneartor.ResumeLayout(false);
+            this.groupGenerator.ResumeLayout(false);
+            this.tabControlGeneartor.ResumeLayout(false);
+            this.tabPageStruct.ResumeLayout(false);
+            this.tabPageStruct.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.PanSelectAndSnippet.ResumeLayout(false);
             this.gbSnippet.ResumeLayout(false);
             this.bgselect.ResumeLayout(false);
@@ -713,12 +723,6 @@
             this.gbSearch.ResumeLayout(false);
             this.gbSearch.PerformLayout();
             this.tabPageSystemConfig.ResumeLayout(false);
-            this.groupGenerator.ResumeLayout(false);
-            this.tabControlGeneartor.ResumeLayout(false);
-            this.tabPageStruct.ResumeLayout(false);
-            this.tabPageStruct.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -19,5 +19,13 @@ namespace Core.UsuallyCommon.DataBase
         public bool IsRequire { get; set; } 
         public byte Scale { get; set; }
         public string DefaultValue { get; set; }
+
+        public string Type { get; set; }
+
+
+        public string GetValue(string name)
+        {
+            return this.GetType().GetProperty(name).GetValue(this, null).ToStringExtension();
+        }
     }
 }

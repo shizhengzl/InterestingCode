@@ -58,6 +58,7 @@
     <Compile Include="GeneartorTools.Designer.cs">
       <DependentUpon>GeneartorTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generator\GeneratorClass.cs" />
     <Compile Include="ImageEnum.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -48,7 +48,29 @@ namespace VSBussinessExtenstion.DataBaseHelper
         {
             ChangeDataBase(table);
             string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL.Replace("@DataBaseName", table.DataBaseName).Replace("@TableName", table.TableName);
-            table.Columns = DatabaseHelper.ExecuteQuery(getColumnSql).Tables[0].ToList<Column>();
+            table.Columns = DatabaseHelper.ExecuteQuery(getColumnSql).Tables[0].ToList<Column>(); 
+            table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType,x.Type));
+        }
+
+        public string GetColumnType(DataBaseType dataBaseType,string Type)
+        {
+            string columnType = string.Empty;
+            switch(dataBaseType)
+            {
+                case DataBaseType.SQLServer:
+                    columnType = dbContext.DataTypeConfigs.FirstOrDefault(y => y.Type == dataBaseType && y.SQLServerType == Type).CSharpType;
+                    break;
+                case DataBaseType.SQLite:
+                    columnType = dbContext.DataTypeConfigs.FirstOrDefault(y => y.Type == dataBaseType && y.SQLiteType == Type).CSharpType;
+                    break;
+                case DataBaseType.MYSQL:
+                    columnType = dbContext.DataTypeConfigs.FirstOrDefault(y => y.Type == dataBaseType && y.MySqlType == Type).CSharpType;
+                    break;
+                case DataBaseType.Oracle:
+                    columnType = dbContext.DataTypeConfigs.FirstOrDefault(y => y.Type == dataBaseType && y.OracleType == Type).CSharpType;
+                    break;
+            }
+            return columnType;
         }
 
         public void ChangeDataBase(DataBaseAddress baseAddress)
