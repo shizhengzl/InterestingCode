@@ -16,10 +16,18 @@ namespace Core.UsuallyCommon
 
         public List<Classs> classList = new List<Classs>();
 
+        //public List<NameSpaces> NameSpaces = new List<NameSpaces>();
+
         // <SNippet5>
         public override void VisitUsingDirective(UsingDirectiveSyntax node)
         {
             this.Usings.Add(node);
+        }
+
+        public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
+        {
+            base.VisitNamespaceDeclaration(node);
+             
         }
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
@@ -27,9 +35,13 @@ namespace Core.UsuallyCommon
             var trivia = node.GetLeadingTrivia().FirstOrDefault(x => x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia || x.Kind() == SyntaxKind.SingleLineCommentTrivia);
             var name = node.Identifier.Value.ToStringExtension();
             var comment = trivia.Token.LeadingTrivia.ToStringExtension();
-            Classs.Add(node);
-
-            var classs = new Classs() { Name = name, Comment = comment };
+            Classs.Add(node); 
+            var classs = new Classs() { ClassName = name, ClassComment = comment };
+            if (node.Parent != null)
+            {
+                var namespaces = (NamespaceDeclarationSyntax)(node.Parent);
+                classs.NameSpace = namespaces.Name.ToString();
+            }
             foreach (var item in node.Members)
             {
                 if (item.GetType() == typeof(PropertyDeclarationSyntax))
@@ -37,7 +49,7 @@ namespace Core.UsuallyCommon
                     var proterty = item as PropertyDeclarationSyntax;
                     var protertyComment = proterty.GetLeadingTrivia().FirstOrDefault(x => x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
                     || x.Kind() == SyntaxKind.SingleLineCommentTrivia).Token.LeadingTrivia.ToStringExtension();
-                    var protertys = new Proterty() { ClassName = name, ProtertyType = proterty.Type.ToString(), Comment = protertyComment, Name = proterty.Identifier.ValueText };
+                    var protertys = new Proterty() { ClassName = name, PropertyType = proterty.Type.ToString(), PropertyComment = protertyComment, PropertyName = proterty.Identifier.ValueText };
                     classs.Protertys.Add(protertys);
                 }
                 if (item.GetType() == typeof(MethodDeclarationSyntax))
@@ -58,9 +70,9 @@ namespace Core.UsuallyCommon
                     Method methodClass = new Method()
                     {
                         ClassName = name,
-                        Name = methods.Identifier.ValueText,
-                        ReturnType = returnType,
-                        Comment = methodComment
+                        MethodName = methods.Identifier.ValueText,
+                        MethodReturnType = returnType,
+                        MethodComment = methodComment
                     };
 
                     var paramsList = methods.ParameterList.Parameters;
@@ -68,8 +80,8 @@ namespace Core.UsuallyCommon
                     {
                         MethodArgument methodArgument = new MethodArgument()
                         {
-                            Name = iparams.Identifier.ValueText,
-                            ArgumentType = iparams.Type.ToStringExtension(),
+                            MethodArgumentName = iparams.Identifier.ValueText,
+                            MethodArgumentArgumentType = iparams.Type.ToStringExtension(),
                             ClassName = name,
                             MethodName = methods.Identifier.ValueText,
                         };
@@ -81,7 +93,7 @@ namespace Core.UsuallyCommon
                 }
             }
 
-            classList.Add(classs);
+            classList.Add(classs);  
         }
     }
 }

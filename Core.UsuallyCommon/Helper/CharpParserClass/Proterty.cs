@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Core.UsuallyCommon
 {
-    public class Proterty
+    public class Proterty : Classs
     {
-        public string ClassName { get; set; }
-        public string Name { get; set; }
-        public string Comment { get; set; }
-        public string ProtertyType { get; set; }
+        //public string ClassName { get; set; }
+        public string PropertyName { get; set; }
+        public string PropertyComment { get; set; }
+        public string PropertyType { get; set; }
     }
 }

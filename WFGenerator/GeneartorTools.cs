@@ -133,26 +133,7 @@ namespace WFGenerator
          
          
 
-        private void btnxmlString_Click(object sender, EventArgs e)
-        {
-            var xmlString = txtXmlSelect.Text;
-            if (string.IsNullOrEmpty(xmlString))
-                return;
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(xmlString);
-            InitXmlTree(document);
-        }
-
-        public void InitXmlTree(XmlDocument document)
-        {
-            TreeViewXML.Nodes.Clear();
-            if (document != null)
-            {
-                TreeNode root = new TreeNode() { Text = document.Name };
-                TreeViewXML.Nodes.Add(root);
-                LoadChild(root, document.ChildNodes);
-            }
-        }
+     
 
         public void LoadChild(TreeNode treeNode, XmlNodeList xmlNodes)
         {
@@ -221,11 +202,29 @@ namespace WFGenerator
                             listColumns.Add(childs.Tag as Column);
                     }
                 }
-                var code = generatorClass.GetGenerator(snippet, listColumns);
-
+                var code = generatorClass.GetGenerator(snippet, listColumns); 
                 txtGenerator.AppendText(code);
+                txtGenerator.AppendText(Environment.NewLine);
+            }
 
-                 
+            var context = txtXmlSelect.Text;
+            if (!string.IsNullOrEmpty(context))
+            {
+                CSharpParser cSharpParser = new CSharpParser(context);
+                try
+                {
+                    var listClass = cSharpParser.GetClass();
+
+                    foreach (var classs in listClass)
+                    { 
+                        txtGenerator.AppendText(generatorClass.GetGenerator(snippet, classs));
+                        txtGenerator.AppendText(Environment.NewLine);
+                    } 
+                }
+                catch (Exception)
+                {
+                     
+                }
             }
 
         }
@@ -233,6 +232,37 @@ namespace WFGenerator
         private void tGeneratorFile_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtXmlSelect_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+                this.txtXmlSelect.Cursor = System.Windows.Forms.Cursors.Arrow;  //指定鼠标形状（更好看）
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            } 
+        }
+
+        private void txtXmlSelect_DragDrop(object sender, DragEventArgs e)
+        { 
+            var path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+
+            txtXmlSelect.Text =  Core.UsuallyCommon.IoHelper.FileReader(path);
+
+            //还原鼠标形状        
+            this.txtXmlSelect.Cursor = System.Windows.Forms.Cursors.IBeam;  
+        }
+
+        private void btnString_Click(object sender, EventArgs e)
+        {
+            if(string.IsNullOrEmpty(txtXmlSelect.Text))
+            {
+                return;
+            } 
         }
     }
 

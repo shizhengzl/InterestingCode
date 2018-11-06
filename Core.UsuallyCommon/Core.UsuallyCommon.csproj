@@ -198,6 +198,7 @@
     <Compile Include="Helper\CharpParserClass\Classs.cs" />
     <Compile Include="Helper\CharpParserClass\MethodArgument.cs" />
     <Compile Include="Helper\CharpParserClass\CSharpParser.cs" />
+    <Compile Include="Helper\CharpParserClass\NameSpaces.cs" />
     <Compile Include="Helper\CharpParserClass\ObjectCollector.cs" />
     <Compile Include="Helper\HtmlParser.cs" />
     <Compile Include="Helper\IoHelper.cs" />

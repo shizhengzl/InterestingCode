@@ -13,9 +13,11 @@ namespace Core.UsuallyCommon
             Methods = new List<Method>();
             Protertys = new List<Proterty>();
         }
-        public string Name { get; set; }
+        public string ClassName { get; set; }
 
-        public string Comment { get; set; }
+        public string ClassComment { get; set; }
+
+        public string NameSpace { get; set; }
 
         public List<Method> Methods { get; set; }
 

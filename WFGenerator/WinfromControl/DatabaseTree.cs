@@ -144,8 +144,11 @@ namespace WFGenerator.WinfromControl
                     break;
                 case TreeType.Snippte:
                     LoadSnippet();
+                    this.ExpandAll();
                     break;
             }
+
+           
         }
 
         public void LoadSnippet()

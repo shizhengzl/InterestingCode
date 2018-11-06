@@ -44,7 +44,7 @@ namespace WFGenerator
                     textBox = new ComboBox() { Name = $"{proprety.Name}" };
                     var firstenum = enumList.FirstOrDefault(x => x.Name == proprety.PropertyType.Name);
                     textBox.Items.AddRange(Core.UsuallyCommon.Extensions.EnumToList(firstenum).ToArray());
-
+                    
                     textBox.SelectedText = val;
                 }
                 else if ("Boolean" == proprety.PropertyType.Name)
@@ -53,7 +53,7 @@ namespace WFGenerator
                 }
                 else
                 {
-                    textBox = new TextBox() { Name = $"{proprety.Name}", Text = val, Width = 400, Multiline = true, Height = 60 };
+                    textBox = new TextBox() { Name = $"{proprety.Name}", Text = val, Width = 400, Multiline = true, Height = 60, ScrollBars = ScrollBars.Both };
                 }
 
                 if (proprety.Name.ToUpper() == "ID")

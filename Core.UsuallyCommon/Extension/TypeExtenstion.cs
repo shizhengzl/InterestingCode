@@ -189,6 +189,13 @@ namespace Core.UsuallyCommon
         }
 
 
+        public static string GetPropertyValue(this object obj,string name)
+        {
+            return obj.GetType().GetProperty(name).GetValue(obj, null).ToStringExtension();
+        }
+    
+
+
         #region TypeConvert
         // dll .cs
         // xml 

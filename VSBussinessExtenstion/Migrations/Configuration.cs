@@ -375,8 +375,23 @@ namespace VSBussinessExtenstion.Migrations
             var csharpdemo = new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = true, Name = "Csharp Demo Folder" };
             context.Snippets.Add(csharpdemo);
             context.SaveChanges();
-            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = false, Name = "Csharp Demo", GeneratorFileName = "@ClassName.cs", IsEnabled = true, ParentId = csharpdemo.Id, Context = @" this is className:@ClassName 
-            this is Propertys <%! @PropertyName !%>" });
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = false, Name = "Csharp Demo", GeneratorFileName = "@ClassName.cs", IsEnabled = true,
+                ParentId = csharpdemo.Id, Context = @"  var option = {
+                //rviceInfo格式为:命名空间.类名.方法名
+				//Slxt.Services为namespace下面的 Slxt.Services
+                serviceInfo:  '@NameSpace.@ClassName.@MethodName',
+                //Javascript对象，键值对形式，直接匹配服务端函数参数。
+                data: {<%! @MethodArgumentName : @MethodArgumentName !%> }
+                }
+                //发起GET请求
+                var vals = MapExt.postJSON(option);
+                if(vals.result){
+                    alert('删除成功');
+                    appGrid.frameElement.Query();
+                }else{
+                    alert('删除失败');
+                } "
+            });
 
 
             var xmldemo = new Snippet() { DataSourceType = DataSourceType.XMLType, IsFloder = true, Name = "XML Demo Folder" };

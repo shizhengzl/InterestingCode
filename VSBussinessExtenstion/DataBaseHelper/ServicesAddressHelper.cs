@@ -48,7 +48,11 @@ namespace VSBussinessExtenstion.DataBaseHelper
         {
             ChangeDataBase(table);
             string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL.Replace("@DataBaseName", table.DataBaseName).Replace("@TableName", table.TableName);
-            table.Columns = DatabaseHelper.ExecuteQuery(getColumnSql).Tables[0].ToList<Column>(); 
+            table.Columns = DatabaseHelper.ExecuteQuery(getColumnSql).Tables[0].ToList<Column>();
+
+            table.Columns.ForEach(x => x.Address = table.Address); 
+            table.Columns.ForEach(x => x.DataBaseName = table.DataBaseName);
+            table.Columns.ForEach(x => x.TableName = table.TableName);
             table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType,x.Type));
         }
 
