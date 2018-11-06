@@ -219,6 +219,7 @@ namespace WFGenerator
                     { 
                         txtGenerator.AppendText(generatorClass.GetGenerator(snippet, classs));
                         txtGenerator.AppendText(Environment.NewLine);
+                        txtGenerator.AppendText(Environment.NewLine);
                     } 
                 }
                 catch (Exception)

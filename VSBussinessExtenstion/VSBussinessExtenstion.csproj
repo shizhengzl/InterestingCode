@@ -53,9 +53,9 @@
     <Compile Include="DataBaseHelper\DataBaseHelper.cs" />
     <Compile Include="DataBaseHelper\ServicesAddressHelper.cs" />
     <Compile Include="DefaultSqlite.cs" />
-    <Compile Include="Migrations\201810310615240_DefaultSqlite.cs" />
-    <Compile Include="Migrations\201810310615240_DefaultSqlite.Designer.cs">
-      <DependentUpon>201810310615240_DefaultSqlite.cs</DependentUpon>
+    <Compile Include="Migrations\201811060644048_DefaultSqlite.cs" />
+    <Compile Include="Migrations\201811060644048_DefaultSqlite.Designer.cs">
+      <DependentUpon>201811060644048_DefaultSqlite.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,8 +71,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201810310615240_DefaultSqlite.resx">
-      <DependentUpon>201810310615240_DefaultSqlite.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811060644048_DefaultSqlite.resx">
+      <DependentUpon>201811060644048_DefaultSqlite.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

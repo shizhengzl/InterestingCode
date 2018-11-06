@@ -13,7 +13,7 @@ namespace VSBussinessExtenstion.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201810310615240_DefaultSqlite"; }
+            get { return "201811060644048_DefaultSqlite"; }
         }
         
         string IMigrationMetadata.Source
