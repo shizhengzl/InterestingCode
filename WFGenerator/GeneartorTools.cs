@@ -26,7 +26,7 @@ namespace WFGenerator
         {
             InitializeComponent();
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            InitSystemConfig(); 
+            InitSystemConfig();
         }
 
         public DefaultSqlite sqlite = new DefaultSqlite();
@@ -41,15 +41,18 @@ namespace WFGenerator
             ServerTree.sh = sh;
             ServerTree.ImageList = imageList;
             ServerTree.treeType = TreeType.DataBase;
-            ServerTree.Refresh();
+            ServerTree.Refreshs();
 
             SnippetTree.sqlite = sqlite;
             SnippetTree.CheckBoxes = false;
             SnippetTree.ImageList = imageList;
             SnippetTree.treeType = TreeType.Snippte;
-            SnippetTree.Refresh();
+            SnippetTree.Refreshs();
+
+            ClassTree.ImageList = imageList;
+            ClassTree.treeType = TreeType.Class;
         }
-         
+
 
         #region SystemConfig
 
@@ -74,7 +77,7 @@ namespace WFGenerator
             tabControlSet.TabPages.Add(tpclass);
         }
         #endregion
-  
+
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
@@ -124,16 +127,13 @@ namespace WFGenerator
                 }
             }
         }
-   
+
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            
-        }
-         
-         
 
-     
+        }
+
 
         public void LoadChild(TreeNode treeNode, XmlNodeList xmlNodes)
         {
@@ -165,7 +165,7 @@ namespace WFGenerator
                     LoadChild(xmlNote, item.ChildNodes);
                 }
             }
-        } 
+        }
 
         GeneratorClass generatorClass = new GeneratorClass();
 
@@ -185,49 +185,21 @@ namespace WFGenerator
             if (snippet.IsFloder)
                 return;
             txtGenerator.Text = string.Empty;
-            foreach(TreeNode note in ServerTree.listSelect)
+            SelectDataSoruceType selecttype = Core.UsuallyCommon.Extensions.EnumParse<SelectDataSoruceType>(tabControlSelect.SelectedIndex.ToString());
+
+            switch (selecttype)
             {
-                List<Column> listColumns = new List<Column>();
-                if(string.IsNullOrEmpty(note.Nodes[0].Text))
-                {
-                    Table table = note.Tag as Table;
-                    sh.InitColumn(table);
-                    listColumns.AddRange(table.Columns);
-                }
-                else
-                {
-                    foreach (TreeNode childs in note.Nodes)
-                    {
-                        if(childs.Checked)
-                            listColumns.Add(childs.Tag as Column);
-                    }
-                }
-                var code = generatorClass.GetGenerator(snippet, listColumns); 
-                txtGenerator.AppendText(code);
-                txtGenerator.AppendText(Environment.NewLine);
+                case SelectDataSoruceType.DataBase:
+                    if (snippet.DataSourceType == DataSourceType.DatabaseType)
+                        txtGenerator.AppendText(generatorClass.GetGenerator(snippet, ServerTree.listSelect, sh));
+                    break;
+                case SelectDataSoruceType.Class:
+                    if (snippet.DataSourceType == DataSourceType.CSharpType)
+                        txtGenerator.AppendText(generatorClass.GetGenerator(snippet, ClassTree.listSelect));
+                    break;
+                case SelectDataSoruceType.XML:
+                    break;
             }
-
-            var context = txtXmlSelect.Text;
-            if (!string.IsNullOrEmpty(context))
-            {
-                CSharpParser cSharpParser = new CSharpParser(context);
-                try
-                {
-                    var listClass = cSharpParser.GetClass();
-
-                    foreach (var classs in listClass)
-                    { 
-                        txtGenerator.AppendText(generatorClass.GetGenerator(snippet, classs));
-                        txtGenerator.AppendText(Environment.NewLine);
-                        txtGenerator.AppendText(Environment.NewLine);
-                    } 
-                }
-                catch (Exception)
-                {
-                     
-                }
-            }
-
         }
 
         private void tGeneratorFile_Click(object sender, EventArgs e)
@@ -245,25 +217,41 @@ namespace WFGenerator
             else
             {
                 e.Effect = DragDropEffects.None;
-            } 
+            }
         }
 
         private void txtXmlSelect_DragDrop(object sender, DragEventArgs e)
-        { 
+        {
             var path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
 
-            txtXmlSelect.Text =  Core.UsuallyCommon.IoHelper.FileReader(path);
+            var context = Core.UsuallyCommon.IoHelper.FileReader(path);
+
+            txtXmlSelect.Text = context;
 
             //还原鼠标形状        
-            this.txtXmlSelect.Cursor = System.Windows.Forms.Cursors.IBeam;  
+            this.txtXmlSelect.Cursor = System.Windows.Forms.Cursors.IBeam;
+
+            if (!string.IsNullOrEmpty(context))
+            {
+                CSharpParser cSharpParser = new CSharpParser(context);
+                try
+                {
+                    ClassTree.Refreshs(cSharpParser.GetClass());
+                    tabControlSelect.SelectedIndex = 1;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
         }
 
         private void btnString_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(txtXmlSelect.Text))
+            if (string.IsNullOrEmpty(txtXmlSelect.Text))
             {
                 return;
-            } 
+            }
         }
     }
 

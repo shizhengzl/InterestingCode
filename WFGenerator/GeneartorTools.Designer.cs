@@ -43,10 +43,12 @@
             this.tabPageData = new System.Windows.Forms.TabPage();
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
+            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.bgselect = new System.Windows.Forms.GroupBox();
             this.tabControlSelect = new System.Windows.Forms.TabControl();
             this.tabPageSelectSQL = new System.Windows.Forms.TabPage();
             this.gtree = new System.Windows.Forms.GroupBox();
+            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.toolStripTreeServer = new System.Windows.Forms.ToolStrip();
             this.tsAdd = new System.Windows.Forms.ToolStripButton();
             this.tsRemove = new System.Windows.Forms.ToolStripButton();
@@ -79,8 +81,7 @@
             this.tabControlSet = new System.Windows.Forms.TabControl();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.openFile = new System.Windows.Forms.OpenFileDialog();
-            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
-            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
             this.groupGenerator.SuspendLayout();
@@ -94,6 +95,7 @@
             this.tabPageSelectSQL.SuspendLayout();
             this.gtree.SuspendLayout();
             this.toolStripTreeServer.SuspendLayout();
+            this.tabPageSelectClass.SuspendLayout();
             this.tabPageSelectXML.SuspendLayout();
             this.gbleft.SuspendLayout();
             this.tabControlSource.SuspendLayout();
@@ -244,6 +246,20 @@
             this.gbSnippet.TabStop = false;
             this.gbSnippet.Text = "Snippet";
             // 
+            // SnippetTree
+            // 
+            this.SnippetTree.CheckBoxes = true;
+            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SnippetTree.listSnippet = null;
+            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
+            this.SnippetTree.Name = "SnippetTree";
+            this.SnippetTree.sh = null;
+            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
+            this.SnippetTree.sqlite = null;
+            this.SnippetTree.TabIndex = 0;
+            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
+            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
+            // 
             // bgselect
             // 
             this.bgselect.Controls.Add(this.tabControlSelect);
@@ -290,6 +306,19 @@
             this.gtree.TabStop = false;
             this.gtree.Text = "Tree";
             // 
+            // ServerTree
+            // 
+            this.ServerTree.CheckBoxes = true;
+            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ServerTree.listSnippet = null;
+            this.ServerTree.Location = new System.Drawing.Point(3, 42);
+            this.ServerTree.Name = "ServerTree";
+            this.ServerTree.sh = null;
+            this.ServerTree.Size = new System.Drawing.Size(287, 235);
+            this.ServerTree.sqlite = null;
+            this.ServerTree.TabIndex = 1;
+            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
             // toolStripTreeServer
             // 
             this.toolStripTreeServer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -329,6 +358,7 @@
             // 
             // tabPageSelectClass
             // 
+            this.tabPageSelectClass.Controls.Add(this.ClassTree);
             this.tabPageSelectClass.Location = new System.Drawing.Point(4, 22);
             this.tabPageSelectClass.Name = "tabPageSelectClass";
             this.tabPageSelectClass.Padding = new System.Windows.Forms.Padding(3);
@@ -626,32 +656,18 @@
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
             // 
-            // SnippetTree
+            // ClassTree
             // 
-            this.SnippetTree.CheckBoxes = true;
-            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SnippetTree.listSnippet = null;
-            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
-            this.SnippetTree.Name = "SnippetTree";
-            this.SnippetTree.sh = null;
-            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
-            this.SnippetTree.sqlite = null;
-            this.SnippetTree.TabIndex = 0;
-            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
-            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
-            // 
-            // ServerTree
-            // 
-            this.ServerTree.CheckBoxes = true;
-            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ServerTree.listSnippet = null;
-            this.ServerTree.Location = new System.Drawing.Point(3, 42);
-            this.ServerTree.Name = "ServerTree";
-            this.ServerTree.sh = null;
-            this.ServerTree.Size = new System.Drawing.Size(287, 235);
-            this.ServerTree.sqlite = null;
-            this.ServerTree.TabIndex = 1;
-            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
+            this.ClassTree.CheckBoxes = true;
+            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ClassTree.listSnippet = null;
+            this.ClassTree.Location = new System.Drawing.Point(3, 3);
+            this.ClassTree.Name = "ClassTree";
+            this.ClassTree.sh = null;
+            this.ClassTree.Size = new System.Drawing.Size(293, 280);
+            this.ClassTree.sqlite = null;
+            this.ClassTree.TabIndex = 0;
+            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // GeneartorTools
             // 
@@ -680,6 +696,7 @@
             this.gtree.PerformLayout();
             this.toolStripTreeServer.ResumeLayout(false);
             this.toolStripTreeServer.PerformLayout();
+            this.tabPageSelectClass.ResumeLayout(false);
             this.tabPageSelectXML.ResumeLayout(false);
             this.gbleft.ResumeLayout(false);
             this.tabControlSource.ResumeLayout(false);
@@ -750,6 +767,7 @@
         private System.Windows.Forms.Button btnSelectFolder;
         private System.Windows.Forms.TextBox txtXmlSelect;
         private System.Windows.Forms.Button btnSelectFile;
+        private WinfromControl.DatabaseTree ClassTree;
     }
 }
 

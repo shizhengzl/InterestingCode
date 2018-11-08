@@ -1,4 +1,5 @@
-﻿using Core.UsuallyCommon.DataBase;
+﻿using Core.UsuallyCommon;
+using Core.UsuallyCommon.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,9 +34,9 @@ namespace WFGenerator.WinfromControl
                 var dbNote = (e.Node as TreeNode);
                 if (!(dbNote.Tag != null))
                     return;
-              
+
                 if (dbNote.Tag is Core.UsuallyCommon.DataBase.Table)
-                { 
+                {
                     var table = dbNote.Tag as Core.UsuallyCommon.DataBase.Table;
                     sh.InitColumn(table);
                     dbNote.Nodes.Clear();
@@ -44,7 +45,7 @@ namespace WFGenerator.WinfromControl
                         TreeNode columnNode = new TreeNode()
                         {
                             Text = column.ColumnName,
-                            SelectedImageIndex = (int)ImageEnum.Table,  
+                            SelectedImageIndex = (int)ImageEnum.Table,
                             ImageIndex = (int)ImageEnum.Table,
                             Tag = column
                         };
@@ -75,12 +76,17 @@ namespace WFGenerator.WinfromControl
             GetCheckNode(tn, Checked);
         }
 
-        public void GetCheckNode(TreeNode tn,bool Checked)
+        public void GetCheckNode(TreeNode tn, bool Checked)
         {
-            var table = tn.Tag as Table;
+            dynamic table = tn.Tag as Table;
             if (table == null)
+                table = tn.Tag as Method;
+            if (table == null)
+                table = tn.Tag as Proterty;
+            if (table == null) 
                 return;
-            if (table.GetType().Name == typeof(Table).Name)
+            if (table.GetType().Name == typeof(Table).Name || table.GetType().Name == typeof(Method).Name
+                || table.GetType().Name == typeof(Core.UsuallyCommon.Proterty).Name)
             {
                 if (Checked)
                 {
@@ -133,7 +139,7 @@ namespace WFGenerator.WinfromControl
         }
 
 
-        public override void Refresh()
+        public void Refreshs(object objects = null)
         {
             this.Nodes.Clear();
             this.listSelect.Clear();
@@ -146,9 +152,83 @@ namespace WFGenerator.WinfromControl
                     LoadSnippet();
                     this.ExpandAll();
                     break;
+                case TreeType.Class:
+                    LoadClass(objects);
+                    this.ExpandAll();
+                    break;
+            }
+        }
+
+        public void LoadClass(object objects)
+        {
+            List<Classs> classses = (List<Classs>)objects;
+
+            TreeNode namespaces = new TreeNode();
+
+            if(classses.Count > 0){
+                namespaces.Text = classses.FirstOrDefault().NameSpace;
+                this.Nodes.Add(namespaces);
             }
 
-           
+            foreach (Classs item in classses)
+            {
+                TreeNode classnote = new TreeNode()
+                {
+                    Name = item.ClassName,
+                    Text = item.ClassName,
+                    Tag = item,
+                    SelectedImageIndex = (int)ImageEnum.Table,
+                    ImageIndex = (int)ImageEnum.Table
+                };
+                namespaces.Nodes.Add(classnote);
+                 
+                TreeNode propertyFloder = new TreeNode()
+                {
+                    Name = "Property",
+                    Text = "Property", 
+                    SelectedImageIndex = (int)ImageEnum.Folder,
+                    ImageIndex = (int)ImageEnum.Table
+                };
+
+                TreeNode methodFloder = new TreeNode()
+                {
+                    Name = "Method",
+                    Text = "Method", 
+                    SelectedImageIndex = (int)ImageEnum.Folder,
+                    ImageIndex = (int)ImageEnum.Table
+                };
+
+                classnote.Nodes.Add(propertyFloder);
+                classnote.Nodes.Add(methodFloder);
+
+                // add property
+                foreach (var property in item.Protertys)
+                {
+                    TreeNode propertynote = new TreeNode()
+                    {
+                        Name = property.PropertyName,
+                        Text = property.PropertyName,
+                        Tag = property,
+                        SelectedImageIndex = (int)ImageEnum.Edit,
+                        ImageIndex = (int)ImageEnum.Edit
+                    };
+                    propertyFloder.Nodes.Add(propertynote);
+                }
+
+                // add method 
+                foreach (var method in item.Methods)
+                {
+                    TreeNode methodnote = new TreeNode()
+                    {
+                        Name = method.MethodName,
+                        Text = method.MethodName,
+                        Tag = method,
+                        SelectedImageIndex = (int)ImageEnum.Edit,
+                        ImageIndex = (int)ImageEnum.Edit
+                    };
+                    methodFloder.Nodes.Add(methodnote);
+                } 
+            }
         }
 
         public void LoadSnippet()

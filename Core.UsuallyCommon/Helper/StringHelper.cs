@@ -36,5 +36,38 @@ namespace Core.UsuallyCommon
             } 
             return list;
         }
+
+        public static List<string> GetStringListByStartAndEndInner(string str, string start, string end)
+        {
+            List<string> list = new List<string>();
+
+            List<int> starts = GetPostion(str, start).OrderByDescending(x => x).ToList<int>();
+            List<int> ends = GetPostion(str, end).OrderBy(x => x).ToList<int>();
+            for (int i = 0; i < starts.Count; i++)
+            { 
+                list.Add(str.Substring(starts[i], ends.FirstOrDefault(x=>x > starts[i]) - starts[i] + start.Length));
+            } 
+
+            return list; 
+        }
+
+        public static List<int> GetPostion(string str,string chars)
+        {
+            List<int> result = new List<int>();
+
+            int cacl = 0; 
+            int length = (str.Length - str.Replace(chars, string.Empty).Length) / chars.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int index = str.IndexOf(chars, cacl);
+                if (index > -1)
+                {
+                    result.Add(index);
+                    cacl = index + 1;
+                }
+            } 
+            return result;
+        } 
+
     }
 }

@@ -69,6 +69,7 @@ namespace Core.UsuallyCommon
 
                     Method methodClass = new Method()
                     {
+                        NameSpace = classs.NameSpace ,
                         ClassName = name,
                         MethodName = methods.Identifier.ValueText,
                         MethodReturnType = returnType,
@@ -80,6 +81,7 @@ namespace Core.UsuallyCommon
                     {
                         MethodArgument methodArgument = new MethodArgument()
                         {
+                            NameSpace = classs.NameSpace,
                             MethodArgumentName = iparams.Identifier.ValueText,
                             MethodArgumentArgumentType = iparams.Type.ToStringExtension(),
                             ClassName = name,
@@ -88,11 +90,9 @@ namespace Core.UsuallyCommon
                         methodClass.MethodArguments.Add(methodArgument);
 
                     }
-
                     classs.Methods.Add(methodClass);
                 }
             }
-
             classList.Add(classs);  
         }
     }

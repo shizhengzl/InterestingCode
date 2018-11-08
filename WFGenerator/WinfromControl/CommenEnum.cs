@@ -23,6 +23,14 @@ namespace WFGenerator
     public enum TreeType
     {
         DataBase = 0 ,
-        Snippte = 1
+        Snippte = 1,
+        Class = 2
+    }
+
+    public enum SelectDataSoruceType
+    {
+        DataBase = 0,
+        Class = 1,
+        XML = 2
     }
 }
