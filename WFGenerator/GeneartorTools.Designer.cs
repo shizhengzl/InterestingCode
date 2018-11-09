@@ -54,6 +54,7 @@
             this.tsRemove = new System.Windows.Forms.ToolStripButton();
             this.tsRefresh = new System.Windows.Forms.ToolStripButton();
             this.tabPageSelectClass = new System.Windows.Forms.TabPage();
+            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.tabPageSelectXML = new System.Windows.Forms.TabPage();
             this.TreeViewXML = new System.Windows.Forms.TreeView();
             this.gbleft = new System.Windows.Forms.GroupBox();
@@ -81,7 +82,6 @@
             this.tabControlSet = new System.Windows.Forms.TabControl();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.openFile = new System.Windows.Forms.OpenFileDialog();
-            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
             this.groupGenerator.SuspendLayout();
@@ -367,6 +367,19 @@
             this.tabPageSelectClass.Text = "Class";
             this.tabPageSelectClass.UseVisualStyleBackColor = true;
             // 
+            // ClassTree
+            // 
+            this.ClassTree.CheckBoxes = true;
+            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ClassTree.listSnippet = null;
+            this.ClassTree.Location = new System.Drawing.Point(3, 3);
+            this.ClassTree.Name = "ClassTree";
+            this.ClassTree.sh = null;
+            this.ClassTree.Size = new System.Drawing.Size(293, 280);
+            this.ClassTree.sqlite = null;
+            this.ClassTree.TabIndex = 0;
+            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
             // tabPageSelectXML
             // 
             this.tabPageSelectXML.Controls.Add(this.TreeViewXML);
@@ -404,6 +417,7 @@
             // 
             this.tabControlSource.Controls.Add(this.tpSource);
             this.tabControlSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlSource.ImageList = this.imageList;
             this.tabControlSource.Location = new System.Drawing.Point(3, 210);
             this.tabControlSource.Name = "tabControlSource";
             this.tabControlSource.SelectedIndex = 0;
@@ -416,17 +430,18 @@
             this.tpSource.Controls.Add(this.btnSelectFolder);
             this.tpSource.Controls.Add(this.txtXmlSelect);
             this.tpSource.Controls.Add(this.btnSelectFile);
-            this.tpSource.Location = new System.Drawing.Point(4, 22);
+            this.tpSource.ImageIndex = 4;
+            this.tpSource.Location = new System.Drawing.Point(4, 23);
             this.tpSource.Name = "tpSource";
             this.tpSource.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSource.Size = new System.Drawing.Size(353, 392);
+            this.tpSource.Size = new System.Drawing.Size(353, 391);
             this.tpSource.TabIndex = 4;
             this.tpSource.Text = "From Source";
             this.tpSource.UseVisualStyleBackColor = true;
             // 
             // btnString
             // 
-            this.btnString.Location = new System.Drawing.Point(234, 119);
+            this.btnString.Location = new System.Drawing.Point(234, 280);
             this.btnString.Name = "btnString";
             this.btnString.Size = new System.Drawing.Size(88, 23);
             this.btnString.TabIndex = 3;
@@ -436,12 +451,13 @@
             // 
             // btnSelectFolder
             // 
-            this.btnSelectFolder.Location = new System.Drawing.Point(129, 119);
+            this.btnSelectFolder.Location = new System.Drawing.Point(129, 280);
             this.btnSelectFolder.Name = "btnSelectFolder";
             this.btnSelectFolder.Size = new System.Drawing.Size(99, 23);
             this.btnSelectFolder.TabIndex = 2;
             this.btnSelectFolder.Text = "Select Folder";
             this.btnSelectFolder.UseVisualStyleBackColor = true;
+            this.btnSelectFolder.Click += new System.EventHandler(this.btnSelectFolder_Click);
             // 
             // txtXmlSelect
             // 
@@ -450,14 +466,14 @@
             this.txtXmlSelect.Multiline = true;
             this.txtXmlSelect.Name = "txtXmlSelect";
             this.txtXmlSelect.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtXmlSelect.Size = new System.Drawing.Size(341, 91);
+            this.txtXmlSelect.Size = new System.Drawing.Size(341, 257);
             this.txtXmlSelect.TabIndex = 1;
             this.txtXmlSelect.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtXmlSelect_DragDrop);
             this.txtXmlSelect.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtXmlSelect_DragEnter);
             // 
             // btnSelectFile
             // 
-            this.btnSelectFile.Location = new System.Drawing.Point(18, 119);
+            this.btnSelectFile.Location = new System.Drawing.Point(18, 280);
             this.btnSelectFile.Name = "btnSelectFile";
             this.btnSelectFile.Size = new System.Drawing.Size(105, 23);
             this.btnSelectFile.TabIndex = 0;
@@ -655,19 +671,6 @@
             // 
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
-            // 
-            // ClassTree
-            // 
-            this.ClassTree.CheckBoxes = true;
-            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ClassTree.listSnippet = null;
-            this.ClassTree.Location = new System.Drawing.Point(3, 3);
-            this.ClassTree.Name = "ClassTree";
-            this.ClassTree.sh = null;
-            this.ClassTree.Size = new System.Drawing.Size(293, 280);
-            this.ClassTree.sqlite = null;
-            this.ClassTree.TabIndex = 0;
-            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // GeneartorTools
             // 

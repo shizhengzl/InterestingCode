@@ -20,10 +20,9 @@ namespace VSBussinessExtenstion
         {
             get
             {
-                if (_sqlConnection == null)
-                {
-                    _sqlConnection = new SqlConnection(connectionString);
-                }
+
+                _sqlConnection = new SqlConnection(connectionString);
+
                 return _sqlConnection;
             }
         }

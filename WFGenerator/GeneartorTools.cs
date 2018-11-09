@@ -233,16 +233,7 @@ namespace WFGenerator
 
             if (!string.IsNullOrEmpty(context))
             {
-                CSharpParser cSharpParser = new CSharpParser(context);
-                try
-                {
-                    ClassTree.Refreshs(cSharpParser.GetClass());
-                    tabControlSelect.SelectedIndex = 1;
-                }
-                catch (Exception)
-                {
-
-                }
+                GeneratorClass(context);
             }
         }
 
@@ -252,6 +243,26 @@ namespace WFGenerator
             {
                 return;
             }
+            GeneratorClass(txtXmlSelect.Text);
+        }
+
+        private void GeneratorClass(string context)
+        {
+            CSharpParser cSharpParser = new CSharpParser(context);
+            try
+            {
+                ClassTree.Refreshs(cSharpParser.GetClass());
+                tabControlSelect.SelectedIndex = (int)SelectDataSoruceType.Class;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnSelectFolder_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

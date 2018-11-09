@@ -15,7 +15,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         public void Init(DataBaseAddress address)
         {
-            InitDatabase(address); 
+            InitDatabase(address);
         }
 
         public void InitDatabase(DataBaseAddress baseAddress)
@@ -32,13 +32,13 @@ namespace VSBussinessExtenstion.DataBaseHelper
             {
                 throw ex;
             }
-          
+
         }
 
         public void InitTable(DataBase dataBase)
         {
             ChangeDataBase(dataBase);
-            string getDataTableSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == dataBase.DBType).GetTableSQL.Replace("@DataBaseName",dataBase.DataBaseName) ;
+            string getDataTableSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == dataBase.DBType).GetTableSQL.Replace("@DataBaseName", dataBase.DataBaseName);
             dataBase.Tables = DatabaseHelper.ExecuteQuery(getDataTableSql).Tables[0].ToList<Table>();
             dataBase.Tables.ForEach(x => x.Address = dataBase.Address);
             dataBase.Tables.ForEach(x => x.DataBaseName = dataBase.DataBaseName);
@@ -50,16 +50,16 @@ namespace VSBussinessExtenstion.DataBaseHelper
             string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL.Replace("@DataBaseName", table.DataBaseName).Replace("@TableName", table.TableName);
             table.Columns = DatabaseHelper.ExecuteQuery(getColumnSql).Tables[0].ToList<Column>();
 
-            table.Columns.ForEach(x => x.Address = table.Address); 
+            table.Columns.ForEach(x => x.Address = table.Address);
             table.Columns.ForEach(x => x.DataBaseName = table.DataBaseName);
             table.Columns.ForEach(x => x.TableName = table.TableName);
-            table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType,x.Type));
+            table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType, x.Type));
         }
 
-        public string GetColumnType(DataBaseType dataBaseType,string Type)
+        public string GetColumnType(DataBaseType dataBaseType, string Type)
         {
             string columnType = string.Empty;
-            switch(dataBaseType)
+            switch (dataBaseType)
             {
                 case DataBaseType.SQLServer:
                     columnType = dbContext.DataTypeConfigs.FirstOrDefault(y => y.Type == dataBaseType && y.SQLServerType == Type).CSharpType;
@@ -79,8 +79,9 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         public void ChangeDataBase(DataBaseAddress baseAddress)
         {
-            var con = dbContext.ConnectionStrings.FirstOrDefault(x=>x.Type == baseAddress.DBType);
-            DatabaseHelper.connectionString = string.Format(con.Connection, baseAddress.Address, baseAddress.User, baseAddress.Password, baseAddress.DefaultDatabase); //baseAddress.GetConnectionString();
+            var con = dbContext.ConnectionStrings.FirstOrDefault(x => x.Type == baseAddress.DBType);
+            if(baseAddress.GetType().Name == typeof(DataBaseAddress).Name)
+                DatabaseHelper.connectionString = string.Format(con.Connection, baseAddress.Address, baseAddress.User, baseAddress.Password, baseAddress.DefaultDatabase); //baseAddress.GetConnectionString();
         }
     }
 }
