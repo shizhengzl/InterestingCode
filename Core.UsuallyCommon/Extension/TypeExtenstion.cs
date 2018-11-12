@@ -31,6 +31,15 @@ namespace Core.UsuallyCommon
             return result;
         }
 
+        public static Double ToDouble(this object obj)
+        {
+            Double result = 0;
+            if (obj == null)
+                return result;
+            bool isparse = Double.TryParse(obj.ToStringExtension(), out result);
+            return result;
+        }
+
         public static string ToStringExtension(this object obj)
         {
             string result = string.Empty;

@@ -28,13 +28,7 @@ namespace WFGenerator
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             InitSystemConfig();
         }
-
-        public DefaultSqlite sqlite = new DefaultSqlite();
-        public ServicesAddressHelper sh = new ServicesAddressHelper();
-        public List<Table> listSelectTalbe = new List<Table>();
-        public List<Table> listAllTalbe = new List<Table>();
-
-
+         
         private void GeneartorTools_Load(object sender, EventArgs e)
         {
             ServerTree.sqlite = sqlite;
@@ -52,7 +46,13 @@ namespace WFGenerator
             ClassTree.ImageList = imageList;
             ClassTree.treeType = TreeType.Class;
         }
-
+        
+        #region Variabled 
+        public DefaultSqlite sqlite = new DefaultSqlite();
+        public ServicesAddressHelper sh = new ServicesAddressHelper();
+        public List<Table> listAllTalbe = new List<Table>();
+        public GeneratorClass generatorClass = new GeneratorClass();
+        #endregion
 
         #region SystemConfig
 
@@ -76,26 +76,33 @@ namespace WFGenerator
             tpclass.Controls.Add(panel);
             tabControlSet.TabPages.Add(tpclass);
         }
-        #endregion
+        #endregion 
 
-
+        #region Filter 
         private void btnSearch_Click(object sender, EventArgs e)
-        {
-
+        { 
             var context = txtSearch.Text;
             var listdata = StringHelper.GetStringSingleColumn(context);
-            if (listdata.Count > 0)
-            {
-                listSelectTalbe.Clear();
+            SelectDataSoruceType selecttype = Core.UsuallyCommon.Extensions.EnumParse<SelectDataSoruceType>(tabControlSelect.SelectedIndex.ToString());
 
-                listSelectTalbe.AddRange(listAllTalbe.Where(x => listdata.Any(y => y.ToUpper() == x.TableName.ToUpper())).ToList<Table>());
-            }
+            if (listdata.Count == 0) 
+                return; 
 
             if (rdLikdSearch.Checked)
             {
                 if (rdFilterTable.Checked)
                 {
-
+                    switch (selecttype)
+                    {
+                        case SelectDataSoruceType.DataBase:
+                            ServerTree.listSelect.Clear();
+                            ServerTree.Refreshs(listdata, SearchType.LikeSearch);
+                            break;
+                        case SelectDataSoruceType.Class:
+                            break;
+                        case SelectDataSoruceType.XML:
+                            break;
+                    }
                 }
                 else
                 {
@@ -107,7 +114,17 @@ namespace WFGenerator
             {
                 if (rdFilterTable.Checked)
                 {
-
+                    switch (selecttype)
+                    {
+                        case SelectDataSoruceType.DataBase:
+                            ServerTree.listSelect.Clear();
+                            ServerTree.Refreshs(listdata, SearchType.FuzzySearch, txtFuzzyPercent.Text.ToDouble() / 100.00);
+                            break;
+                        case SelectDataSoruceType.Class:
+                            break;
+                        case SelectDataSoruceType.XML:
+                            break;
+                    }
                 }
                 else
                 {
@@ -119,7 +136,17 @@ namespace WFGenerator
             {
                 if (rdFilterTable.Checked)
                 {
-                    //InitSelectDataBaseTree();
+                     switch (selecttype)
+                    {
+                        case SelectDataSoruceType.DataBase:
+                            ServerTree.listSelect.Clear();
+                            ServerTree.Refreshs(listdata,SearchType.Complete);
+                            break;
+                        case SelectDataSoruceType.Class:
+                            break;
+                        case SelectDataSoruceType.XML:
+                            break;
+                    }
                 }
                 else
                 {
@@ -127,48 +154,14 @@ namespace WFGenerator
                 }
             }
         }
-
-
+         
         private void btnClear_Click(object sender, EventArgs e)
         {
 
         }
+        #endregion
 
-
-        public void LoadChild(TreeNode treeNode, XmlNodeList xmlNodes)
-        {
-            foreach (XmlNode item in xmlNodes)
-            {
-                if (item.Attributes != null && item.Attributes.Count > 0)
-                {
-                    TreeNode attributes = new TreeNode() { Text = "Attributes" };
-
-                    foreach (XmlAttribute attribute in item.Attributes)
-                    {
-                        var attributename = attribute.Name;
-                        var attributevalue = attribute.Value;
-
-                        TreeNode attributeNote = new TreeNode() { Text = attributename, Tag = attribute, ToolTipText = attributevalue };
-                        attributes.Nodes.Add(attributeNote);
-                    }
-                    treeNode.Nodes.Add(attributes);
-                }
-                if (item.NodeType != XmlNodeType.Text && item.NodeType != XmlNodeType.Comment)
-                {
-                    var notename = item.Name;
-                    var notevalue = item.InnerText;
-
-                    TreeNode xmlNote = new TreeNode() { Text = notename, Tag = item, ToolTipText = notevalue };
-
-                    treeNode.Nodes.Add(xmlNote);
-
-                    LoadChild(xmlNote, item.ChildNodes);
-                }
-            }
-        }
-
-        GeneratorClass generatorClass = new GeneratorClass();
-
+        #region Generator 
         private void tsRefresh_Click(object sender, EventArgs e)
         {
             ServerTree.Refresh();
@@ -251,7 +244,7 @@ namespace WFGenerator
             CSharpParser cSharpParser = new CSharpParser(context);
             try
             {
-                ClassTree.Refreshs(cSharpParser.GetClass());
+                ClassTree.Refreshs(null,0,0,cSharpParser.GetClass());
                 tabControlSelect.SelectedIndex = (int)SelectDataSoruceType.Class;
             }
             catch (Exception ex)
@@ -264,6 +257,7 @@ namespace WFGenerator
         {
 
         }
+        #endregion
     }
 
     public class ExtenstionClass

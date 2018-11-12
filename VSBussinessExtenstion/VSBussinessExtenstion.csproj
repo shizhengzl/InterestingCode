@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CommonEnum.cs" />
     <Compile Include="DataBaseHelper\DataBaseHelper.cs" />
     <Compile Include="DataBaseHelper\ServicesAddressHelper.cs" />
     <Compile Include="DefaultSqlite.cs" />

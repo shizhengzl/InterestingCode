@@ -354,8 +354,8 @@ namespace VSBussinessExtenstion.Migrations
             {
                 Type = Core.UsuallyCommon.DataBaseType.SQLServer,
                 GetDataBaseSQL = "SELECT name AS DataBaseName FROM sys.sysdatabases ORDER BY name",
-                GetTableSQL = "USE @DataBaseName SELECT name AS TableName FROM sys.tables ORDER BY name",
-                GetColumnSQL = @"USE @DataBaseName  SELECT a.name as ColumnName,b.name AS Type FROM sys.columns a INNER JOIN sys.types b 
+                GetTableSQL = "USE [@DataBaseName] SELECT name AS TableName FROM sys.tables ORDER BY name",
+                GetColumnSQL = @"USE [@DataBaseName]  SELECT a.name as ColumnName,b.name AS Type FROM sys.columns a INNER JOIN sys.types b 
                                  ON a.system_type_id = b.system_type_id  AND a.user_type_id = b.user_type_id WHERE OBJECT_ID = OBJECT_ID('@TableName')"
             });
 

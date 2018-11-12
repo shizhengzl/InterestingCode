@@ -27,6 +27,8 @@ namespace VSBussinessExtenstion.DataBaseHelper
                 baseAddress.DataBases = DatabaseHelper.ExecuteQuery(getDatabaseSql).Tables[0].ToList<DataBase>().Where(x =>
                 string.IsNullOrEmpty(baseAddress.DefaultDatabase) || x.DataBaseName == baseAddress.DefaultDatabase).ToList<DataBase>();
                 baseAddress.DataBases.ForEach(x => x.Address = baseAddress.Address);
+                baseAddress.DataBases.ForEach(x => x.User = baseAddress.User);
+                baseAddress.DataBases.ForEach(x => x.Password = baseAddress.Password);
             }
             catch (Exception ex)
             {
@@ -35,13 +37,31 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         }
 
-        public void InitTable(DataBase dataBase)
+        public void InitTable(DataBase dataBase,List<string> list= null, SearchType searchType = 0,double center = 0.5)
         {
             ChangeDataBase(dataBase);
             string getDataTableSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == dataBase.DBType).GetTableSQL.Replace("@DataBaseName", dataBase.DataBaseName);
             dataBase.Tables = DatabaseHelper.ExecuteQuery(getDataTableSql).Tables[0].ToList<Table>();
             dataBase.Tables.ForEach(x => x.Address = dataBase.Address);
             dataBase.Tables.ForEach(x => x.DataBaseName = dataBase.DataBaseName);
+            dataBase.Tables.ForEach(x => x.User = dataBase.User);
+            dataBase.Tables.ForEach(x => x.Password = dataBase.Password);
+
+            if(list != null)
+            { 
+                switch (searchType)
+                {
+                    case SearchType.Complete:
+                        dataBase.Tables = dataBase.Tables.Where(x => list.Any(y=>y.ToUpper() == x.TableName.ToUpper())).ToList<Table>();
+                        break;
+                    case SearchType.LikeSearch:
+                        dataBase.Tables = dataBase.Tables.Where(x =>x.TableName.ToUpper().IndexOf(list.First().ToUpper()) > -1).ToList<Table>();
+                        break;
+                    case SearchType.FuzzySearch:
+                        dataBase.Tables = dataBase.Tables.Where(x =>Core.UsuallyCommon.StringHelper.SearchExists(x.TableName,list.ToArray(), center)).ToList<Table>();
+                        break;
+                }
+            }
         }
 
         public void InitColumn(Table table)
@@ -80,7 +100,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
         public void ChangeDataBase(DataBaseAddress baseAddress)
         {
             var con = dbContext.ConnectionStrings.FirstOrDefault(x => x.Type == baseAddress.DBType);
-            if(baseAddress.GetType().Name == typeof(DataBaseAddress).Name)
+            if(!String.IsNullOrEmpty(baseAddress.User) && !String.IsNullOrEmpty(baseAddress.Password))
                 DatabaseHelper.connectionString = string.Format(con.Connection, baseAddress.Address, baseAddress.User, baseAddress.Password, baseAddress.DefaultDatabase); //baseAddress.GetConnectionString();
         }
     }

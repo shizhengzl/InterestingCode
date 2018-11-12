@@ -10,6 +10,9 @@ namespace Core.ConsoleLog
     {
         static void Main(string[] args)
         {
+            var s = Core.UsuallyCommon.StringHelper.Search("cb_Adjust", new List<string>() { "Ajust" }.ToArray(),0.2);
+
+            return;
             string str = @" <%! var option = {
                 //rviceInfo格式为:命名空间.类名.方法名
 				//Slxt.Services为namespace下面的 Slxt.Services
