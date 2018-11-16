@@ -91,12 +91,17 @@ namespace Core.UsuallyCommon
         {
             if (!System.IO.File.Exists(Path))
             {
-                //StreamWriter sr = System.IO.File.CreateText(Path);
-                FileStream fs = new FileStream(Path, FileMode.Create);
-                StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding("GB2312"));
-                sw.Write(Content);
-                sw.Close();
-                fs.Close();
+                var url = Path.GetFileDirectory();
+                if (!Directory.Exists(url))//如果不存在就创建file文件夹　　             　　              
+                    Directory.CreateDirectory(url);//创建该文件夹　　       
+                AppendFile(Path, Content);
+            }
+            else
+            {
+                StreamWriter writer = new StreamWriter(Path, false, Encoding.GetEncoding("GB2312"));
+                writer.Flush();
+                writer.Write(Content);
+                writer.Close();
             }
         }
 

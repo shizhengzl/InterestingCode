@@ -39,22 +39,18 @@
             this.txtGenerator = new System.Windows.Forms.TextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tGenerator = new System.Windows.Forms.ToolStripButton();
-            this.tGeneratorFile = new System.Windows.Forms.ToolStripButton();
             this.tabPageData = new System.Windows.Forms.TabPage();
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
-            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.bgselect = new System.Windows.Forms.GroupBox();
             this.tabControlSelect = new System.Windows.Forms.TabControl();
             this.tabPageSelectSQL = new System.Windows.Forms.TabPage();
             this.gtree = new System.Windows.Forms.GroupBox();
-            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.toolStripTreeServer = new System.Windows.Forms.ToolStrip();
             this.tsAdd = new System.Windows.Forms.ToolStripButton();
             this.tsRemove = new System.Windows.Forms.ToolStripButton();
             this.tsRefresh = new System.Windows.Forms.ToolStripButton();
             this.tabPageSelectClass = new System.Windows.Forms.TabPage();
-            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.tabPageSelectXML = new System.Windows.Forms.TabPage();
             this.TreeViewXML = new System.Windows.Forms.TreeView();
             this.gbleft = new System.Windows.Forms.GroupBox();
@@ -64,6 +60,7 @@
             this.btnSelectFolder = new System.Windows.Forms.Button();
             this.txtXmlSelect = new System.Windows.Forms.TextBox();
             this.btnSelectFile = new System.Windows.Forms.Button();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.pSearch = new System.Windows.Forms.Panel();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -78,10 +75,27 @@
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.tabPageString = new System.Windows.Forms.TabPage();
             this.tabPageSQLCompare = new System.Windows.Forms.TabPage();
+            this.txtExportSQL = new System.Windows.Forms.TextBox();
+            this.groupMode = new System.Windows.Forms.GroupBox();
+            this.btnCheckSQL = new System.Windows.Forms.Button();
+            this.btnExportSQL = new System.Windows.Forms.Button();
+            this.groupDataSourceOne = new System.Windows.Forms.GroupBox();
+            this.groupSearch = new System.Windows.Forms.GroupBox();
+            this.comTragetDatabase = new System.Windows.Forms.ComboBox();
+            this.comSourceDatabase = new System.Windows.Forms.ComboBox();
+            this.btnFuzzy = new System.Windows.Forms.Button();
+            this.btnComplete = new System.Windows.Forms.Button();
+            this.textSearch = new System.Windows.Forms.TextBox();
+            this.btnLike = new System.Windows.Forms.Button();
+            this.comTraget = new System.Windows.Forms.ComboBox();
+            this.comSource = new System.Windows.Forms.ComboBox();
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.openFile = new System.Windows.Forms.OpenFileDialog();
+            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.DataBaseSearch = new WFGenerator.WinfromControl.DatabaseTree();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
             this.groupGenerator.SuspendLayout();
@@ -103,6 +117,10 @@
             this.pSearch.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbSearch.SuspendLayout();
+            this.tabPageSQLCompare.SuspendLayout();
+            this.groupMode.SuspendLayout();
+            this.groupDataSourceOne.SuspendLayout();
+            this.groupSearch.SuspendLayout();
             this.tabPageSystemConfig.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,6 +145,7 @@
             this.tabControlALL.SelectedIndex = 0;
             this.tabControlALL.Size = new System.Drawing.Size(1215, 664);
             this.tabControlALL.TabIndex = 1;
+            this.tabControlALL.SelectedIndexChanged += new System.EventHandler(this.tabControlALL_SelectedIndexChanged);
             // 
             // tabPageSQLGeneartor
             // 
@@ -189,8 +208,7 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tGenerator,
-            this.tGeneratorFile});
+            this.tGenerator});
             this.toolStrip1.Location = new System.Drawing.Point(3, 3);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(501, 25);
@@ -205,15 +223,6 @@
             this.tGenerator.Size = new System.Drawing.Size(87, 22);
             this.tGenerator.Text = "Generator";
             this.tGenerator.Click += new System.EventHandler(this.tGenerator_Click);
-            // 
-            // tGeneratorFile
-            // 
-            this.tGeneratorFile.Image = ((System.Drawing.Image)(resources.GetObject("tGeneratorFile.Image")));
-            this.tGeneratorFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tGeneratorFile.Name = "tGeneratorFile";
-            this.tGeneratorFile.Size = new System.Drawing.Size(106, 22);
-            this.tGeneratorFile.Text = "GeneratorFile";
-            this.tGeneratorFile.Click += new System.EventHandler(this.tGeneratorFile_Click);
             // 
             // tabPageData
             // 
@@ -245,20 +254,6 @@
             this.gbSnippet.TabIndex = 2;
             this.gbSnippet.TabStop = false;
             this.gbSnippet.Text = "Snippet";
-            // 
-            // SnippetTree
-            // 
-            this.SnippetTree.CheckBoxes = true;
-            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SnippetTree.listSnippet = null;
-            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
-            this.SnippetTree.Name = "SnippetTree";
-            this.SnippetTree.sh = null;
-            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
-            this.SnippetTree.sqlite = null;
-            this.SnippetTree.TabIndex = 0;
-            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
-            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
             // 
             // bgselect
             // 
@@ -305,19 +300,6 @@
             this.gtree.TabIndex = 2;
             this.gtree.TabStop = false;
             this.gtree.Text = "Tree";
-            // 
-            // ServerTree
-            // 
-            this.ServerTree.CheckBoxes = true;
-            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ServerTree.listSnippet = null;
-            this.ServerTree.Location = new System.Drawing.Point(3, 42);
-            this.ServerTree.Name = "ServerTree";
-            this.ServerTree.sh = null;
-            this.ServerTree.Size = new System.Drawing.Size(287, 235);
-            this.ServerTree.sqlite = null;
-            this.ServerTree.TabIndex = 1;
-            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // toolStripTreeServer
             // 
@@ -366,19 +348,6 @@
             this.tabPageSelectClass.TabIndex = 1;
             this.tabPageSelectClass.Text = "Class";
             this.tabPageSelectClass.UseVisualStyleBackColor = true;
-            // 
-            // ClassTree
-            // 
-            this.ClassTree.CheckBoxes = true;
-            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ClassTree.listSnippet = null;
-            this.ClassTree.Location = new System.Drawing.Point(3, 3);
-            this.ClassTree.Name = "ClassTree";
-            this.ClassTree.sh = null;
-            this.ClassTree.Size = new System.Drawing.Size(293, 280);
-            this.ClassTree.sqlite = null;
-            this.ClassTree.TabIndex = 0;
-            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // tabPageSelectXML
             // 
@@ -479,6 +448,22 @@
             this.btnSelectFile.TabIndex = 0;
             this.btnSelectFile.Text = "Select File";
             this.btnSelectFile.UseVisualStyleBackColor = true;
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "add_edit_24px.png");
+            this.imageList.Images.SetKeyName(1, "database_24px.png");
+            this.imageList.Images.SetKeyName(2, "edit_24px.png");
+            this.imageList.Images.SetKeyName(3, "folder_24px.png");
+            this.imageList.Images.SetKeyName(4, "generate_tables_24px.png");
+            this.imageList.Images.SetKeyName(5, "refresh_24px.png");
+            this.imageList.Images.SetKeyName(6, "remove_24px.png");
+            this.imageList.Images.SetKeyName(7, "server_24px.png");
+            this.imageList.Images.SetKeyName(8, "table_24px.png");
+            this.imageList.Images.SetKeyName(9, "dialog_ok_24px.png");
+            this.imageList.Images.SetKeyName(10, "error_24px.png");
             // 
             // pSearch
             // 
@@ -620,6 +605,9 @@
             // 
             // tabPageSQLCompare
             // 
+            this.tabPageSQLCompare.Controls.Add(this.txtExportSQL);
+            this.tabPageSQLCompare.Controls.Add(this.groupMode);
+            this.tabPageSQLCompare.Controls.Add(this.groupDataSourceOne);
             this.tabPageSQLCompare.ImageIndex = 4;
             this.tabPageSQLCompare.Location = new System.Drawing.Point(4, 23);
             this.tabPageSQLCompare.Name = "tabPageSQLCompare";
@@ -628,6 +616,158 @@
             this.tabPageSQLCompare.TabIndex = 3;
             this.tabPageSQLCompare.Text = "SQL Compare";
             this.tabPageSQLCompare.UseVisualStyleBackColor = true;
+            // 
+            // txtExportSQL
+            // 
+            this.txtExportSQL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExportSQL.Location = new System.Drawing.Point(397, 198);
+            this.txtExportSQL.Multiline = true;
+            this.txtExportSQL.Name = "txtExportSQL";
+            this.txtExportSQL.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtExportSQL.Size = new System.Drawing.Size(807, 436);
+            this.txtExportSQL.TabIndex = 2;
+            // 
+            // groupMode
+            // 
+            this.groupMode.Controls.Add(this.btnCheckSQL);
+            this.groupMode.Controls.Add(this.btnExportSQL);
+            this.groupMode.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupMode.Location = new System.Drawing.Point(397, 3);
+            this.groupMode.Name = "groupMode";
+            this.groupMode.Size = new System.Drawing.Size(807, 195);
+            this.groupMode.TabIndex = 1;
+            this.groupMode.TabStop = false;
+            this.groupMode.Text = "GroupMode";
+            // 
+            // btnCheckSQL
+            // 
+            this.btnCheckSQL.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCheckSQL.Location = new System.Drawing.Point(28, 80);
+            this.btnCheckSQL.Name = "btnCheckSQL";
+            this.btnCheckSQL.Size = new System.Drawing.Size(102, 30);
+            this.btnCheckSQL.TabIndex = 1;
+            this.btnCheckSQL.Text = "检查长度";
+            this.btnCheckSQL.UseVisualStyleBackColor = true;
+            this.btnCheckSQL.Click += new System.EventHandler(this.btnCheckSQL_Click);
+            // 
+            // btnExportSQL
+            // 
+            this.btnExportSQL.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnExportSQL.Location = new System.Drawing.Point(152, 80);
+            this.btnExportSQL.Name = "btnExportSQL";
+            this.btnExportSQL.Size = new System.Drawing.Size(91, 30);
+            this.btnExportSQL.TabIndex = 0;
+            this.btnExportSQL.Text = "导数SQL";
+            this.btnExportSQL.UseVisualStyleBackColor = true;
+            this.btnExportSQL.Click += new System.EventHandler(this.btnExportSQL_Click);
+            // 
+            // groupDataSourceOne
+            // 
+            this.groupDataSourceOne.Controls.Add(this.DataBaseSearch);
+            this.groupDataSourceOne.Controls.Add(this.groupSearch);
+            this.groupDataSourceOne.Dock = System.Windows.Forms.DockStyle.Left;
+            this.groupDataSourceOne.Location = new System.Drawing.Point(3, 3);
+            this.groupDataSourceOne.Name = "groupDataSourceOne";
+            this.groupDataSourceOne.Size = new System.Drawing.Size(394, 631);
+            this.groupDataSourceOne.TabIndex = 0;
+            this.groupDataSourceOne.TabStop = false;
+            this.groupDataSourceOne.Text = "DataSource";
+            // 
+            // groupSearch
+            // 
+            this.groupSearch.Controls.Add(this.comTragetDatabase);
+            this.groupSearch.Controls.Add(this.comSourceDatabase);
+            this.groupSearch.Controls.Add(this.btnFuzzy);
+            this.groupSearch.Controls.Add(this.btnComplete);
+            this.groupSearch.Controls.Add(this.textSearch);
+            this.groupSearch.Controls.Add(this.btnLike);
+            this.groupSearch.Controls.Add(this.comTraget);
+            this.groupSearch.Controls.Add(this.comSource);
+            this.groupSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupSearch.Location = new System.Drawing.Point(3, 17);
+            this.groupSearch.Name = "groupSearch";
+            this.groupSearch.Size = new System.Drawing.Size(388, 178);
+            this.groupSearch.TabIndex = 0;
+            this.groupSearch.TabStop = false;
+            this.groupSearch.Text = "groupSearch";
+            // 
+            // comTragetDatabase
+            // 
+            this.comTragetDatabase.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comTragetDatabase.FormattingEnabled = true;
+            this.comTragetDatabase.Location = new System.Drawing.Point(187, 66);
+            this.comTragetDatabase.Name = "comTragetDatabase";
+            this.comTragetDatabase.Size = new System.Drawing.Size(177, 27);
+            this.comTragetDatabase.TabIndex = 18;
+            this.comTragetDatabase.SelectedIndexChanged += new System.EventHandler(this.comTragetDatabase_SelectedIndexChanged);
+            // 
+            // comSourceDatabase
+            // 
+            this.comSourceDatabase.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comSourceDatabase.FormattingEnabled = true;
+            this.comSourceDatabase.Location = new System.Drawing.Point(187, 31);
+            this.comSourceDatabase.Name = "comSourceDatabase";
+            this.comSourceDatabase.Size = new System.Drawing.Size(177, 27);
+            this.comSourceDatabase.TabIndex = 17;
+            this.comSourceDatabase.SelectedIndexChanged += new System.EventHandler(this.comSourceDatabase_SelectedIndexChanged);
+            // 
+            // btnFuzzy
+            // 
+            this.btnFuzzy.Location = new System.Drawing.Point(236, 145);
+            this.btnFuzzy.Name = "btnFuzzy";
+            this.btnFuzzy.Size = new System.Drawing.Size(75, 23);
+            this.btnFuzzy.TabIndex = 16;
+            this.btnFuzzy.Text = "Fuzzy";
+            this.btnFuzzy.UseVisualStyleBackColor = true;
+            this.btnFuzzy.Click += new System.EventHandler(this.btnFuzzy_Click);
+            // 
+            // btnComplete
+            // 
+            this.btnComplete.Location = new System.Drawing.Point(145, 145);
+            this.btnComplete.Name = "btnComplete";
+            this.btnComplete.Size = new System.Drawing.Size(75, 23);
+            this.btnComplete.TabIndex = 15;
+            this.btnComplete.Text = "Complete";
+            this.btnComplete.UseVisualStyleBackColor = true;
+            this.btnComplete.Click += new System.EventHandler(this.btnComplete_Click);
+            // 
+            // textSearch
+            // 
+            this.textSearch.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textSearch.Location = new System.Drawing.Point(6, 99);
+            this.textSearch.Name = "textSearch";
+            this.textSearch.Size = new System.Drawing.Size(358, 29);
+            this.textSearch.TabIndex = 14;
+            // 
+            // btnLike
+            // 
+            this.btnLike.Location = new System.Drawing.Point(64, 145);
+            this.btnLike.Name = "btnLike";
+            this.btnLike.Size = new System.Drawing.Size(75, 23);
+            this.btnLike.TabIndex = 13;
+            this.btnLike.Text = "Like";
+            this.btnLike.UseVisualStyleBackColor = true;
+            this.btnLike.Click += new System.EventHandler(this.btnLike_Click);
+            // 
+            // comTraget
+            // 
+            this.comTraget.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comTraget.FormattingEnabled = true;
+            this.comTraget.Location = new System.Drawing.Point(6, 66);
+            this.comTraget.Name = "comTraget";
+            this.comTraget.Size = new System.Drawing.Size(165, 27);
+            this.comTraget.TabIndex = 12;
+            this.comTraget.SelectedIndexChanged += new System.EventHandler(this.comTraget_SelectedIndexChanged);
+            // 
+            // comSource
+            // 
+            this.comSource.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comSource.FormattingEnabled = true;
+            this.comSource.Location = new System.Drawing.Point(6, 31);
+            this.comSource.Name = "comSource";
+            this.comSource.Size = new System.Drawing.Size(165, 27);
+            this.comSource.TabIndex = 11;
+            this.comSource.SelectedIndexChanged += new System.EventHandler(this.comSource_SelectedIndexChanged);
             // 
             // tabPageSystemConfig
             // 
@@ -651,26 +791,67 @@
             this.tabControlSet.Size = new System.Drawing.Size(1201, 631);
             this.tabControlSet.TabIndex = 0;
             // 
-            // imageList
-            // 
-            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName(0, "add_edit_24px.png");
-            this.imageList.Images.SetKeyName(1, "database_24px.png");
-            this.imageList.Images.SetKeyName(2, "edit_24px.png");
-            this.imageList.Images.SetKeyName(3, "folder_24px.png");
-            this.imageList.Images.SetKeyName(4, "generate_tables_24px.png");
-            this.imageList.Images.SetKeyName(5, "refresh_24px.png");
-            this.imageList.Images.SetKeyName(6, "remove_24px.png");
-            this.imageList.Images.SetKeyName(7, "server_24px.png");
-            this.imageList.Images.SetKeyName(8, "table_24px.png");
-            this.imageList.Images.SetKeyName(9, "dialog_ok_24px.png");
-            this.imageList.Images.SetKeyName(10, "error_24px.png");
-            // 
             // openFile
             // 
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
+            // 
+            // SnippetTree
+            // 
+            this.SnippetTree.CheckBoxes = true;
+            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SnippetTree.listSnippet = null;
+            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
+            this.SnippetTree.Name = "SnippetTree";
+            this.SnippetTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.SnippetTree.sh = null;
+            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
+            this.SnippetTree.sqlite = null;
+            this.SnippetTree.TabIndex = 0;
+            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
+            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
+            // 
+            // ServerTree
+            // 
+            this.ServerTree.CheckBoxes = true;
+            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ServerTree.listSnippet = null;
+            this.ServerTree.Location = new System.Drawing.Point(3, 42);
+            this.ServerTree.Name = "ServerTree";
+            this.ServerTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.ServerTree.sh = null;
+            this.ServerTree.Size = new System.Drawing.Size(287, 235);
+            this.ServerTree.sqlite = null;
+            this.ServerTree.TabIndex = 1;
+            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
+            // ClassTree
+            // 
+            this.ClassTree.CheckBoxes = true;
+            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ClassTree.listSnippet = null;
+            this.ClassTree.Location = new System.Drawing.Point(3, 3);
+            this.ClassTree.Name = "ClassTree";
+            this.ClassTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.ClassTree.sh = null;
+            this.ClassTree.Size = new System.Drawing.Size(293, 280);
+            this.ClassTree.sqlite = null;
+            this.ClassTree.TabIndex = 0;
+            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
+            // DataBaseSearch
+            // 
+            this.DataBaseSearch.CheckBoxes = true;
+            this.DataBaseSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DataBaseSearch.listSnippet = null;
+            this.DataBaseSearch.Location = new System.Drawing.Point(3, 195);
+            this.DataBaseSearch.Name = "DataBaseSearch";
+            this.DataBaseSearch.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.DataBaseSearch.sh = null;
+            this.DataBaseSearch.Size = new System.Drawing.Size(388, 433);
+            this.DataBaseSearch.sqlite = null;
+            this.DataBaseSearch.TabIndex = 1;
+            this.DataBaseSearch.treeType = WFGenerator.TreeType.DataBase;
             // 
             // GeneartorTools
             // 
@@ -711,6 +892,12 @@
             this.groupBox1.PerformLayout();
             this.gbSearch.ResumeLayout(false);
             this.gbSearch.PerformLayout();
+            this.tabPageSQLCompare.ResumeLayout(false);
+            this.tabPageSQLCompare.PerformLayout();
+            this.groupMode.ResumeLayout(false);
+            this.groupDataSourceOne.ResumeLayout(false);
+            this.groupSearch.ResumeLayout(false);
+            this.groupSearch.PerformLayout();
             this.tabPageSystemConfig.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -763,7 +950,6 @@
         private System.Windows.Forms.TextBox txtGenerator;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tGenerator;
-        private System.Windows.Forms.ToolStripButton tGeneratorFile;
         private System.Windows.Forms.TabControl tabControlSource;
         private System.Windows.Forms.TabPage tpSource;
         private System.Windows.Forms.Button btnString;
@@ -771,6 +957,21 @@
         private System.Windows.Forms.TextBox txtXmlSelect;
         private System.Windows.Forms.Button btnSelectFile;
         private WinfromControl.DatabaseTree ClassTree;
+        private System.Windows.Forms.GroupBox groupDataSourceOne;
+        private WinfromControl.DatabaseTree DataBaseSearch;
+        private System.Windows.Forms.GroupBox groupSearch;
+        private System.Windows.Forms.Button btnFuzzy;
+        private System.Windows.Forms.Button btnComplete;
+        private System.Windows.Forms.TextBox textSearch;
+        private System.Windows.Forms.Button btnLike;
+        private System.Windows.Forms.ComboBox comTraget;
+        private System.Windows.Forms.ComboBox comSource;
+        private System.Windows.Forms.GroupBox groupMode;
+        private System.Windows.Forms.Button btnCheckSQL;
+        private System.Windows.Forms.Button btnExportSQL;
+        private System.Windows.Forms.TextBox txtExportSQL;
+        private System.Windows.Forms.ComboBox comTragetDatabase;
+        private System.Windows.Forms.ComboBox comSourceDatabase;
     }
 }
 

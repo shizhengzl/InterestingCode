@@ -20,6 +20,9 @@ namespace WFGenerator.WinfromControl
         public TreeType treeType { get; set; }
 
         public List<TreeNode> listSelect = new List<TreeNode>();
+
+        public SelectDataSoruceType selectDataSoruceType { get; set; }
+
         public DatabaseTree()
         {
             this.CheckBoxes = true;
@@ -139,14 +142,14 @@ namespace WFGenerator.WinfromControl
         }
 
 
-        public void Refreshs(List<string> list = null,SearchType searchType = 0,double center = 0.5, object objects = null)
+        public void Refreshs(List<string> list = null,SearchType searchType = 0,double center = 0.5, object objects = null,string addresses = "",string databases= "")
         {
             this.Nodes.Clear();
             this.listSelect.Clear();
             switch (treeType)
             {
                 case TreeType.DataBase:
-                    LoadDataBase(list, searchType, center);
+                    LoadDataBase(list, searchType, center, addresses,databases);
                     break;
                 case TreeType.Snippte:
                     LoadSnippet();
@@ -270,9 +273,14 @@ namespace WFGenerator.WinfromControl
                 GetChildSnippet(treeNode, snippet);
             }
         }
-        public void LoadDataBase(List<string> list = null, SearchType searchType = 0,double center = 0.5)
+        public void LoadDataBase(List<string> list = null,
+            SearchType searchType = 0,double center = 0.5,string addresses = "",string databases = "" )
         {
             var address = sqlite.DataBaseAddresses.ToList();
+            if(!string.IsNullOrEmpty(addresses))
+            {
+                address = address.Where(x => x.Address == addresses && x.DefaultDatabase == databases).ToList();
+            }
             foreach (var item in address)
             {
                 TreeNode treeNode = new TreeNode(item.Address);
@@ -287,6 +295,11 @@ namespace WFGenerator.WinfromControl
                 {
                     MessageBox.Show(ex.Message);
                     continue;
+                }
+
+                if(!string.IsNullOrEmpty(databases))
+                {
+                    item.DataBases = item.DataBases.Where(x => x.DataBaseName == databases).ToList();
                 }
 
                 foreach (var db in item.DataBases)
