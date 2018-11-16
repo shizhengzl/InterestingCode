@@ -17,6 +17,7 @@ using System.Data.Entity.Core.Metadata.Edm;
 using Core.UsuallyCommon;
 using System.Reflection;
 using System.Xml;
+using EnvDTE80;
 
 namespace WFGenerator
 {
@@ -30,8 +31,9 @@ namespace WFGenerator
     }
     public partial class GeneartorTools : Form
     {
-        public GeneartorTools()
+        public GeneartorTools(DTE2 applicationObject = null)
         {
+            ApplicationVsHelper._applicationObject = applicationObject;
             InitializeComponent();
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             InitSystemConfig();
@@ -80,7 +82,7 @@ namespace WFGenerator
             var className = type.Name;
             TabPage tpclass = new TabPage() { Name = className, Text = className };
 
-            PanelExtension<T> panel = new PanelExtension<T>();
+            PanelExtension<T> panel = new PanelExtension<T>(this);
             tpclass.Controls.Add(panel);
             tabControlSet.TabPages.Add(tpclass);
         }

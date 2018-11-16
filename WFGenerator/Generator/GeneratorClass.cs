@@ -45,7 +45,8 @@ namespace WFGenerator
                 }
                 if (generatorFile)
                 {
-                    string filename = snippet.OutputPath.Replace("/", "\\") + "\\" +this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
+                    string filename = (ApplicationVsHelper._applicationObject == null 
+                        ? string.Empty : ApplicationVsHelper.VsProjectPath) + snippet.OutputPath.Replace("/", "\\") + "\\" +this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
                     GeneratorFile(context, filename);
                 }
                 sbResult.AppendLine(context);
@@ -99,7 +100,11 @@ namespace WFGenerator
                 sbResult.AppendLine(result);
                 if(generatorFile)
                 {
-
+                    string filename = (ApplicationVsHelper._applicationObject == null
+                      ? string.Empty : ApplicationVsHelper.VsProjectPath) 
+                      + snippet.OutputPath.Replace("/", "\\") + "\\" 
+                      + this.ReplaceDataBase(snippet.GeneratorFileName, methods.FirstOrDefault(), true);
+                    GeneratorFile(result, filename);
                 }
             }
             return sb.ToString();

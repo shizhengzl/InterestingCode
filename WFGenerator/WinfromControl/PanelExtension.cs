@@ -12,11 +12,11 @@ namespace WFGenerator
         public GridViewExtension<T> gridView { get; set; }
 
         public ToolScriptExtension<T> toolScript { get; set; }
-        public PanelExtension()
+        public PanelExtension(GeneartorTools tools)
         {
             this.Dock = DockStyle.Fill;
-            toolScript = new ToolScriptExtension<T>(this);
-            gridView = new GridViewExtension<T>();
+            toolScript = new ToolScriptExtension<T>(this, tools);
+            gridView = new GridViewExtension<T>(tools);
 
             Panel pt = new Panel() { Height = 40 };
             Panel ptg = new Panel();

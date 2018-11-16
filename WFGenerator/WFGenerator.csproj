@@ -38,6 +38,15 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="envdte100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -52,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationVsHelper.cs" />
     <Compile Include="GeneartorTools.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,6 +72,13 @@
     <Compile Include="ImageEnum.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WinfromControl\Combobox\PerPixelAlphaForm.cs" />
+    <Compile Include="WinfromControl\Combobox\TaskNotifier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinfromControl\Combobox\TreeCombox\TreeComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinfromControl\CommenEnum.cs" />
     <Compile Include="WinfromControl\DatabaseTree.cs">
       <SubType>Component</SubType>
@@ -91,6 +108,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="WinfromControl\Combobox\TreeCombox\TreeComboBox.resx">
+      <DependentUpon>TreeComboBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WinfromControl\ToolScriptExtension.resx">
       <DependentUpon>ToolScriptExtension.cs</DependentUpon>
     </EmbeddedResource>
@@ -130,6 +150,8 @@
     <Content Include="img\remove_24px.png" />
     <Content Include="img\server_24px.png" />
     <Content Include="img\table_24px.png" />
+    <Content Include="WinfromControl\Combobox\TreeCombox\bm.png" />
+    <Content Include="WinfromControl\Combobox\TreeCombox\BM_dropdown.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

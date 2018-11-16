@@ -940,7 +940,7 @@
         private System.Windows.Forms.TabPage tabPageSelectClass;
         private System.Windows.Forms.TabPage tabPageSelectXML;
         private System.Windows.Forms.TreeView TreeViewXML;
-        private System.Windows.Forms.ImageList imageList;
+        public System.Windows.Forms.ImageList imageList;
         private WinfromControl.DatabaseTree ServerTree;
         private WinfromControl.DatabaseTree SnippetTree;
         private System.Windows.Forms.GroupBox groupGenerator;

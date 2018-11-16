@@ -12,8 +12,11 @@ namespace WFGenerator
     public class GridViewExtension<T> : DataGridView where T : class, new()
     {
 
-        public GridViewExtension()
+        public GeneartorTools tools { get; set; }
+
+        public GridViewExtension(GeneartorTools _tools)
         {
+            tools = _tools;
             this.Dock = DockStyle.Fill;
             this.DataSource = ExtenstionClass.GetList<T>(new DefaultSqlite());
             this.AutoGenerateColumns = true;
@@ -27,7 +30,7 @@ namespace WFGenerator
         {
             var objects = (T)this.CurrentRow.DataBoundItem;//visit  相当于一个实体
 
-            WindowExtension<T> window = new WindowExtension<T>(objects, false);
+            WindowExtension<T> window = new WindowExtension<T>(objects, false, tools);
 
             DialogResult dialog = window.ShowDialog();
 

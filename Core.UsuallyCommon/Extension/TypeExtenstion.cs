@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace Core.UsuallyCommon
 {
     public static class TypeExtenstion
-    {
+    { 
+
         // 获取文件扩展名
         public static string GetFileExtension(this object obj)
         {

@@ -13,11 +13,13 @@ namespace WFGenerator
 {
     public class ToolScriptExtension<T> : ToolStrip where T : class, new()
     {
-      
+        public GeneartorTools tools { get; set; }
         public PanelExtension<T> Panel { get; set; }
-        public ToolScriptExtension(PanelExtension<T> panel)
-        { 
+        public ToolScriptExtension(PanelExtension<T> panel,GeneartorTools _tools)
+        {
+            tools = _tools;
             Panel = panel;
+
             this.Dock = DockStyle.Fill;  
             List<string> btn = Core.UsuallyCommon.Extensions.EnumToList<ToolScriptButton>();
             foreach (var item in btn)
@@ -31,16 +33,16 @@ namespace WFGenerator
                 switch (btnenum)
                 {
                     case ToolScriptButton.Insert:
-                        //button.Image = imageListone.Images[(int)ImageEnum.Add]; 
+                        button.Image = tools.imageList.Images[(int)ImageEnum.Add]; 
                         break;
                     case ToolScriptButton.Update:
-                        //button.Image = imageListone.Images[(int)ImageEnum.Edit]; 
+                        button.Image = tools.imageList.Images[(int)ImageEnum.Edit]; 
                         break;
                     case ToolScriptButton.Delete:
-                        //button.Image = imageListone.Images[(int)ImageEnum.Remove]; 
+                        button.Image = tools.imageList.Images[(int)ImageEnum.Remove]; 
                         break;
                     case ToolScriptButton.Refresh:
-                        //button.Image = imageListone.Images[(int)ImageEnum.Refresh]; 
+                        button.Image = tools.imageList.Images[(int)ImageEnum.Refresh]; 
                         break;
                 }
                 this.Items.Add(button);
@@ -54,7 +56,7 @@ namespace WFGenerator
             switch (btnenum)
             {
                 case ToolScriptButton.Insert:
-                    WindowExtension<T> windowinsert = new WindowExtension<T>(new T(), true);
+                    WindowExtension<T> windowinsert = new WindowExtension<T>(new T(), true, tools);
                     DialogResult dialoginsert = windowinsert.ShowDialog();
                     break;
                 case ToolScriptButton.Update:
@@ -64,7 +66,7 @@ namespace WFGenerator
                         return;
                     }
                     var result = ExtenstionClass.GetList<T>(new DefaultSqlite()).Skip(Panel.gridView.SelectedRows[0].Index).Take(1).FirstOrDefault();
-                    WindowExtension<T> windowupdate = new WindowExtension<T>(result, false);
+                    WindowExtension<T> windowupdate = new WindowExtension<T>(result, false, tools);
                     DialogResult dialogupdate = windowupdate.ShowDialog();
                     break;
                 case ToolScriptButton.Delete:

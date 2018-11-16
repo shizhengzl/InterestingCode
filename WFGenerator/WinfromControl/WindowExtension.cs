@@ -21,7 +21,7 @@ namespace WFGenerator
         public bool IsInsert { get; set; }
 
         public List<Type> enumList = new List<Type>() { typeof(DataBaseType), typeof(DataSourceType), typeof(CharStatu) };
-        public WindowExtension(T objects, bool isInsert)
+        public WindowExtension(T objects, bool isInsert,GeneartorTools tools)
         {
             IsInsert = isInsert;
             objectself = objects;
@@ -53,7 +53,13 @@ namespace WFGenerator
                 }
                 else
                 {
-                    textBox = new TextBox() { Name = $"{proprety.Name}", Text = val, Width = 400, Multiline = true, Height = 60, ScrollBars = ScrollBars.Both };
+                    if(proprety.Name.ToLower() == "outputpath")
+                    {
+                        textBox = new TreeComboBox() { Name = $"{proprety.Name}", Text = val, Width = 400 }; 
+                        textBox.ImageList = tools.imageList; 
+                    }
+                    else
+                        textBox = new TextBox() { Name = $"{proprety.Name}", Text = val, Width = 400, Multiline = true, Height = 60, ScrollBars = ScrollBars.Both };
                 }
 
                 if (proprety.Name.ToUpper() == "ID")
@@ -126,6 +132,10 @@ namespace WFGenerator
                         tb = (item as TextBox); 
                         SetPropertyInfo(objectself.GetType().GetProperties().FirstOrDefault(x => x.Name == tb.Name), tb.Text);
                         break;
+                    case "TreeComboBox":
+                        tb = (item as TreeComboBox);
+                        SetPropertyInfo(objectself.GetType().GetProperties().FirstOrDefault(x => x.Name == tb.Name), tb.Text);
+                        break; 
                 } 
             }
             DbEntityEntry entry = db.Entry<T>(objectself);
