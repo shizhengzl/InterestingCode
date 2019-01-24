@@ -37,7 +37,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         }
 
-        public void InitTable(DataBase dataBase,List<string> list= null, SearchType searchType = 0,double center = 0.5)
+        public void InitTable(DataBase dataBase,List<string> list= null, SearchType searchType = 0)
         {
             ChangeDataBase(dataBase);
             string getDataTableSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == dataBase.DBType).GetTableSQL.Replace("@DataBaseName", dataBase.DataBaseName);
@@ -48,17 +48,21 @@ namespace VSBussinessExtenstion.DataBaseHelper
             dataBase.Tables.ForEach(x => x.Password = dataBase.Password);
 
             if(list != null)
-            { 
+            {
                 switch (searchType)
                 {
                     case SearchType.Complete:
-                        dataBase.Tables = dataBase.Tables.Where(x => list.Any(y=>y.ToUpper() == x.TableName.ToUpper())).ToList<Table>();
+                        dataBase.Tables = dataBase.Tables
+                            .Where(x => list.Any(y => y.ToUpper() == x.TableName.ToUpper())).ToList<Table>();
                         break;
                     case SearchType.LikeSearch:
-                        dataBase.Tables = dataBase.Tables.Where(x =>x.TableName.ToUpper().IndexOf(list.First().ToUpper()) > -1).ToList<Table>();
+                        dataBase.Tables = dataBase.Tables
+                            .Where(x => x.TableName.ToUpper().IndexOf(list.First().ToUpper()) > -1).ToList<Table>();
                         break;
                     case SearchType.FuzzySearch:
-                        dataBase.Tables = dataBase.Tables.Where(x =>Core.UsuallyCommon.StringHelper.SearchExists(x.TableName,list.ToArray(), center)).ToList<Table>();
+                        dataBase.Tables = dataBase.Tables.Where(x =>
+                            Core.UsuallyCommon.StringHelper.SearchWordExists(list.First().ToString()
+                                , new string[] {x.TableName})).ToList<Table>();
                         break;
                 }
             }

@@ -8,7 +8,66 @@ namespace Core.UsuallyCommon
 {
     public class StringHelper
     {
-        public static List<String> GetStringSingleColumn(string context)
+        public static Boolean SearchWordExists(string param, string[] items)
+        {
+            return Search(param, items).Length > 0;
+        }
+
+        public static string[] Search(string param, string[] datas)
+        {
+            if (string.IsNullOrWhiteSpace(param))
+                return new string[0];
+
+            string[] words = param.Split(new char[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string word in words)
+            {
+                int maxDist = (word.Length - 1) / 2;
+
+                var q = from str in datas
+                        where word.Length <= str.Length
+                            && Enumerable.Range(0, maxDist + 1)
+                            .Any(dist =>
+                            {
+                                return Enumerable.Range(0, Math.Max(str.Length - word.Length - dist + 1, 0))
+                                    .Any(f =>
+                                    {
+                                        return Distance(word, str.Substring(f, word.Length + dist)) <= maxDist;
+                                    });
+                            })
+                        orderby str
+                        select str;
+                datas = q.ToArray();
+            }
+
+            return datas;
+        }
+
+        static int Distance(string str1, string str2)
+        {
+            int n = str1.Length;
+            int m = str2.Length;
+            int[,] C = new int[n + 1, m + 1];
+            int i, j, x, y, z;
+            for (i = 0; i <= n; i++)
+                C[i, 0] = i;
+            for (i = 1; i <= m; i++)
+                C[0, i] = i;
+            for (i = 0; i < n; i++)
+                for (j = 0; j < m; j++)
+                {
+                    x = C[i, j + 1] + 1;
+                    y = C[i + 1, j] + 1;
+                    if (str1[i] == str2[j])
+                        z = C[i, j];
+                    else
+                        z = C[i, j] + 1;
+                    C[i + 1, j + 1] = Math.Min(Math.Min(x, y), z);
+                }
+            return C[n, m];
+        }
+    
+    public static List<String> GetStringSingleColumn(string context)
         {
             string[] separatingChars = new string[] { "\r\n", "\n", "\r", "\t" };
             string[] linedatas = context.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
@@ -70,7 +129,7 @@ namespace Core.UsuallyCommon
         }
 
 
-        public static Boolean SearchExists(string param, string[] items, double Center = 0.50)
+        public static Boolean SearchExists(string param, string[] items)
         {
             if (string.IsNullOrWhiteSpace(param) || items == null || items.Length == 0)
                 return false;
@@ -83,7 +142,7 @@ namespace Core.UsuallyCommon
             var q = from sentence in items.AsParallel()
                     let MLL = Mul_LnCS_Length(sentence, words)
                     where MLL >= 0
-                    orderby (MLL + Center) / sentence.Length, sentence
+                    orderby (MLL + 0.5) / sentence.Length, sentence
                     select sentence;
 
             var list =  q.ToArray().ToList<string>();

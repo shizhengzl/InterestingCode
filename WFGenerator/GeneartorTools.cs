@@ -128,7 +128,7 @@ namespace WFGenerator
                     {
                         case SelectDataSoruceType.DataBase:
                             ServerTree.listSelect.Clear();
-                            ServerTree.Refreshs(listdata, SearchType.FuzzySearch, txtFuzzyPercent.Text.ToDouble() / 100.00);
+                            ServerTree.Refreshs(listdata, SearchType.FuzzySearch);
                             break;
                         case SelectDataSoruceType.Class:
                             break;
@@ -174,7 +174,7 @@ namespace WFGenerator
         #region Generator 
         private void tsRefresh_Click(object sender, EventArgs e)
         {
-            ServerTree.Refresh();
+            ServerTree.Refreshs();
         }
 
         private void tGenerator_Click(object sender, EventArgs e)
@@ -272,7 +272,7 @@ namespace WFGenerator
             CSharpParser cSharpParser = new CSharpParser(context);
             try
             {
-                ClassTree.Refreshs(null, 0, 0, cSharpParser.GetClass());
+                ClassTree.Refreshs(null, 0, cSharpParser.GetClass());
                 tabControlSelect.SelectedIndex = (int)SelectDataSoruceType.Class;
             }
             catch (Exception ex)
@@ -362,7 +362,7 @@ namespace WFGenerator
             var addresses = comSource.Text;
             if (!string.IsNullOrEmpty(databases))
             {
-                DataBaseSearch.Refreshs(null, 0, 0, null, addresses,databases);
+                DataBaseSearch.Refreshs(null, 0,  null, addresses,databases);
             }
         }
 
@@ -379,7 +379,7 @@ namespace WFGenerator
             {
                 var listdata = StringHelper.GetStringSingleColumn(context);
                 DataBaseSearch.listSelect.Clear();
-                DataBaseSearch.Refreshs(listdata, SearchType.LikeSearch,0.5,null, addresses, databases);
+                DataBaseSearch.Refreshs(listdata, SearchType.LikeSearch,null, addresses, databases);
             }
          
         }
@@ -392,7 +392,7 @@ namespace WFGenerator
             {
                 var listdata = StringHelper.GetStringSingleColumn(context);
                 DataBaseSearch.listSelect.Clear();
-                DataBaseSearch.Refreshs(listdata, SearchType.Complete, 0.5, null, addresses, databases);
+                DataBaseSearch.Refreshs(listdata, SearchType.Complete, null, addresses, databases);
             } 
         }
 
@@ -405,7 +405,7 @@ namespace WFGenerator
             {
                 var listdata = StringHelper.GetStringSingleColumn(context);
                 DataBaseSearch.listSelect.Clear();
-                DataBaseSearch.Refreshs(listdata, SearchType.FuzzySearch, 0.5, null, addresses, databases);
+                DataBaseSearch.Refreshs(listdata, SearchType.FuzzySearch, null, addresses, databases);
             }
         } 
 

@@ -142,14 +142,14 @@ namespace WFGenerator.WinfromControl
         }
 
 
-        public void Refreshs(List<string> list = null,SearchType searchType = 0,double center = 0.5, object objects = null,string addresses = "",string databases= "")
+        public void Refreshs(List<string> list = null,SearchType searchType = 0, object objects = null,string addresses = "",string databases= "")
         {
             this.Nodes.Clear();
             this.listSelect.Clear();
             switch (treeType)
             {
                 case TreeType.DataBase:
-                    LoadDataBase(list, searchType, center, addresses,databases);
+                    LoadDataBase(list, searchType, addresses,databases);
                     break;
                 case TreeType.Snippte:
                     LoadSnippet();
@@ -274,7 +274,7 @@ namespace WFGenerator.WinfromControl
             }
         }
         public void LoadDataBase(List<string> list = null,
-            SearchType searchType = 0,double center = 0.5,string addresses = "",string databases = "" )
+            SearchType searchType = 0,string addresses = "",string databases = "" )
         {
             var address = sqlite.DataBaseAddresses.ToList();
             if(!string.IsNullOrEmpty(addresses))
@@ -311,7 +311,7 @@ namespace WFGenerator.WinfromControl
                     dbNode.Tag = db;
 
                     // init table
-                    sh.InitTable(db,list,searchType, center);
+                    sh.InitTable(db,list,searchType);
                     foreach (var table in db.Tables)
                     {
                         TreeNode tableNode = new TreeNode()

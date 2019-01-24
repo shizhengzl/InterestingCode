@@ -14,7 +14,7 @@ namespace WFGenerator
 {
     public class GeneratorClass
     {
-        public void GeneratorFile(string context,string path)
+        public void GeneratorFile(string context, string path)
         {
             if (string.IsNullOrEmpty(path))
                 return;
@@ -23,6 +23,8 @@ namespace WFGenerator
 
         public string DataBaseGenerator(List<Column> columns, Snippet snippet, Boolean generatorFile)
         {
+            if (string.IsNullOrEmpty(snippet.OutputPath))
+                snippet.OutputPath = @"C:\Generator\";
             string context = snippet.Context;
             var listReplace = StringHelper.GetStringListByStartAndEndInner(context, SnippetReplace.Start.GetDescription(), SnippetReplace.End.GetDescription());
 
@@ -32,29 +34,32 @@ namespace WFGenerator
             {
                 var lists = columns.Where(x => x.TableName == table);
                 context = snippet.Context;
-                foreach (var column in lists)
-                {  
+                foreach (var item in listReplace)
+                {
                     StringBuilder sb = new StringBuilder();
-                    foreach (var item in listReplace)
+                    var inittempcontext = item.Replace(SnippetReplace.Start.GetDescription(), string.Empty).Replace(SnippetReplace.End.GetDescription(), string.Empty);
+
+                    foreach (var column in lists)
                     {
-                        var inittempcontext = item.Replace(SnippetReplace.Start.GetDescription(), string.Empty).Replace(SnippetReplace.End.GetDescription(), string.Empty);
                         sb.Append(this.ReplaceDataBase<Column>(inittempcontext, column, true));
-                        context = context.Replace(item, sb.ToStringExtension());
+
                     }
-                    context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
+                    context = context.Replace(item, sb.ToStringExtension());
+
                 }
+                context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
                 if (generatorFile)
                 {
-                    string filename = (ApplicationVsHelper._applicationObject == null 
-                        ? string.Empty : ApplicationVsHelper.VsProjectPath) + snippet.OutputPath.Replace("/", "\\") + "\\" +this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
+                    string filename = (ApplicationVsHelper._applicationObject == null
+                        ? string.Empty : ApplicationVsHelper.VsProjectPath) + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
                     GeneratorFile(context, filename);
                 }
                 sbResult.AppendLine(context);
-            } 
+            }
             return context;
         }
 
-        public string ClassGenerator(List<Method> methods,List<Proterty> proterties, Snippet snippet,bool generatorFile)
+        public string ClassGenerator(List<Method> methods, List<Proterty> proterties, Snippet snippet, bool generatorFile)
         {
             string context = snippet.Context;
             string result = string.Empty;
@@ -63,7 +68,7 @@ namespace WFGenerator
             StringBuilder sbResult = new StringBuilder();
             var classnamelist = methods.GroupBy(g => g.ClassName).Select(x => x.Key).Union(proterties.GroupBy(g => g.ClassName).Select(x => x.Key));
             foreach (var classname in classnamelist)
-            { 
+            {
                 context = snippet.Context;
                 var methodslist = methods.Where(x => x.ClassName == classname);
                 var proertyslist = proterties.Where(x => x.ClassName == classname);
@@ -98,31 +103,31 @@ namespace WFGenerator
                         result = this.ReplaceDataBase(result, proertyslist.FirstOrDefault(), true);
                 }
                 sbResult.AppendLine(result);
-                if(generatorFile)
+                if (generatorFile)
                 {
                     string filename = (ApplicationVsHelper._applicationObject == null
-                      ? string.Empty : ApplicationVsHelper.VsProjectPath) 
-                      + snippet.OutputPath.Replace("/", "\\") + "\\" 
+                      ? string.Empty : ApplicationVsHelper.VsProjectPath)
+                      + snippet.OutputPath.Replace("/", "\\") + "\\"
                       + this.ReplaceDataBase(snippet.GeneratorFileName, methods.FirstOrDefault(), true);
                     GeneratorFile(result, filename);
                 }
             }
             return sb.ToString();
         }
-        
+
         public string GetGenerator(Snippet snippet, object datasource, ServicesAddressHelper sh = null
            , Boolean generatorFile = false)
         {
             if (snippet.IsFloder)
                 return string.Empty;
-            List<TreeNode> listsource = datasource as List<TreeNode>; 
+            List<TreeNode> listsource = datasource as List<TreeNode>;
             StringBuilder sbResult = new StringBuilder();
 
             if (snippet.DataSourceType == DataSourceType.DatabaseType)
             {
                 foreach (TreeNode note in listsource)
-                { 
-                    List<Column> listColumns = new List<Column>(); 
+                {
+                    List<Column> listColumns = new List<Column>();
                     if (string.IsNullOrEmpty(note.Nodes[0].Text))
                     {
                         Table table = note.Tag as Table;
@@ -136,12 +141,12 @@ namespace WFGenerator
                             if (childs.Checked)
                                 listColumns.Add(childs.Tag as Column);
                         }
-                    } 
-                    sbResult.AppendLine(DataBaseGenerator(listColumns,snippet, generatorFile));
+                    }
+                    sbResult.AppendLine(DataBaseGenerator(listColumns, snippet, generatorFile));
                 }
             }
             if (snippet.DataSourceType == DataSourceType.CSharpType)
-            { 
+            {
                 List<Method> methods = new List<Method>();
                 List<Proterty> proterties = new List<Proterty>();
                 foreach (TreeNode note in listsource)
@@ -178,7 +183,7 @@ namespace WFGenerator
             }
             return nochange ? context : returnValue;
         }
-        
+
         public bool HasArgument<T>(string context, T t) where T : class
         {
             bool hasArgument = false;

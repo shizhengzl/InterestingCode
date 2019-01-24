@@ -10,7 +10,7 @@ namespace Core.ConsoleLog
     {
         static void Main(string[] args)
         {
-            var s = Core.UsuallyCommon.StringHelper.Search("cb_Adjust", new List<string>() { "Ajust" }.ToArray(),0.2);
+            var s = Core.UsuallyCommon.StringHelper.Search("just", new List<string>() { "cb_Adjust" }.ToArray());
 
             return;
             string str = @" <%! var option = {
