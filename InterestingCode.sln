@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.ConsoleLog", "Core.Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsixGeneratorExtenstion", "VsixGeneratorExtenstion\VsixGeneratorExtenstion.csproj", "{5E953C3E-4873-498A-8E72-FA4A8A21663A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomIntelliSenseExtension", "CustomIntelliSenseExtension\CustomIntelliSenseExtension.csproj", "{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{5E953C3E-4873-498A-8E72-FA4A8A21663A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E953C3E-4873-498A-8E72-FA4A8A21663A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E953C3E-4873-498A-8E72-FA4A8A21663A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
