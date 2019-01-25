@@ -194,6 +194,7 @@
     <Compile Include="DataBase\DataBase.cs" />
     <Compile Include="DataBase\DataBaseAddress.cs" />
     <Compile Include="DataBase\Table.cs" />
+    <Compile Include="DBHelper\DatabaseHelper.cs" />
     <Compile Include="Extension\TypeExtenstion.cs" />
     <Compile Include="Helper\CharpParserClass\Classs.cs" />
     <Compile Include="Helper\CharpParserClass\MethodArgument.cs" />
