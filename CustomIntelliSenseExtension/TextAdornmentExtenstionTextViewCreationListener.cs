@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -32,6 +33,28 @@ namespace CustomIntelliSenseExtension
         internal IGlyphService GlyphService { get; set; }
     }
 
+    public class ListChar
+    {
+        public static List<string> chars = new List<string>();
+
+        public static List<Intellisence> listsnippet = new List<Intellisence>();
+
+        public void InitDatabaseConfig()
+        {
+            //if (IsInit)
+            //    return;
+            IsInit = true;
+
+            DatabaseHelper.connectionString = @"server=.;uid=sa;pwd=sasa;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            var chars = DatabaseHelper.ExecuteQuery("SELECT DISTINCT StartChar FROM Intellisence").Tables[0].ToList<Intellisence>();
+            ListChar.chars = chars.Select(x => x.StartChar).ToList<string>();
+            ListChar.listsnippet = DatabaseHelper.ExecuteQuery("SELECT * FROM Intellisence").Tables[0].ToList<Intellisence>();
+
+        }
+
+        public static bool IsInit = false;
+    }
+
     internal class UeqtDynamicCompletionSource : ICompletionSource
     {
 
@@ -44,116 +67,80 @@ namespace CustomIntelliSenseExtension
         {
             m_textBuffer = tb;
             m_sourceProvider = t;
-
-            DatabaseHelper.connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=DefaultSqlite;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            new ListChar().InitDatabaseConfig();
+            //DatabaseHelper.connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=DefaultSqlite;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
         }
 
 
         void ICompletionSource.AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets)
         {
-
             if (completionSets.Count != 0)
                 return;
             string currentStr = session.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
 
             string lastChar = currentStr.Substring(currentStr.Length - 1, 1);
-     
-            if (lastChar == ".")
+            
+            foreach (var item in ListChar.chars)
             {
-                if (currentStr.LastIndexOf(" ") > 0)
-                {
-                    currentStr = currentStr.Substring(currentStr.LastIndexOf(" ") + 1);
-                }
-                if (currentStr.LastIndexOf("\t") > 0)
-                {
-                    currentStr = currentStr.Substring(currentStr.LastIndexOf("\t") + 1);
-                }
-                // 判断.的个数
-                string searchNode = string.Empty;
-                if (currentStr.Length - currentStr.Replace(".", "").Length == 1)
-                {
-                    if (currentStr.Replace(".", "").ToLower() == "szcommon")
-                        searchNode = currentStr.Replace(".", "");
-                    else
-                        return;
-                }
-                else
-                {
-                    // 判断第一个点之前是不是szcommon 如果不是则马上返回
-                    if (currentStr.Substring(0, currentStr.IndexOf(".")).Replace(".", "").ToLower() != "szcommon")
-                        return;
-                    searchNode = currentStr.Substring(0, currentStr.Length - 1).Replace(".", "//");
-                }
 
-                var mCompList = new List<Completion>();
-                try
+                if (lastChar == item.ToString())
                 {
+                    currentStr = currentStr.Replace(lastChar, "").Trim();
 
-                    mCompList.Add(new Completion(
-                        ".不吃肉的狮子"
+                    var mCompList = new List<Completion>();
+                    try
+                    {
+                        var first = ListChar.listsnippet.FirstOrDefault(x => x.StartChar == item);
+
+                        List<Intellisence> list = new List<Intellisence>();
+                        if(string.IsNullOrEmpty(first.DefinedSql))
+                        {
+                            list = ListChar.listsnippet.Where(x => x.StartChar == item
+                                && StringHelper.SearchWordExists(currentStr, new string[] { x.DisplayText })).ToList<Intellisence>();
+                             
+                        }
+                        else
+                        {
+                            var sql = first.DefinedSql.Replace("@REPLACENAME", currentStr);
+                            var oldConnecton = DatabaseHelper.connectionString;
+                            DatabaseHelper.connectionString = first.ConnectionString;
+                            list = DatabaseHelper.ExecuteQuery(sql).Tables[0].ToList<Intellisence>();
+                            DatabaseHelper.connectionString = oldConnecton;
+                        }
+
+                        foreach (var intellisences in list)
+                        {
+                            mCompList.Add(new Completion(
+                           intellisences.DisplayText
+                           , intellisences.InsertionText
+                           , intellisences.Description
+                           , m_sourceProvider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupProperty, StandardGlyphItem.GlyphItemPublic)
+                           , "72"));
+
+                        }
+                        mCompList.Add(new Completion(
+                        "不吃肉的狮子"
                         , "不吃肉的狮子"
                         , "不吃肉的狮子"
-                        , m_sourceProvider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupProperty, StandardGlyphItem.GlyphItemInternal)
+                        , m_sourceProvider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphExtensionMethod, StandardGlyphItem.GlyphItemPublic)
                         , "72"));
 
-                    var set = new CompletionSet(
-                               "szCommon",//"施政的智能提示",
-                               "施政的智能提示",
-                               FindTokenSpanAtPosition(session.GetTriggerPoint(m_textBuffer), session),
-                               mCompList,
-                               null);
-                    if (!completionSets.Contains(set))
-                        completionSets.Insert(0, set); 
 
+                        var set = new CompletionSet(
+                              "moniker",//"施政的智能提示",
+                              "施政的智能提示",
+                              FindTokenSpanAtPosition(session.GetTriggerPoint(m_textBuffer), session),
+                              mCompList,
+                              null);
+
+                        completionSets.Add(set);
+
+                    }
+                    catch (Exception ex)
+                    { 
+                    }
                 }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message);
-                }
-
-            }
-
-            if (lastChar == "$")
-            {
-                currentStr = currentStr.Replace("$", "").Trim();
-
-                var mCompList = new List<Completion>();
-                try
-                {
-                   var intellisence = DatabaseHelper.ExecuteQuery("SELECT * FROM Intellisence").Tables[0].ToList<Intellisence>();
-
-                   var result = intellisence.Where(x => StringHelper.SearchWordExists(currentStr, new string[] {x.DisplayText}));
-
-
-                   foreach (var intellisences in result)
-                   {
-                        mCompList.Add(new Completion(
-                       intellisences.DisplayText
-                       , intellisences.InsertionText
-                       ,  intellisences.Description
-                       , m_sourceProvider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupProperty, StandardGlyphItem.GlyphItemPublic)
-                       , "72"));
-
-                    } 
-                    var set = new CompletionSet(
-                               "施政的智能提示",//"施政的智能提示",
-                               "施政的智能提示",
-                               FindTokenSpanAtPosition(session.GetTriggerPoint(m_textBuffer), session),
-                               mCompList,
-                               null);
-                    
-                   
-                   // completionSets.Clear();
-                    if (!completionSets.Contains(set))
-                        completionSets.Insert(0, set);
-                    session.SelectedCompletionSet = set;
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message);
-                }
-            }
-
+            }  
         }
 
         ITrackingSpan FindTokenSpanAtPosition(ITrackingPoint point, ICompletionSession session)
@@ -169,6 +156,8 @@ namespace CustomIntelliSenseExtension
 
         }
     }
+
+ 
 
     [Export(typeof(IVsTextViewCreationListener))]
     [Name("ueqt completion handler")]
@@ -294,6 +283,7 @@ namespace CustomIntelliSenseExtension
                     switch ((VSConstants.VSStd2KCmdID)nCmdID)
                     {
                         case VSConstants.VSStd2KCmdID.TYPECHAR:
+                            new ListChar().InitDatabaseConfig();
                             char ch = GetTypeChar(pvaIn);
                             //如果当前的会话已经被启动
                             if (_CurrentSession != null && _CurrentSession.IsStarted && ch != '.')
@@ -306,7 +296,8 @@ namespace CustomIntelliSenseExtension
                                 _CurrentSession.SelectedCompletionSet.Recalculate();
 
                             }
-                            if (ch == '$' || ch == '.')
+                           
+                            if (ListChar.chars.Any(x=>x == ch.ToString()) || ch == '.')
                             {
                                 //获取插入符号,也就是光标位置.
                                 SnapshotPoint caret = _TextView.Caret.Position.BufferPosition;
@@ -380,7 +371,7 @@ namespace CustomIntelliSenseExtension
                 int position = (currentString.LastIndexOf(" ") > 0) ? (currentString.Length - currentString.LastIndexOf(" "))
                         : (currentString.LastIndexOf("\t") > 0 ? (currentString.Length - currentString.LastIndexOf("\t")) : currentString.Length);
 
-                if (lastChar == "$")
+                if ( ListChar.chars.Any(x=>x == lastChar))
                 {
                     //判断table
                     string tableName = currentString;
@@ -396,44 +387,18 @@ namespace CustomIntelliSenseExtension
                     {
                         tableName = tableName.Substring(tableName.LastIndexOf("\t") + 1);
                     }
-                    if (tableName.IndexOf("$") > 0)
+                    if (tableName.IndexOf(lastChar) > 0)
                     {
-                        tableName = tableName.Replace("$", "").Trim();
+                        tableName = tableName.Replace(lastChar, "").Trim();
                     }
                     edit.Delete(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position 
                         , position );
-
-                    //string text = _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText.ToString();
-
-                    // 从数据库读取
-                    //string sqlConstr = _CurrentSession.SelectedCompletionSet.Moniker.ToString();
-                    //string sql = _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText;
-                    //sql = sql.Replace("@TableName", tableName);
-
-
-
+                   
                     string text = _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText;// DbHelper.DbHelperSQL.ExecScalar(sql);
 
                     edit.Insert(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position, text);
                 }
-                else
-                {
-                    if (lastChar == ".")
-                    {
-                        if (_CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.Description.ToString() == "hasChild")
-                            position = 0;
-                        else
-                            edit.Delete(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position, position);
-                    }
-                    else
-                    {
-                        if (_CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.Description.ToString() == "hasChild")
-                            position = currentString.Length - currentString.LastIndexOf('.') - 1;
-                        edit.Delete(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position, position);
-                    }
-                    edit.Insert(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position, _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText);
-
-                }
+                
                 edit.Apply();
                 if (_CurrentSession != null)
                     _CurrentSession.Dismiss();
