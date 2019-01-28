@@ -93,23 +93,22 @@ namespace CustomIntelliSenseExtension
                     var mCompList = new List<Completion>();
                     try
                     {
-                        var first = ListChar.listsnippet.FirstOrDefault(x => x.StartChar == item);
+                        
+                        List<Intellisences> list = new List<Intellisences>(); 
+                        list.AddRange(ListChar.listsnippet.Where(x => x.StartChar == item
+                        && string.IsNullOrEmpty(x.DefinedSql)
+                        && StringHelper.SearchWordExists(currentStr, new string[] { x.DisplayText })
+                        ));
 
-                        List<Intellisences> list = new List<Intellisences>();
-                        if(string.IsNullOrEmpty(first.DefinedSql))
+                        var sqllist = ListChar.listsnippet.Where(x => !string.IsNullOrEmpty(x.DefinedSql));
+                        var oldConnecton = DatabaseHelper.connectionString;
+                        foreach (var sql in sqllist)
                         {
-                            list = ListChar.listsnippet.Where(x => x.StartChar == item
-                                && StringHelper.SearchWordExists(currentStr, new string[] { x.DisplayText })).ToList<Intellisences>();
-                             
+                            var sqls = sql.DefinedSql.Replace("@REPLACENAME", currentStr);
+                            DatabaseHelper.connectionString = sql.ConnectionString;
+                            list.AddRange(DatabaseHelper.ExecuteQuery(sqls).Tables[0].ToList<Intellisences>());
                         }
-                        else
-                        {
-                            var sql = first.DefinedSql.Replace("@REPLACENAME", currentStr);
-                            var oldConnecton = DatabaseHelper.connectionString;
-                            DatabaseHelper.connectionString = first.ConnectionString;
-                            list = DatabaseHelper.ExecuteQuery(sql).Tables[0].ToList<Intellisences>();
-                            DatabaseHelper.connectionString = oldConnecton;
-                        }
+                        DatabaseHelper.connectionString = oldConnecton;
 
                         foreach (var intellisences in list)
                         {
