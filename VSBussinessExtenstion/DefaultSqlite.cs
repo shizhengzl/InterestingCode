@@ -32,6 +32,8 @@
         public virtual DbSet<ConnectionString> ConnectionStrings { get; set; }
 
         public virtual DbSet<Snippet> Snippets { get; set; }
+
+        public virtual DbSet<Intellisence> Intellisences { get; set; }
     }
 
     //public class MyEntity
@@ -39,6 +41,23 @@
     //    public int Id { get; set; }
     //    public string Name { get; set; }
     //}
+
+    public class Intellisence
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public string StartChar { get; set; }
+
+        public string DisplayText { get; set; }
+        public string InsertionText { get; set; }
+        public string Description { get; set; }
+
+        public string DefinedSql { get; set; }
+
+
+        public string ConnectionString { get; set; }
+    }
 
     public class Snippet
     {

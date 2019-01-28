@@ -37,7 +37,7 @@ namespace CustomIntelliSenseExtension
     {
         public static List<string> chars = new List<string>();
 
-        public static List<Intellisence> listsnippet = new List<Intellisence>();
+        public static List<Intellisences> listsnippet = new List<Intellisences>();
 
         public void InitDatabaseConfig()
         {
@@ -45,10 +45,14 @@ namespace CustomIntelliSenseExtension
             //    return;
             IsInit = true;
 
-            DatabaseHelper.connectionString = @"server=.;uid=sa;pwd=sasa;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
-            var chars = DatabaseHelper.ExecuteQuery("SELECT DISTINCT StartChar FROM Intellisence").Tables[0].ToList<Intellisence>();
+            //DatabaseHelper.connectionString = @"server=.;uid=sa;pwd=sasa;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
+
+
+            DatabaseHelper.connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=DefaultSqlite;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
+
+            var chars = DatabaseHelper.ExecuteQuery("SELECT DISTINCT StartChar FROM Intellisences").Tables[0].ToList<Intellisences>();
             ListChar.chars = chars.Select(x => x.StartChar).ToList<string>();
-            ListChar.listsnippet = DatabaseHelper.ExecuteQuery("SELECT * FROM Intellisence").Tables[0].ToList<Intellisence>();
+            ListChar.listsnippet = DatabaseHelper.ExecuteQuery("SELECT * FROM Intellisences").Tables[0].ToList<Intellisences>();
 
         }
 
@@ -68,8 +72,7 @@ namespace CustomIntelliSenseExtension
             m_textBuffer = tb;
             m_sourceProvider = t;
             new ListChar().InitDatabaseConfig();
-            //DatabaseHelper.connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=DefaultSqlite;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
-        }
+         }
 
 
         void ICompletionSource.AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets)
@@ -92,11 +95,11 @@ namespace CustomIntelliSenseExtension
                     {
                         var first = ListChar.listsnippet.FirstOrDefault(x => x.StartChar == item);
 
-                        List<Intellisence> list = new List<Intellisence>();
+                        List<Intellisences> list = new List<Intellisences>();
                         if(string.IsNullOrEmpty(first.DefinedSql))
                         {
                             list = ListChar.listsnippet.Where(x => x.StartChar == item
-                                && StringHelper.SearchWordExists(currentStr, new string[] { x.DisplayText })).ToList<Intellisence>();
+                                && StringHelper.SearchWordExists(currentStr, new string[] { x.DisplayText })).ToList<Intellisences>();
                              
                         }
                         else
@@ -104,7 +107,7 @@ namespace CustomIntelliSenseExtension
                             var sql = first.DefinedSql.Replace("@REPLACENAME", currentStr);
                             var oldConnecton = DatabaseHelper.connectionString;
                             DatabaseHelper.connectionString = first.ConnectionString;
-                            list = DatabaseHelper.ExecuteQuery(sql).Tables[0].ToList<Intellisence>();
+                            list = DatabaseHelper.ExecuteQuery(sql).Tables[0].ToList<Intellisences>();
                             DatabaseHelper.connectionString = oldConnecton;
                         }
 

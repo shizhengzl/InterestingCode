@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Intellisence.cs" />
+    <Compile Include="Intellisences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextAdornmentExtenstion.cs" />
     <Compile Include="TextAdornmentExtenstionTextViewCreationListener.cs" />

@@ -74,6 +74,8 @@ namespace WFGenerator
             InitClass<Variable>();
             InitClass<DataTypeConfig>();
             InitClass<Snippet>();
+            InitClass<Intellisence>();
+            
         }
 
         public void InitClass<T>() where T : class, new()

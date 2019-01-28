@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CustomIntelliSenseExtension
 {
-    public class Intellisence
+    public class Intellisences
     {
         public int Id { get; set; }
 
