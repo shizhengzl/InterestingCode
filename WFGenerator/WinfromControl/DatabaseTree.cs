@@ -236,7 +236,7 @@ namespace WFGenerator.WinfromControl
 
         public void LoadSnippet()
         {
-            listSnippet = sqlite.Snippets.ToList();
+            listSnippet = sqlite.Snippets.AsNoTracking().ToList();
 
             var initSnippets = listSnippet.Where(x => x.ParentId == 0);
 

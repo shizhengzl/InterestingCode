@@ -41,7 +41,8 @@ namespace WFGenerator
 
                     foreach (var column in lists)
                     {
-                        sb.Append(this.ReplaceDataBase<Column>(inittempcontext, column, true));
+                        if(CheckType(column,inittempcontext))
+                            sb.Append(this.ReplaceDataBase<Column>(inittempcontext, column, true));
 
                     }
                     context = context.Replace(item, sb.ToStringExtension());
@@ -113,6 +114,32 @@ namespace WFGenerator
                 }
             }
             return sb.ToString();
+        }
+
+        public bool CheckType(Column column,string snippetcontext)
+        {
+            var tmoney = new List<string>() {"@Double", "@Decimal"};
+            var tdatetime = new List<string>() {"@DateTime"};
+            var tbool = new List<string>() {"@Boolean"};
+            var tstring = new List<string>() {"@String"};
+
+            var csharptype = column.ColumnType;
+
+            var bmoney = tmoney.Any(x => snippetcontext.Contains(x));
+            var bdatetime = tdatetime.Any(x => snippetcontext.Contains(x));
+            var bbool = tbool.Any(x => snippetcontext.Contains(x));
+            var bstring = tstring.Any(x => snippetcontext.Contains(x));
+
+            if (bmoney || bdatetime || bbool || bstring)
+            {
+                return (bmoney && tmoney.Any(x => csharptype.Contains(x))) ||
+                       (bdatetime && tdatetime.Any(x => csharptype.Contains(x))) ||
+                       (bbool && tbool.Any(x => csharptype.Contains(x))) ||
+                       (bstring && tstring.Any(x => csharptype.Contains(x)));
+            }
+
+            return true;
+
         }
 
         public string GetGenerator(Snippet snippet, object datasource, ServicesAddressHelper sh = null

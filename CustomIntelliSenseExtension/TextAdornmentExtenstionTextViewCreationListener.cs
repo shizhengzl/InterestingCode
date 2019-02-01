@@ -79,32 +79,35 @@ namespace CustomIntelliSenseExtension
         {
             if (completionSets.Count != 0)
                 return;
-            string currentStr = session.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
+            string inputtext = session.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
 
-            string lastChar = currentStr.Substring(currentStr.Length - 1, 1);
+            var inputlist = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(inputtext);
+
+            var starttext = inputlist.LastOrDefault();
+
+            string lastChar = starttext.Substring(starttext.Length - 1, 1);
+
+            starttext = starttext.Replace(lastChar, "").Trim();
             
             foreach (var item in ListChar.chars)
             {
 
                 if (lastChar == item.ToString())
-                {
-                    currentStr = currentStr.Replace(lastChar, "").Trim();
-
+                { 
                     var mCompList = new List<Completion>();
                     try
-                    {
-                        
+                    { 
                         List<Intellisences> list = new List<Intellisences>(); 
                         list.AddRange(ListChar.listsnippet.Where(x => x.StartChar == item
                         && string.IsNullOrEmpty(x.DefinedSql)
-                        && StringHelper.SearchWordExists(currentStr, new string[] { x.DisplayText })
+                        && StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText })
                         ));
 
                         var sqllist = ListChar.listsnippet.Where(x => !string.IsNullOrEmpty(x.DefinedSql));
                         var oldConnecton = DatabaseHelper.connectionString;
                         foreach (var sql in sqllist)
                         {
-                            var sqls = sql.DefinedSql.Replace("@REPLACENAME", currentStr);
+                            var sqls = sql.DefinedSql.Replace("@REPLACENAME", starttext);
                             DatabaseHelper.connectionString = sql.ConnectionString;
                             list.AddRange(DatabaseHelper.ExecuteQuery(sqls).Tables[0].ToList<Intellisences>());
                         }
@@ -367,36 +370,28 @@ namespace CustomIntelliSenseExtension
             {
                 ITextEdit edit = _CurrentSession.TextView.TextBuffer.CreateEdit();
                 ITextSnapshot snapshot = edit.Snapshot;
+                 
 
-                string currentString = _CurrentSession.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
-                string lastChar = currentString.Substring(currentString.Length - 1, 1);
-                int position = (currentString.LastIndexOf(" ") > 0) ? (currentString.Length - currentString.LastIndexOf(" "))
-                        : (currentString.LastIndexOf("\t") > 0 ? (currentString.Length - currentString.LastIndexOf("\t")) : currentString.Length);
+                string inputtext = _CurrentSession.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
+
+                var inputlist = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(inputtext);
+
+                var starttext = inputlist.LastOrDefault();
+
+                string lastChar = starttext.Substring(starttext.Length - 1, 1);
+
+                starttext = starttext.Replace(lastChar, "").Trim();
+
+                int position = (starttext.LastIndexOf(" ") > 0) ? (starttext.Length  + 1 - starttext.LastIndexOf(" "))
+                        : (starttext.LastIndexOf("\t") > 0 ? (starttext.Length + 1 - starttext.LastIndexOf("\t")) : starttext.Length + 1);
 
                 if ( ListChar.chars.Any(x=>x == lastChar))
                 {
-                    //判断table
-                    string tableName = currentString;
-                    if (tableName.LastIndexOf('.') > 0)
-                    {
-                        tableName = tableName.Substring(tableName.LastIndexOf('.') + 1);
-                    }
-                    if (tableName.LastIndexOf(" ") > 0)
-                    {
-                        tableName = tableName.Substring(tableName.LastIndexOf(" ") + 1);
-                    }
-                    if (tableName.LastIndexOf("\t") > 0)
-                    {
-                        tableName = tableName.Substring(tableName.LastIndexOf("\t") + 1);
-                    }
-                    if (tableName.IndexOf(lastChar) > 0)
-                    {
-                        tableName = tableName.Replace(lastChar, "").Trim();
-                    }
+                   
                     edit.Delete(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position 
                         , position );
                    
-                    string text = _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText;// DbHelper.DbHelperSQL.ExecScalar(sql);
+                    string text = _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText;
 
                     edit.Insert(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position, text);
                 }

@@ -177,6 +177,7 @@ namespace WFGenerator
         private void tsRefresh_Click(object sender, EventArgs e)
         {
             ServerTree.Refreshs();
+            SnippetTree.Refreshs();
         }
 
         private void tGenerator_Click(object sender, EventArgs e)
@@ -200,6 +201,8 @@ namespace WFGenerator
                     }
                 }
             }
+
+            tsmessage.Text = "......生成完成";
         }
 
         private void SnippetTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)

@@ -69,7 +69,7 @@ namespace Core.UsuallyCommon
     
     public static List<String> GetStringSingleColumn(string context)
         {
-            string[] separatingChars = new string[] { "\r\n", "\n", "\r", "\t" };
+            string[] separatingChars = new string[] { "\r\n", "\n", "\r", "\t" ," ", "."};
             string[] linedatas = context.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
             return linedatas.ToList<string>();
         }

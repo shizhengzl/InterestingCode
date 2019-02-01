@@ -14,5 +14,7 @@ namespace Core.UsuallyCommon.DataBase
         public string TableDescription { get; set; }
         public string TableType { get; set; }
         public List<Column> Columns { get; set; }
+
+        public  string Key { get; set; }
     }
 }

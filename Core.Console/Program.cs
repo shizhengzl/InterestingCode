@@ -10,7 +10,16 @@ namespace Core.ConsoleLog
     {
         static void Main(string[] args)
         {
-            var s = Core.UsuallyCommon.StringHelper.Search("just", new List<string>() { "cb_Adjust" }.ToArray());
+            var strs = "post^";
+            var result = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(strs);
+            foreach (var rs in result)
+            {
+                Console.WriteLine(rs);
+            }
+
+            Console.ReadLine();
+
+            //var s = Core.UsuallyCommon.StringHelper.Search("just", new List<string>() { "cb_Adjust" }.ToArray());
 
             return;
             string str = @" <%! var option = {
