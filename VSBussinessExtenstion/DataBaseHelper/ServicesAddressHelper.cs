@@ -78,6 +78,8 @@ namespace VSBussinessExtenstion.DataBaseHelper
             table.Columns.ForEach(x => x.DataBaseName = table.DataBaseName);
             table.Columns.ForEach(x => x.TableName = table.TableName);
             table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType, x.Type));
+            table.Columns.ForEach(x => x.Key = table.Key);
+            table.Columns.ForEach(x => x.TableDescription = table.TableDescription);
         }
 
         public string GetColumnType(DataBaseType dataBaseType, string Type)

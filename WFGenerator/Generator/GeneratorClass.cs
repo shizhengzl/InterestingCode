@@ -48,6 +48,8 @@ namespace WFGenerator
                     context = context.Replace(item, sb.ToStringExtension());
 
                 }
+
+                context = BatchComma(context);
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
                 if (generatorFile)
                 {
@@ -58,6 +60,30 @@ namespace WFGenerator
                 sbResult.AppendLine(context);
             }
             return context;
+        }
+
+
+        public string BatchComma(string context)
+        {
+
+
+            context = context.Replace("@Double", string.Empty);
+            context = context.Replace("@Decimal", string.Empty);
+            context = context.Replace("@DateTime", string.Empty);
+            context = context.Replace("@Boolean", string.Empty);
+            context = context.Replace("@String", string.Empty);
+
+            var comma = "@Comma";
+            if (context.IndexOf(comma) < 0)
+                return context;
+            context = context.Remove(context.LastIndexOf(comma), comma.Length);
+            context = context.Replace(comma, ",");
+
+
+    
+
+            return context;
+
         }
 
         public string ClassGenerator(List<Method> methods, List<Proterty> proterties, Snippet snippet, bool generatorFile)
@@ -132,10 +158,10 @@ namespace WFGenerator
 
             if (bmoney || bdatetime || bbool || bstring)
             {
-                return (bmoney && tmoney.Any(x => csharptype.Contains(x))) ||
-                       (bdatetime && tdatetime.Any(x => csharptype.Contains(x))) ||
-                       (bbool && tbool.Any(x => csharptype.Contains(x))) ||
-                       (bstring && tstring.Any(x => csharptype.Contains(x)));
+                return (bmoney && tmoney.Any(x => x.Contains(csharptype))) ||
+                       (bdatetime && tdatetime.Any(x => x.Contains(csharptype))) ||
+                       (bbool && tbool.Any(x => x.Contains(csharptype))) ||
+                       (bstring && tstring.Any(x => x.Contains(csharptype)));
             }
 
             return true;
