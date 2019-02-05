@@ -14,7 +14,8 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities; 
-
+using System.Xml.XPath;
+using System.Xml.Linq;
 namespace CustomIntelliSenseExtension
 {
     [Export(typeof(ICompletionSourceProvider))]
@@ -62,7 +63,7 @@ namespace CustomIntelliSenseExtension
     internal class UeqtDynamicCompletionSource : ICompletionSource
     {
 
-        ITextBuffer m_textBuffer { get; set; }
+        public ITextBuffer m_textBuffer { get; set; }
         UeqtDynamicCompletionSourceProvider m_sourceProvider { get; set; }
 
        
@@ -80,17 +81,21 @@ namespace CustomIntelliSenseExtension
             if (completionSets.Count != 0)
                 return;
             string inputtext = session.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
-
+            //string alltext = ((Microsoft.VisualStudio.Text.Implementation.BaseBuffer)((Microsoft.VisualStudio.Text.Editor.Implementation.WpfTextView)session.TextView).TextBuffer).builder.ToString()
+            var alltext = m_textBuffer.CurrentSnapshot.GetText();
             var inputlist = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(inputtext);
-
-            var starttext = inputlist.LastOrDefault();
-
-            string lastChar = starttext.Substring(starttext.Length - 1, 1);
-
-            starttext = starttext.Replace(lastChar, "").Trim();
-            
+             
             foreach (var item in ListChar.chars)
             {
+
+                var starttext = inputlist.FirstOrDefault(x => x.IndexOf(item) > 0);
+                var replacechar = starttext;
+                if(string.IsNullOrEmpty(starttext))
+                    continue;
+
+                string lastChar = starttext.Substring(starttext.Length - 1, 1);
+                starttext = starttext.Replace(lastChar, "").Trim();
+
 
                 if (lastChar == item.ToString())
                 { 
@@ -103,11 +108,13 @@ namespace CustomIntelliSenseExtension
                         && StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText })
                         ));
 
-                        var sqllist = ListChar.listsnippet.Where(x => !string.IsNullOrEmpty(x.DefinedSql));
+                        var sqllist = ListChar.listsnippet.Where(x => x.StartChar == item && !string.IsNullOrEmpty(x.DefinedSql));
                         var oldConnecton = DatabaseHelper.connectionString;
                         foreach (var sql in sqllist)
                         {
                             var sqls = sql.DefinedSql.Replace("@REPLACENAME", starttext);
+                            sqls = BatchContext(alltext.Replace(replacechar,string.Empty), sqls);
+                            sqls = BatchCurrentLineContext(inputtext.Replace(replacechar,string.Empty), sqls);
                             DatabaseHelper.connectionString = sql.ConnectionString;
                             list.AddRange(DatabaseHelper.ExecuteQuery(sqls).Tables[0].ToList<Intellisences>());
                         }
@@ -146,6 +153,37 @@ namespace CustomIntelliSenseExtension
                     }
                 }
             }  
+        }
+
+
+        public string BatchCurrentLineContext(string context, string sql)
+        {
+            var element = Core.UsuallyCommon.XmlParser.GetCurrentLineElement(context);
+
+            var attributes = element.Attributes();
+
+            foreach (var arr in attributes)
+            {
+                sql = sql.Replace($"@{arr.Name}",$"'{arr.Value}'");
+            }
+
+            return sql;
+        }
+        public string BatchContext(string context,string sql)
+        {
+            var arrs = StringHelper.GetStringListByStartAndEndInner(sql, "[[", "]]");
+            foreach (var arr in arrs)
+            {
+                var rs  = arr.Replace("[[", string.Empty).Replace("]]", string.Empty);
+                var result = string.Empty;
+                if (rs.IndexOf(".") > 0)
+                    result = XmlParser.GetElementAttributteValueByPath(context, rs.Split('.')[0], rs.Split('.')[1]);
+
+                else
+                    result = XmlParser.GetElementValueByPath(context, rs);
+                sql = sql.Replace($"[[{rs}]]", $"'{result}'");
+            }
+            return sql;
         }
 
         ITrackingSpan FindTokenSpanAtPosition(ITrackingPoint point, ICompletionSession session)
