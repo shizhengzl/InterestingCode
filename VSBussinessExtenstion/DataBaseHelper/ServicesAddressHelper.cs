@@ -23,7 +23,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
             try
             {
                 ChangeDataBase(baseAddress);
-                string getDatabaseSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == baseAddress.DBType).GetDataBaseSQL;
+                string getDatabaseSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == baseAddress.DBType).GetDataBaseSQL.Replace("@DataBaseName",baseAddress.DefaultDatabase);
                 baseAddress.DataBases = DatabaseHelper.ExecuteQuery(getDatabaseSql).Tables[0].ToList<DataBase>().Where(x =>
                 string.IsNullOrEmpty(baseAddress.DefaultDatabase) || x.DataBaseName == baseAddress.DefaultDatabase).ToList<DataBase>();
                 baseAddress.DataBases.ForEach(x => x.Address = baseAddress.Address);

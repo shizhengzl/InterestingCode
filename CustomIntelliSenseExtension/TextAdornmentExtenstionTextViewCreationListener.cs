@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Utilities; 
+using Microsoft.VisualStudio.Utilities;
 using System.Xml.XPath;
 using System.Xml.Linq;
 namespace CustomIntelliSenseExtension
@@ -66,14 +66,14 @@ namespace CustomIntelliSenseExtension
         public ITextBuffer m_textBuffer { get; set; }
         UeqtDynamicCompletionSourceProvider m_sourceProvider { get; set; }
 
-       
-        
+
+
         public UeqtDynamicCompletionSource(UeqtDynamicCompletionSourceProvider t, ITextBuffer tb)
         {
             m_textBuffer = tb;
             m_sourceProvider = t;
             new ListChar().InitDatabaseConfig();
-         }
+        }
 
 
         void ICompletionSource.AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets)
@@ -81,16 +81,15 @@ namespace CustomIntelliSenseExtension
             if (completionSets.Count != 0)
                 return;
             string inputtext = session.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
-            //string alltext = ((Microsoft.VisualStudio.Text.Implementation.BaseBuffer)((Microsoft.VisualStudio.Text.Editor.Implementation.WpfTextView)session.TextView).TextBuffer).builder.ToString()
             var alltext = m_textBuffer.CurrentSnapshot.GetText();
             var inputlist = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(inputtext);
-             
+
             foreach (var item in ListChar.chars)
             {
 
                 var starttext = inputlist.FirstOrDefault(x => x.IndexOf(item) > 0);
                 var replacechar = starttext;
-                if(string.IsNullOrEmpty(starttext))
+                if (string.IsNullOrEmpty(starttext))
                     continue;
 
                 string lastChar = starttext.Substring(starttext.Length - 1, 1);
@@ -98,11 +97,11 @@ namespace CustomIntelliSenseExtension
 
 
                 if (lastChar == item.ToString())
-                { 
+                {
                     var mCompList = new List<Completion>();
                     try
-                    { 
-                        List<Intellisences> list = new List<Intellisences>(); 
+                    {
+                        List<Intellisences> list = new List<Intellisences>();
                         list.AddRange(ListChar.listsnippet.Where(x => x.StartChar == item
                         && string.IsNullOrEmpty(x.DefinedSql)
                         && StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText })
@@ -113,8 +112,12 @@ namespace CustomIntelliSenseExtension
                         foreach (var sql in sqllist)
                         {
                             var sqls = sql.DefinedSql.Replace("@REPLACENAME", starttext);
-                            sqls = BatchContext(alltext.Replace(replacechar,string.Empty), sqls);
-                            sqls = BatchCurrentLineContext(inputtext.Replace(replacechar,string.Empty), sqls);
+                            if (m_textBuffer.ContentType.ToString().ToLower().Equals("xml"))
+                            { 
+                                sqls = BatchContext(alltext.Replace(replacechar, string.Empty), sqls);
+                                sqls = BatchCurrentLineContext(inputtext.Replace(replacechar, string.Empty), sqls);
+
+                            }
                             DatabaseHelper.connectionString = sql.ConnectionString;
                             list.AddRange(DatabaseHelper.ExecuteQuery(sqls).Tables[0].ToList<Intellisences>());
                         }
@@ -149,10 +152,10 @@ namespace CustomIntelliSenseExtension
 
                     }
                     catch (Exception ex)
-                    { 
+                    {
                     }
                 }
-            }  
+            }
         }
 
 
@@ -160,28 +163,31 @@ namespace CustomIntelliSenseExtension
         {
             var element = Core.UsuallyCommon.XmlParser.GetCurrentLineElement(context);
 
+            if (element == null)
+                return sql;
+
             var attributes = element.Attributes();
 
             foreach (var arr in attributes)
             {
-                sql = sql.Replace($"@{arr.Name}",$"'{arr.Value}'");
+                sql = sql.Replace($"@{arr.Name}", $"{arr.Value}");
             }
 
             return sql;
         }
-        public string BatchContext(string context,string sql)
+        public string BatchContext(string context, string sql)
         {
             var arrs = StringHelper.GetStringListByStartAndEndInner(sql, "[[", "]]");
             foreach (var arr in arrs)
             {
-                var rs  = arr.Replace("[[", string.Empty).Replace("]]", string.Empty);
+                var rs = arr.Replace("[[", string.Empty).Replace("]]", string.Empty);
                 var result = string.Empty;
                 if (rs.IndexOf(".") > 0)
                     result = XmlParser.GetElementAttributteValueByPath(context, rs.Split('.')[0], rs.Split('.')[1]);
 
                 else
                     result = XmlParser.GetElementValueByPath(context, rs);
-                sql = sql.Replace($"[[{rs}]]", $"'{result}'");
+                sql = sql.Replace($"[[{rs}]]", $"{result}");
             }
             return sql;
         }
@@ -200,7 +206,7 @@ namespace CustomIntelliSenseExtension
         }
     }
 
- 
+
 
     [Export(typeof(IVsTextViewCreationListener))]
     [Name("ueqt completion handler")]
@@ -339,8 +345,8 @@ namespace CustomIntelliSenseExtension
                                 _CurrentSession.SelectedCompletionSet.Recalculate();
 
                             }
-                           
-                            if (ListChar.chars.Any(x=>x == ch.ToString()) || ch == '.')
+
+                            if (ListChar.chars.Any(x => x == ch.ToString()) || ch == '.')
                             {
                                 //获取插入符号,也就是光标位置.
                                 SnapshotPoint caret = _TextView.Caret.Position.BufferPosition;
@@ -353,12 +359,12 @@ namespace CustomIntelliSenseExtension
                                 //启动该会话.
                                 _CurrentSession.Start();
                                 // _CurrentSession.SelectedCompletionSet.SelectionStatus = new  CompletionSelectionStatus(_CurrentSession.SelectedCompletionSet.Completions[0],true,true);
-                                
-                                
+
+
                                 //添加放弃事件
                                 _CurrentSession.Dismissed += (sender, args) => _CurrentSession = null;
 
-                               // _CurrentSession.Filter();
+                                // _CurrentSession.Filter();
                             }
                             //if (ch == ' ')
                             //    StartSession();
@@ -408,32 +414,38 @@ namespace CustomIntelliSenseExtension
             {
                 ITextEdit edit = _CurrentSession.TextView.TextBuffer.CreateEdit();
                 ITextSnapshot snapshot = edit.Snapshot;
-                 
+
 
                 string inputtext = _CurrentSession.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
 
+               
                 var inputlist = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(inputtext);
 
-                var starttext = inputlist.LastOrDefault();
-
+                var starttext = string.Empty;
+                foreach (var chars in ListChar.chars)
+                {
+                    starttext = inputlist.FirstOrDefault(x => x.Contains(chars));
+                    if(!string.IsNullOrEmpty(starttext))
+                        break;
+                } 
                 string lastChar = starttext.Substring(starttext.Length - 1, 1);
 
                 starttext = starttext.Replace(lastChar, "").Trim();
 
-                int position = (starttext.LastIndexOf(" ") > 0) ? (starttext.Length  + 1 - starttext.LastIndexOf(" "))
+                int position = (starttext.LastIndexOf(" ") > 0) ? (starttext.Length + 1 - starttext.LastIndexOf(" "))
                         : (starttext.LastIndexOf("\t") > 0 ? (starttext.Length + 1 - starttext.LastIndexOf("\t")) : starttext.Length + 1);
 
-                if ( ListChar.chars.Any(x=>x == lastChar))
+                if (ListChar.chars.Any(x => x == lastChar))
                 {
-                   
-                    edit.Delete(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position 
-                        , position );
-                   
+
+                    edit.Delete(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position
+                        , position);
+
                     string text = _CurrentSession.SelectedCompletionSet.SelectionStatus.Completion.InsertionText;
 
                     edit.Insert(_CurrentSession.TextView.Caret.Position.BufferPosition.Position - position, text);
                 }
-                
+
                 edit.Apply();
                 if (_CurrentSession != null)
                     _CurrentSession.Dismiss();
