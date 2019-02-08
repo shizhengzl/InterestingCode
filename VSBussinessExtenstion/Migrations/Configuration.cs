@@ -1,3 +1,5 @@
+using Core.UsuallyCommon.DataBase;
+
 namespace VSBussinessExtenstion.Migrations
 {
     using System;
@@ -84,6 +86,19 @@ namespace VSBussinessExtenstion.Migrations
                 SQLDBType = "SqlDbType.DateTime",
                 CSharpType = "DateTime",
                 SQLServerType = "datetime",
+                MySqlType = "",
+                OracleType = "",
+                SQLiteType = ""
+            });
+
+
+            context.DataTypeConfigs.Add(new DataTypeConfig()
+            {
+                Type = Core.UsuallyCommon.DataBaseType.SQLServer
+      ,
+                SQLDBType = "SqlDbType.DateTime",
+                CSharpType = "DateTime",
+                SQLServerType = "datetime2",
                 MySqlType = "",
                 OracleType = "",
                 SQLiteType = ""
@@ -344,8 +359,95 @@ namespace VSBussinessExtenstion.Migrations
                 SQLiteType = ""
             });
 
-            
 
+            var columnsproperty = typeof(Column).GetProperties();
+            context.Variables.RemoveRange(context.Variables.ToList());
+            foreach (var p in columnsproperty)
+            {
+                var item = new Variable()
+                {
+                    VariableName = $"@{p.Name}" ,
+                    FirstChar = CharStatu.Default,
+                    IsSystemGenerator = true,
+                    ReplaceProperty = $"@{p.Name}" ,
+                    ReplaceString = string.Empty,
+                    VariableType = DataSourceType.DatabaseType
+                };
+
+                context.Variables.Add(item); 
+            }
+
+            var ddatetime = new Variable()
+            {
+                VariableName = "@DateTime",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@DateTime",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(ddatetime);
+            var ddouble = new Variable()
+            {
+                VariableName = "@Double",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@Double",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(ddouble);
+            var ddecimal = new Variable()
+            {
+                VariableName = "@Decimal",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@Decimal",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(ddecimal);
+            var dboolean = new Variable()
+            {
+                VariableName = "@Boolean",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@Boolean",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(dboolean);
+            var dstring = new Variable()
+            {
+                VariableName = "@String",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@String",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(dstring);
+            var dint = new Variable()
+            {
+                VariableName = "@Int",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@Int",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(dint);
+
+            var dcomma = new Variable()
+            {
+                VariableName = "@Comma",
+                FirstChar = CharStatu.Default,
+                IsSystemGenerator = true,
+                ReplaceProperty = "@Comma",
+                ReplaceString = string.Empty,
+                VariableType = DataSourceType.DatabaseType
+            };
+            context.Variables.Add(dcomma);  
             context.ConnectionStrings.RemoveRange(context.ConnectionStrings.ToList());
             context.ConnectionStrings.Add(new ConnectionString() { Type = Core.UsuallyCommon.DataBaseType.SQLServer, WindowsAuthentication = false, Connection = "SERVER={0};UID={1};PWD={2};DATABASE={3}" });
 
@@ -367,7 +469,7 @@ namespace VSBussinessExtenstion.Migrations
             var databasedemo = new Snippet() { DataSourceType = DataSourceType.DatabaseType, IsFloder = true, Name = "DataBase Demo Folder" };
             context.Snippets.Add(databasedemo);
             context.SaveChanges();
-            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.DatabaseType, OutputPath=@"C:\Generator", IsFloder = false, Name = "DataBase Demo", GeneratorFileName = "@TableName.cs", IsEnabled = true, ParentId = databasedemo.Id, Context = @"public class @TableName{
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.DatabaseType, OutputPath = @"C:\Generator", IsFloder = false, Name = "DataBase Demo", GeneratorFileName = "@TableName.cs", IsEnabled = true, ParentId = databasedemo.Id, Context = @"public class @TableName{
                 <%! public @ColumnType @ColumnName 
                 !%> 
             }" });
@@ -375,8 +477,15 @@ namespace VSBussinessExtenstion.Migrations
             var csharpdemo = new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = true, Name = "Csharp Demo Folder" };
             context.Snippets.Add(csharpdemo);
             context.SaveChanges();
-            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = false, Name = "Csharp Demo", GeneratorFileName = "@ClassName.cs", IsEnabled = true,
-                ParentId = csharpdemo.Id, Context = @"  var option = {
+            context.Snippets.Add(new Snippet()
+            {
+                DataSourceType = DataSourceType.CSharpType,
+                IsFloder = false,
+                Name = "Csharp Demo",
+                GeneratorFileName = "@ClassName.cs",
+                IsEnabled = true,
+                ParentId = csharpdemo.Id,
+                Context = @"  var option = {
                 //rviceInfo格式为:命名空间.类名.方法名
 				//Slxt.Services为namespace下面的 Slxt.Services
                 serviceInfo:  '@NameSpace.@ClassName.@MethodName',

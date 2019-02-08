@@ -76,6 +76,9 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
             table.Columns.ForEach(x => x.Address = table.Address);
             table.Columns.ForEach(x => x.DataBaseName = table.DataBaseName);
+            table.Columns.ForEach(x => x.User = table.User);
+            table.Columns.ForEach(x => x.Password = table.Password);
+
             table.Columns.ForEach(x => x.TableName = table.TableName);
             table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType, x.Type));
             table.Columns.ForEach(x => x.Key = table.Key);

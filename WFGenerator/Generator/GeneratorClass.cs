@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Core.UsuallyCommon.DataBase;
 using System.Windows.Forms;
 using VSBussinessExtenstion.DataBaseHelper;
+using DatabaseHelper = Core.UsuallyCommon.DatabaseHelper;
 
 namespace WFGenerator
 {
@@ -41,7 +42,7 @@ namespace WFGenerator
 
                     foreach (var column in lists)
                     {
-                        if(CheckType(column,inittempcontext))
+                        if (CheckType(column, inittempcontext))
                             sb.Append(this.ReplaceDataBase<Column>(inittempcontext, column, true));
 
                     }
@@ -49,7 +50,7 @@ namespace WFGenerator
 
                 }
 
-                context = BatchComma(context);
+                context = BatchComma(context,columns.FirstOrDefault());
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
                 if (generatorFile)
                 {
@@ -63,8 +64,23 @@ namespace WFGenerator
         }
 
 
-        public string BatchComma(string context)
+        public string BatchComma(string context, Column column)
         {
+
+            var defaultsqlite = new DefaultSqlite();
+            var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
+            foreach (var varbable in noSystemVarbables)
+            {
+                if (context.IndexOf(varbable.VariableName) > -1)
+                {
+                    var sql = ReplaceDataBase(varbable.ReplaceString, column, true);
+                    if (string.IsNullOrEmpty(DatabaseHelper.connectionString))
+                        DatabaseHelper.connectionString =
+                            $"server={column.Address};uid={column.User};pwd={column.Password};database={column.DataBaseName};";
+                    var replacestring = DatabaseHelper.ExecuteQuery(sql).Tables[0].Rows[0][0].ToString();
+                    context = context.Replace(varbable.VariableName, replacestring);
+                }
+            }
 
 
             context = context.Replace("@Double", string.Empty);
@@ -72,16 +88,13 @@ namespace WFGenerator
             context = context.Replace("@DateTime", string.Empty);
             context = context.Replace("@Boolean", string.Empty);
             context = context.Replace("@String", string.Empty);
+            context = context.Replace("@Int", string.Empty);
 
             var comma = "@Comma";
             if (context.IndexOf(comma) < 0)
                 return context;
             context = context.Remove(context.LastIndexOf(comma), comma.Length);
             context = context.Replace(comma, ",");
-
-
-    
-
             return context;
 
         }
@@ -142,12 +155,13 @@ namespace WFGenerator
             return sb.ToString();
         }
 
-        public bool CheckType(Column column,string snippetcontext)
+        public bool CheckType(Column column, string snippetcontext)
         {
-            var tmoney = new List<string>() {"@Double", "@Decimal"};
-            var tdatetime = new List<string>() {"@DateTime"};
-            var tbool = new List<string>() {"@Boolean"};
-            var tstring = new List<string>() {"@String"};
+            var tmoney = new List<string>() { "@Double", "@Decimal" };
+            var tdatetime = new List<string>() { "@DateTime" };
+            var tbool = new List<string>() { "@Boolean" };
+            var tstring = new List<string>() { "@String" };
+            var ting = new List<string>() { "@Int" };
 
             var csharptype = column.ColumnType;
 
@@ -155,13 +169,15 @@ namespace WFGenerator
             var bdatetime = tdatetime.Any(x => snippetcontext.Contains(x));
             var bbool = tbool.Any(x => snippetcontext.Contains(x));
             var bstring = tstring.Any(x => snippetcontext.Contains(x));
+            var bint = ting.Any(x => snippetcontext.Contains(x));
 
-            if (bmoney || bdatetime || bbool || bstring)
+            if (bmoney || bdatetime || bbool || bstring || bint)
             {
                 return (bmoney && tmoney.Any(x => x.Contains(csharptype))) ||
                        (bdatetime && tdatetime.Any(x => x.Contains(csharptype))) ||
                        (bbool && tbool.Any(x => x.Contains(csharptype))) ||
-                       (bstring && tstring.Any(x => x.Contains(csharptype)));
+                       (bstring && tstring.Any(x => x.Contains(csharptype))) ||
+                       (bint && ting.Any(x => x.Contains(csharptype)));
             }
 
             return true;
