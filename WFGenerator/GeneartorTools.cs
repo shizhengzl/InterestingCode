@@ -431,8 +431,8 @@ namespace WFGenerator
 
             var query = from sources in listsourcecolumns
                         join targets in listtargetcolumns
-                        on new { sources.TableName, sources.ColumnName, sources.Type }
-                        equals new { targets.TableName, targets.ColumnName, targets.Type }
+                        on new { sources.TableName, sources.ColumnName, sources.SQLType }
+                        equals new { targets.TableName, targets.ColumnName, targets.SQLType }
                         select sources;
 
             var columns = query.ToList<Column>();
@@ -524,8 +524,8 @@ namespace WFGenerator
 
             var query = from sources in listsourcecolumns
                         join targets in listtargetcolumns
-                        on new { sources.TableName, sources.ColumnName, sources.Type }
-                        equals new { targets.TableName, targets.ColumnName, targets.Type }
+                        on new { sources.TableName, sources.ColumnName, sources.SQLType }
+                        equals new { targets.TableName, targets.ColumnName, targets.SQLType }
                         where sources.MaxLength < targets.MaxLength
                         select sources;
 

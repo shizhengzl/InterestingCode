@@ -74,6 +74,27 @@ namespace Core.UsuallyCommon
             return linedatas.ToList<string>();
         }
 
+
+    public static string GetWord(string inputtext, int point)
+    {
+            var sbs = StringHelper.GetStringSingleColumn(inputtext);
+            List<KeyValuePair<int, string>> col = new List<KeyValuePair<int, string>>();
+            List<int> points = new List<int>();
+            int indexs = 0;
+            foreach (var bs in sbs)
+            {
+                var sk = inputtext.IndexOf(bs, indexs);
+                if (point - sk < 0)
+                    break;
+
+                col.Add(new KeyValuePair<int, string>(sk, bs));
+                indexs = sk + bs.Length;
+                points.Add(sk);
+            }
+
+            return col[points.Count - 1].Value;
+        }
+
         public static List<string> GetStringListByStartAndEnd(string str, string start, string end)
         {
             List<string> list = new List<string>(); 

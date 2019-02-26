@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneartorTools));
             this.statusStripMessage = new System.Windows.Forms.StatusStrip();
+            this.tsmessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControlALL = new System.Windows.Forms.TabControl();
             this.tabPageSQLGeneartor = new System.Windows.Forms.TabPage();
             this.groupGenerator = new System.Windows.Forms.GroupBox();
@@ -72,7 +73,6 @@
             this.rdFilterColumn = new System.Windows.Forms.RadioButton();
             this.gbSearch = new System.Windows.Forms.GroupBox();
             this.rdComplete = new System.Windows.Forms.RadioButton();
-            this.txtFuzzyPercent = new System.Windows.Forms.TextBox();
             this.rdLikdSearch = new System.Windows.Forms.RadioButton();
             this.rdFuzzySearch = new System.Windows.Forms.RadioButton();
             this.txtSearch = new System.Windows.Forms.TextBox();
@@ -96,7 +96,6 @@
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
-            this.tsmessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripMessage.SuspendLayout();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
@@ -135,6 +134,13 @@
             this.statusStripMessage.Size = new System.Drawing.Size(1215, 22);
             this.statusStripMessage.TabIndex = 0;
             this.statusStripMessage.Text = "statusStrip1";
+            // 
+            // tsmessage
+            // 
+            this.tsmessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.tsmessage.Name = "tsmessage";
+            this.tsmessage.Size = new System.Drawing.Size(61, 17);
+            this.tsmessage.Text = "Message";
             // 
             // tabControlALL
             // 
@@ -583,7 +589,6 @@
             // gbSearch
             // 
             this.gbSearch.Controls.Add(this.rdComplete);
-            this.gbSearch.Controls.Add(this.txtFuzzyPercent);
             this.gbSearch.Controls.Add(this.rdLikdSearch);
             this.gbSearch.Controls.Add(this.rdFuzzySearch);
             this.gbSearch.Location = new System.Drawing.Point(228, 5);
@@ -604,14 +609,6 @@
             this.rdComplete.TabStop = true;
             this.rdComplete.Text = "Complete";
             this.rdComplete.UseVisualStyleBackColor = true;
-            // 
-            // txtFuzzyPercent
-            // 
-            this.txtFuzzyPercent.Location = new System.Drawing.Point(59, 55);
-            this.txtFuzzyPercent.Name = "txtFuzzyPercent";
-            this.txtFuzzyPercent.Size = new System.Drawing.Size(32, 21);
-            this.txtFuzzyPercent.TabIndex = 3;
-            this.txtFuzzyPercent.Text = "90";
             // 
             // rdLikdSearch
             // 
@@ -859,13 +856,6 @@
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
             // 
-            // tsmessage
-            // 
-            this.tsmessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.tsmessage.Name = "tsmessage";
-            this.tsmessage.Size = new System.Drawing.Size(61, 17);
-            this.tsmessage.Text = "Message";
-            // 
             // GeneartorTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -948,7 +938,6 @@
         private System.Windows.Forms.ToolStripButton tsRemove;
         private System.Windows.Forms.ToolStripButton tsRefresh;
         private System.Windows.Forms.RadioButton rdComplete;
-        private System.Windows.Forms.TextBox txtFuzzyPercent;
         private System.Windows.Forms.OpenFileDialog openFile;
         private System.Windows.Forms.TabControl tabControlSelect;
         private System.Windows.Forms.TabPage tabPageSelectSQL;

@@ -33,7 +33,7 @@ namespace WFGenerator
             var tables = columns.GroupBy(x => x.TableName).Select(y => y.Key).ToList<string>();
             foreach (var table in tables)
             {
-                var lists = columns.Where(x => x.TableName == table);
+                var lists = columns.Where(x => x.TableName == table).ToList();
                 context = snippet.Context;
                 foreach (var item in listReplace)
                 {
@@ -42,7 +42,7 @@ namespace WFGenerator
 
                     foreach (var column in lists)
                     {
-                        if (CheckType(column, inittempcontext))
+                        if (CheckType(column, inittempcontext,lists))
                             sb.Append(this.ReplaceDataBase<Column>(inittempcontext, column, true));
 
                     }
@@ -50,7 +50,7 @@ namespace WFGenerator
 
                 }
 
-                context = BatchComma(context,columns.FirstOrDefault());
+                context = BatchComma(context,columns.FirstOrDefault(),lists);
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
                 if (generatorFile)
                 {
@@ -64,7 +64,7 @@ namespace WFGenerator
         }
 
 
-        public string BatchComma(string context, Column column)
+        public string BatchComma(string context, Column column,List<Column> list)
         {
 
             var defaultsqlite = new DefaultSqlite();
@@ -83,13 +83,26 @@ namespace WFGenerator
             }
 
 
-            context = context.Replace("@Double", string.Empty);
-            context = context.Replace("@Decimal", string.Empty);
-            context = context.Replace("@DateTime", string.Empty);
-            context = context.Replace("@Boolean", string.Empty);
-            context = context.Replace("@String", string.Empty);
-            context = context.Replace("@Int", string.Empty);
+            StringBuilder stwhere = new StringBuilder();
 
+            foreach (var columntypes in list)
+            {
+                context = context.Replace($"@{columntypes.CSharpType}", string.Empty);
+
+                if (columntypes.IsPrimarykey)
+                {
+                    if (string.IsNullOrEmpty(stwhere.ToString()))
+                    {
+                        stwhere.Append($" Where {columntypes.ColumnName}=@{columntypes.ColumnName}");
+                    }
+                    else
+                    {
+                        stwhere.Append($" And {columntypes.ColumnName}=@{columntypes.ColumnName}");
+                    }
+                }
+            }
+
+            context = context.Replace("@Where", stwhere.ToString());
             var comma = "@Comma";
             if (context.IndexOf(comma) < 0)
                 return context;
@@ -155,32 +168,27 @@ namespace WFGenerator
             return sb.ToString();
         }
 
-        public bool CheckType(Column column, string snippetcontext)
+        public bool CheckType(Column column, string snippetcontext,List<Column> list)
         {
-            var tmoney = new List<string>() { "@Double", "@Decimal" };
-            var tdatetime = new List<string>() { "@DateTime" };
-            var tbool = new List<string>() { "@Boolean" };
-            var tstring = new List<string>() { "@String" };
-            var ting = new List<string>() { "@Int" };
 
-            var csharptype = column.ColumnType;
+            if (snippetcontext.Contains($"@NotKey") && column.IsPrimarykey)
+                return false;
 
-            var bmoney = tmoney.Any(x => snippetcontext.Contains(x));
-            var bdatetime = tdatetime.Any(x => snippetcontext.Contains(x));
-            var bbool = tbool.Any(x => snippetcontext.Contains(x));
-            var bstring = tstring.Any(x => snippetcontext.Contains(x));
-            var bint = ting.Any(x => snippetcontext.Contains(x));
-
-            if (bmoney || bdatetime || bbool || bstring || bint)
+            var isexists = false;
+            foreach (var columntypes in list)
             {
-                return (bmoney && tmoney.Any(x => x.Contains(csharptype))) ||
-                       (bdatetime && tdatetime.Any(x => x.Contains(csharptype))) ||
-                       (bbool && tbool.Any(x => x.Contains(csharptype))) ||
-                       (bstring && tstring.Any(x => x.Contains(csharptype))) ||
-                       (bint && ting.Any(x => x.Contains(csharptype)));
+                isexists = (snippetcontext.Contains($"@{columntypes.CSharpType}"));
+                if(isexists)
+                    break;
             }
 
+
+            if (isexists)
+                return (snippetcontext.Contains($"@{column.CSharpType}"));
+           
             return true;
+
+             
 
         }
 
@@ -240,6 +248,8 @@ namespace WFGenerator
             var listProperty = t.GetPropertyList();
             foreach (var property in listProperty)
             {
+                if(property.ToLower()== "id")
+                    continue;
                 var value = t.GetPropertyValue(property);
                 value = string.IsNullOrEmpty(value) ? property : value;
                 if (context.IndexOf($"@{property}") >= 0)

@@ -80,7 +80,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
             table.Columns.ForEach(x => x.Password = table.Password);
 
             table.Columns.ForEach(x => x.TableName = table.TableName);
-            table.Columns.ForEach(x => x.ColumnType = GetColumnType(x.DBType, x.Type));
+            table.Columns.ForEach(x => x.CSharpType = GetColumnType(x.DBType, x.SQLType));
             table.Columns.ForEach(x => x.Key = table.Key);
             table.Columns.ForEach(x => x.TableDescription = table.TableDescription);
         }

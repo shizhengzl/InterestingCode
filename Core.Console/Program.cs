@@ -6,10 +6,39 @@ using System.Threading.Tasks;
 using Core.UsuallyCommon;
 namespace Core.ConsoleLog
 {
+
+    
+
     class Program
     {
         static void Main(string[] args)
         {
+
+            var input =@"        public static ";
+
+
+
+
+            int p = 34;
+            var sbs = StringHelper.GetStringSingleColumn(input);
+            List<KeyValuePair<int, string>> col = new List<KeyValuePair<int, string>>();
+            List<int> points = new List<int>();
+            int indexs = 0;
+            foreach (var bs in sbs)
+            {
+                var sk = input.IndexOf(bs, indexs);
+                if(p - sk < 0)
+                    break;
+                
+                col.Add(new KeyValuePair<int, string>(sk,bs));
+                indexs = sk + bs.Length;
+                points.Add(sk);
+            }
+             
+            var result = col[points.Count-1].Value;
+            
+
+            return;
             var strs = @"
 <page funcid = '01010110' >
  
