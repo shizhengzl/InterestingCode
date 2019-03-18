@@ -75,9 +75,16 @@ namespace Core.UsuallyCommon
         }
 
 
-    public static string GetWord(string inputtext, int point)
+        public static List<String> GetStringSingleColumnByVs(string context)
+        {
+            string[] separatingChars = new string[] { "\r\n", "\n", "\r", "\t", " ", "." };
+            string[] linedatas = context.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
+            return linedatas.ToList<string>();
+        }
+
+        public static string GetWord(string inputtext, int point)
     {
-            var sbs = StringHelper.GetStringSingleColumn(inputtext);
+            var sbs = StringHelper.GetStringSingleColumnByVs(inputtext);
             List<KeyValuePair<int, string>> col = new List<KeyValuePair<int, string>>();
             List<int> points = new List<int>();
             int indexs = 0;
@@ -92,7 +99,7 @@ namespace Core.UsuallyCommon
                 points.Add(sk);
             }
 
-            return col[points.Count - 1].Value;
+            return col.Count > 0 ?  col[points.Count - 1].Value : sbs[0];
         }
 
         public static List<string> GetStringListByStartAndEnd(string str, string start, string end)

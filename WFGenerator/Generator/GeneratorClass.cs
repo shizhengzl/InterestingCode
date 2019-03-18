@@ -49,7 +49,7 @@ namespace WFGenerator
                     context = context.Replace(item, sb.ToStringExtension());
 
                 }
-
+                context = context.Replace("@Key", string.Empty);
                 context = BatchComma(context,columns.FirstOrDefault(),lists);
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
                 if (generatorFile)
@@ -80,9 +80,7 @@ namespace WFGenerator
                     var replacestring = DatabaseHelper.ExecuteQuery(sql).Tables[0].Rows[0][0].ToString();
                     context = context.Replace(varbable.VariableName, replacestring);
                 }
-            }
-
-
+            } 
             StringBuilder stwhere = new StringBuilder();
 
             foreach (var columntypes in list)
@@ -171,9 +169,10 @@ namespace WFGenerator
         public bool CheckType(Column column, string snippetcontext,List<Column> list)
         {
 
-            if (snippetcontext.Contains($"@NotKey") && column.IsPrimarykey)
+            if (snippetcontext.Contains($"@NotKey") && (column.IsPrimarykey || column.IsIdentity ))
                 return false;
-
+            if (snippetcontext.Contains($"@Key") && (!column.IsPrimarykey) && !column.IsIdentity )
+                return false;
             var isexists = false;
             foreach (var columntypes in list)
             {
@@ -181,15 +180,11 @@ namespace WFGenerator
                 if(isexists)
                     break;
             }
-
-
+             
             if (isexists)
                 return (snippetcontext.Contains($"@{column.CSharpType}"));
            
-            return true;
-
-             
-
+            return true; 
         }
 
         public string GetGenerator(Snippet snippet, object datasource, ServicesAddressHelper sh = null
@@ -248,12 +243,13 @@ namespace WFGenerator
             var listProperty = t.GetPropertyList();
             foreach (var property in listProperty)
             {
-                if(property.ToLower()== "id")
+                if(string.IsNullOrEmpty(property) ||  property.ToLower()== "id" || property.ToLower() == "key")
                     continue;
                 var value = t.GetPropertyValue(property);
                 value = string.IsNullOrEmpty(value) ? property : value;
                 if (context.IndexOf($"@{property}") >= 0)
                 {
+                    
                     if (nochange)
                         context = context.Replace($"@{property}", value);
                     else
