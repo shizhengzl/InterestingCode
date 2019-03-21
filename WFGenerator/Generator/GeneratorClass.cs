@@ -247,6 +247,9 @@ namespace WFGenerator
                     continue;
                 var value = t.GetPropertyValue(property);
                 value = string.IsNullOrEmpty(value) ? property : value;
+
+                if (property == "IsRequire")
+                    value = value == "false" ? string.Empty : "?";
                 if (context.IndexOf($"@{property}") >= 0)
                 {
                     
