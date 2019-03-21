@@ -240,6 +240,13 @@ namespace WFGenerator
         {
             string returnValue = string.Empty;
 
+            bool isstring = false;
+            if(t.GetType().Name == typeof(Column).Name)
+            {
+                Column col = t as Column;
+                isstring = col.CSharpType.ToLower() == "String".ToLower();
+            }
+
             var listProperty = t.GetPropertyList();
             foreach (var property in listProperty)
             {
@@ -249,7 +256,7 @@ namespace WFGenerator
                 value = string.IsNullOrEmpty(value) ? property : value;
 
                 if (property == "IsRequire")
-                    value = value == "false" ? string.Empty : "?";
+                    value = value == "True" ? (isstring ? string.Empty : "?") : string.Empty;
                 if (context.IndexOf($"@{property}") >= 0)
                 {
                     
