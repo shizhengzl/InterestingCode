@@ -16,7 +16,7 @@
         //如果您想要针对其他数据库和/或数据库提供程序，请在应用程序配置文件中修改“DefaultSqlite”
         //连接字符串。
         public DefaultSqlite()
-            : base(@"data source=(LocalDb)\MSSQLLocalDB;initial catalog=DefaultSqlite;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")
+            : base(@"server=PC-20180428TKKF;uid=sa;pwd=95938;database=DefaultSqlite;")
         {
 
         }

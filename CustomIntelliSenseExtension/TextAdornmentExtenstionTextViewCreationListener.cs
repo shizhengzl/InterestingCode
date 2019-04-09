@@ -49,7 +49,7 @@ namespace CustomIntelliSenseExtension
             //DatabaseHelper.connectionString = @"server=.;uid=sa;pwd=sasa;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
 
 
-            DatabaseHelper.connectionString = @"data source=(LocalDb)\MSSQLLocalDB;initial catalog=DefaultSqlite;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            DatabaseHelper.connectionString = @"server=PC-20180428TKKF;uid=sa;pwd=95938;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
 
             var chars = DatabaseHelper.ExecuteQuery("SELECT DISTINCT StartChar FROM Intellisences").Tables[0].ToList<Intellisences>();
             ListChar.chars = chars.Select(x => x.StartChar).ToList<string>();

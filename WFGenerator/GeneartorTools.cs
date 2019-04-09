@@ -184,7 +184,7 @@ namespace WFGenerator
         {
             // 获取所有启用的模板 判断启用类型
             SelectDataSoruceType selecttype = Core.UsuallyCommon.Extensions.EnumParse<SelectDataSoruceType>(tabControlSelect.SelectedIndex.ToString());
-            var listNode = sqlite.Snippets.ToList();
+            var listNode = sqlite.Snippets.Where(x=>x.IsEnabled).ToList();
             foreach (Snippet snippet in listNode)
             {
                 if (!snippet.IsFloder && snippet.IsEnabled)
