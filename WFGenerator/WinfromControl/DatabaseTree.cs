@@ -323,7 +323,7 @@ namespace WFGenerator.WinfromControl
                             Tag = table
                         };
 
-                        tableNode.Nodes.Add(string.Empty);
+                        //tableNode.Nodes.Add(string.Empty);
 
                         dbNode.Nodes.Add(tableNode);
                     }

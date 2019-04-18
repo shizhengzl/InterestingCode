@@ -4,136 +4,116 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.UsuallyCommon;
+using System.Linq;
+using Core.UsuallyCommon.DataBase;
+using System.Reflection;
+using VSBussinessExtenstion;
+using ScriptCs.Engine;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+
 namespace Core.ConsoleLog
-{
 
-    
-
+{ 
     class Program
     {
+        static DefaultSqlite defaultSqlite = new DefaultSqlite();
         static void Main(string[] args)
         {
+            List<Column> columns = new List<Column>();
+            columns.Add(new Column() { ColumnName = "Name", IsRequire=true, IsIdentity = true ,CSharpType="String"});
+            columns.Add(new Column() { ColumnName = "Age",IsRequire = false, IsIdentity = true, CSharpType = "Int32" });
+            var res = GetString<Column>(columns, "\"public \" + column.CSharpType +   (column.IsRequire ? \"?\" : string.Empty) + column.ColumnName + \" {get;} {set;} \"");
+            //Console.Write(res);
+            var options =
+             ScriptOptions.Default
+            .AddReferences("System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+            var script = CSharpScript.RunAsync(res,options).Result;
+            var result = script.ContinueWithAsync<string>("new GeneratorClass().GetGeneratorString()").Result;
 
-            var input =@"        public static ";
-
-
-
-
-            int p = 34;
-            var sbs = StringHelper.GetStringSingleColumn(input);
-            List<KeyValuePair<int, string>> col = new List<KeyValuePair<int, string>>();
-            List<int> points = new List<int>();
-            int indexs = 0;
-            foreach (var bs in sbs)
-            {
-                var sk = input.IndexOf(bs, indexs);
-                if(p - sk < 0)
-                    break;
-                
-                col.Add(new KeyValuePair<int, string>(sk,bs));
-                indexs = sk + bs.Length;
-                points.Add(sk);
-            }
-             
-            var result = col[points.Count-1].Value;
-            
-
-            return;
-            var strs = @"
-<page funcid = '01010110' >
- 
-   <controls >
- 
-     <control id = 'appFormMenu' >
-  
-        <menus >
-  
-          <menu title = '文件' >
-   
-             <menuitem title = '关闭' action = 'window.close()' />
-      
-              </menu >
-      
-
-            </menus >
-      
-     
-
-</control >
-
-<control id = 'appForm' >
-
-<datasource entity = 's_AreaBcDetail' keyname = 'AreaBcDetailGUID' >
-
-<sql > SELECT AreaBcDetailGUID, AreaBcFaSetGUID, CalcCondition, LeftData, RightData, LeftSymbol, RightSymbol, IsBc, BcgsData, Remark FROM s_AreaBcDetail WHERE(1 = 1) </sql >
-
-</datasource >
-
-<form showtab = 'false' >
-
-<tab title = '补差方案明细' >
-
-<section title = '计算条件' showtitle = 'true' showbar = 'true' cols = '2' titlewidth = '70' secid = 'Section1' >
-
-<item type = 'hidden' name = 'oid' field = 'AreaBcDetailGUID' title = '补差明细GUID' />
-
-<item type = 'hidden' name = 'areabcfasetguid' field = 'areabcfasetguid' title = '补差方案GUID' />
-
-<item type = 'hidden' name = 'calccondition' field = 'CalcCondition' title = '计算条件' />
-
- 
-            
-            <item type = 'radio' field='IsBc' title='是否补差' defaultvalue='1' colspan='2'>
-              <option value = '1' > 补差 </option >
-              <option value='0'>不补差</option>
-            </item>
-          </section>
-          <section title = '' showtitle='true' showbar='true' titlewidth='210' cols='1' secid='Section2'>
-            <item type = 'number' field='BcgsData' title='计算公式　 （面积差 * 合同单价） *'>
-              <attribute min = '0' max='100' grp='false' acc='2' dt='' />
-            </item>
-          </section>
-          <section title = '' showtitle='true' showbar='true' titlewidth='70' cols='2' secid='Section3'>
-            <item type = 'text' field='Remark' title='备注' colspan='2'>
-              <attribute maxlength = '100' />
-            </item >
-          </section >
-        </tab >
-      </form >
-    </control >
-  </controls >
-</page > 
-
- "; 
-
-            Console.ReadLine();
-
-            //var s = Core.UsuallyCommon.StringHelper.Search("just", new List<string>() { "cb_Adjust" }.ToArray());
-
-            return;
-            string str = @" <%! var option = {
-                //rviceInfo格式为:命名空间.类名.方法名
-				//Slxt.Services为namespace下面的 Slxt.Services
-                serviceInfo:  '@NameSpace.@ClassName.@MethodName',
-                //Javascript对象，键值对形式，直接匹配服务端函数参数。
-                data: {<%! @MethodArgumentName : @MethodArgumentName !%> }
-                }
-                //发起GET请求
-                var vals = MapExt.postJSON(option);
-                if(vals.result){
-                    alert('删除成功');
-                    appGrid.frameElement.Query();
-                }else{
-                    alert('删除失败');
-                } 
-			!%>";
-            var list = Core.UsuallyCommon.StringHelper.GetStringListByStartAndEndInner(str,"<%!","!%>");
-
-            var res = StringHelper.GetStringListByStartAndEnd("public class abcd { <%!public @ColumnName{get;set;!%>} <%!@ColumnName!%>", "<%!", "!%>");
-
-            res.ForEach(x => Console.WriteLine(x));
-
+           
+            //var sb = "(column.IsRequire) ? \"?\" : \"\"";
+            //var script = CSharpScript.RunAsync(sb, options,columns).Result;
             Console.ReadLine();
         }
+
+        public static string GetPropertys<T>(T model,List<string> listdbtype)
+        {
+            StringBuilder sb = new StringBuilder();
+            var propertieses = typeof(T).GetProperties().ToList().Where(x => listdbtype.Contains(x.PropertyType.Name)).ToList();
+            propertieses.ForEach(x => { sb.AppendLine(GetPropertyInfo<T>(model, x)); });
+            return sb.ToStringExtension();
+        }
+
+        public static string GetPropertyInfo<T>(T model, PropertyInfo propertyInfo)
+        {
+            StringBuilder sb = new StringBuilder();
+            List<String> types = new List<string>() { "Int32","Boolean","Byte","Int64","Int16","Decimal" };
+            var value = UsuallyCommon.Extensions.GetPropertyValue(model, propertyInfo.Name);
+
+
+            if (propertyInfo.PropertyType.Name == "Boolean")
+                value = value == "True" ? "true" : "false";
+
+            if (types.Any(x => x == propertyInfo.PropertyType.Name))
+                sb.Append($"{propertyInfo.Name} = {value},");
+            else
+                sb.Append($"{propertyInfo.Name} = \"{value}\",");
+
+            return sb.ToStringExtension();
+        }
+
+
+        public static string GetString<T>(List<T> list,string snippet) where T : class
+        { 
+            List<string> listdbtype = defaultSqlite.DataTypeConfigs.Select(x => x.CSharpType).ToList();
+            string nclass = @"
+            using System;
+            using System.Text;
+            using System.Collections.Generic;  ";
+
+            string nproperties = @"public @PropertyType @PropertyName{get;set;}";
+
+            var types = typeof(T).GetProperties().ToList();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(nclass);
+            sb.AppendLine("public class @ClassName {");
+            types.ForEach(x => {
+                if (listdbtype.Contains(x.PropertyType.Name)) sb.AppendLine($"public {x.PropertyType.Name}  {x.Name} {{get;set;}}");
+            });
+
+            sb.AppendLine("}");
+             
+            sb.AppendLine("public class GeneratorClass {");
+
+            string generator = @"
+            public string GetGeneratorString()
+            {
+                StringBuilder sb = new StringBuilder();
+                list.ForEach(column => {
+                    sb.AppendLine(@snippet);
+                });
+                return sb.ToString();
+            }";
+            generator = generator.Replace("@snippet",   snippet );
+            sb.AppendLine(generator);
+
+            sb.AppendLine("public List<@ClassName> list = new List<@ClassName>();");
+
+            sb.AppendLine("public GeneratorClass() {");
+
+            list.ForEach(x =>
+            { 
+                
+                var result = GetPropertys(x,listdbtype);
+                sb.AppendLine($"list.Add(new @ClassName(){{ { result.TrimEnd(',')}  }});");
+            });  
+            sb.AppendLine("}");
+            sb.AppendLine("}");
+            return sb.ToString().Replace("@ClassName", typeof(T).Name);
+        }
+
     }
 }
+

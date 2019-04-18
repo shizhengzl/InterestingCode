@@ -200,20 +200,20 @@ namespace WFGenerator
                 foreach (TreeNode note in listsource)
                 {
                     List<Column> listColumns = new List<Column>();
-                    if (string.IsNullOrEmpty(note.Nodes[0].Text))
-                    {
+                    //if (string.IsNullOrEmpty(note.Nodes[0].Text))
+                    //{
                         Table table = note.Tag as Table;
                         sh.InitColumn(table);
                         listColumns.AddRange(table.Columns);
-                    }
-                    else
-                    {
-                        foreach (TreeNode childs in note.Nodes)
-                        {
-                            if (childs.Checked)
-                                listColumns.Add(childs.Tag as Column);
-                        }
-                    }
+                    //}
+                    //else
+                    //{
+                    //    foreach (TreeNode childs in note.Nodes)
+                    //    {
+                    //        if (childs.Checked)
+                    //            listColumns.Add(childs.Tag as Column);
+                    //    }
+                    //}
                     sbResult.AppendLine(DataBaseGenerator(listColumns, snippet, generatorFile));
                 }
             }
