@@ -28,45 +28,28 @@ namespace WFGenerator
                 snippet.OutputPath = @"C:\Generator\";
             string context = snippet.Context;
             var listReplace = StringHelper.GetStringListByStartAndEndInner(context, SnippetReplace.Start.GetDescription(), SnippetReplace.End.GetDescription());
-
-            StringBuilder sbResult = new StringBuilder();
-            var tables = columns.GroupBy(x => x.TableName).Select(y => y.Key).ToList<string>();
-            foreach (var table in tables)
-            {
-                var lists = columns.Where(x => x.TableName == table).ToList();
-                context = snippet.Context;
-                foreach (var item in listReplace)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    var inittempcontext = item.Replace(SnippetReplace.Start.GetDescription(), string.Empty).Replace(SnippetReplace.End.GetDescription(), string.Empty);
-
-                    foreach (var column in lists)
-                    {
-                        if (CheckType(column, inittempcontext,lists))
-                            sb.Append(this.ReplaceDataBase<Column>(inittempcontext, column, true));
-
-                    }
-                    context = context.Replace(item, sb.ToStringExtension());
-
-                }
-                context = context.Replace("@Key", string.Empty);
-                context = BatchComma(context,columns.FirstOrDefault(),lists);
-                context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
-                if (generatorFile)
-                {
-                    string filename = (ApplicationVsHelper._applicationObject == null
-                        ? string.Empty : ApplicationVsHelper.VsProjectPath) + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
-                    GeneratorFile(context, filename);
-                }
-                sbResult.AppendLine(context);
+             
+            context = snippet.Context;
+            foreach (var item in listReplace)
+            { 
+                var inittempcontext = item.Replace(SnippetReplace.Start.GetDescription(), string.Empty).Replace(SnippetReplace.End.GetDescription(), string.Empty);
+                
+                context = context.Replace(item, ScriptRuns.GetScriptRuns(inittempcontext, columns)); 
             }
+            UserDeclareVarbibles(context, columns.FirstOrDefault());
+            context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
+            if (generatorFile)
+            {
+                string filename = (ApplicationVsHelper._applicationObject == null
+                 ? string.Empty : ApplicationVsHelper.VsProjectPath) + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
+                GeneratorFile(context, filename);
+            } 
             return context;
         }
 
 
-        public string BatchComma(string context, Column column,List<Column> list)
-        {
-
+        public string UserDeclareVarbibles(string context, Column column)
+        { 
             var defaultsqlite = new DefaultSqlite();
             var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
             foreach (var varbable in noSystemVarbables)
@@ -80,32 +63,7 @@ namespace WFGenerator
                     var replacestring = DatabaseHelper.ExecuteQuery(sql).Tables[0].Rows[0][0].ToString();
                     context = context.Replace(varbable.VariableName, replacestring);
                 }
-            } 
-            StringBuilder stwhere = new StringBuilder();
-
-            foreach (var columntypes in list)
-            {
-                context = context.Replace($"@{columntypes.CSharpType}", string.Empty);
-
-                if (columntypes.IsPrimarykey)
-                {
-                    if (string.IsNullOrEmpty(stwhere.ToString()))
-                    {
-                        stwhere.Append($" Where {columntypes.ColumnName}=@{columntypes.ColumnName}");
-                    }
-                    else
-                    {
-                        stwhere.Append($" And {columntypes.ColumnName}=@{columntypes.ColumnName}");
-                    }
-                }
-            }
-
-            context = context.Replace("@Where", stwhere.ToString());
-            var comma = "@Comma";
-            if (context.IndexOf(comma) < 0)
-                return context;
-            context = context.Remove(context.LastIndexOf(comma), comma.Length);
-            context = context.Replace(comma, ",");
+            }  
             return context;
 
         }
@@ -166,27 +124,7 @@ namespace WFGenerator
             return sb.ToString();
         }
 
-        public bool CheckType(Column column, string snippetcontext,List<Column> list)
-        {
-
-            if (snippetcontext.Contains($"@NotKey") && (column.IsPrimarykey || column.IsIdentity ))
-                return false;
-            if (snippetcontext.Contains($"@Key") && (!column.IsPrimarykey) && !column.IsIdentity )
-                return false;
-            var isexists = false;
-            foreach (var columntypes in list)
-            {
-                isexists = (snippetcontext.Contains($"@{columntypes.CSharpType}"));
-                if(isexists)
-                    break;
-            }
-             
-            if (isexists)
-                return (snippetcontext.Contains($"@{column.CSharpType}"));
-           
-            return true; 
-        }
-
+      
         public string GetGenerator(Snippet snippet, object datasource, ServicesAddressHelper sh = null
            , Boolean generatorFile = false)
         {
@@ -197,25 +135,9 @@ namespace WFGenerator
 
             if (snippet.DataSourceType == DataSourceType.DatabaseType)
             {
-                foreach (TreeNode note in listsource)
-                {
-                    List<Column> listColumns = new List<Column>();
-                    //if (string.IsNullOrEmpty(note.Nodes[0].Text))
-                    //{
-                        Table table = note.Tag as Table;
-                        sh.InitColumn(table);
-                        listColumns.AddRange(table.Columns);
-                    //}
-                    //else
-                    //{
-                    //    foreach (TreeNode childs in note.Nodes)
-                    //    {
-                    //        if (childs.Checked)
-                    //            listColumns.Add(childs.Tag as Column);
-                    //    }
-                    //}
-                    sbResult.AppendLine(DataBaseGenerator(listColumns, snippet, generatorFile));
-                }
+                Table table = listsource.FirstOrDefault().Tag as Table;
+                sh.InitColumn(table);
+                sbResult.AppendLine(DataBaseGenerator(table.Columns, snippet, generatorFile));
             }
             if (snippet.DataSourceType == DataSourceType.CSharpType)
             {
@@ -241,7 +163,7 @@ namespace WFGenerator
             string returnValue = string.Empty;
 
             bool isstring = false;
-            if(t.GetType().Name == typeof(Column).Name)
+            if (t.GetType().Name == typeof(Column).Name)
             {
                 Column col = t as Column;
                 isstring = col.CSharpType.ToLower() == "String".ToLower();
@@ -250,7 +172,7 @@ namespace WFGenerator
             var listProperty = t.GetPropertyList();
             foreach (var property in listProperty)
             {
-                if(string.IsNullOrEmpty(property) ||  property.ToLower()== "id" || property.ToLower() == "key")
+                if (string.IsNullOrEmpty(property) || property.ToLower() == "id" || property.ToLower() == "key")
                     continue;
                 var value = t.GetPropertyValue(property);
                 value = string.IsNullOrEmpty(value) ? property : value;
@@ -259,7 +181,7 @@ namespace WFGenerator
                     value = value == "True" ? (isstring ? string.Empty : "?") : string.Empty;
                 if (context.IndexOf($"@{property}") >= 0)
                 {
-                    
+
                     if (nochange)
                         context = context.Replace($"@{property}", value);
                     else

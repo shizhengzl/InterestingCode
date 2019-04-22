@@ -13,23 +13,31 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 
 namespace Core.ConsoleLog
-
 { 
+   
     class Program
     {
         static DefaultSqlite defaultSqlite = new DefaultSqlite();
         static void Main(string[] args)
         {
             List<Column> columns = new List<Column>();
-            columns.Add(new Column() { ColumnName = "Name", IsRequire=true, IsIdentity = true ,CSharpType="String"});
-            columns.Add(new Column() { ColumnName = "Age",IsRequire = false, IsIdentity = true, CSharpType = "Int32" });
-            var res = GetString<Column>(columns, "\"public \" + column.CSharpType +   (column.IsRequire ? \"?\" : string.Empty) + column.ColumnName + \" {get;} {set;} \"");
-            //Console.Write(res);
-            var options =
-             ScriptOptions.Default
-            .AddReferences("System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-            var script = CSharpScript.RunAsync(res,options).Result;
-            var result = script.ContinueWithAsync<string>("new GeneratorClass().GetGeneratorString()").Result;
+            columns.Add(new Column() { ColumnName = "Name", IsRequire = true, IsIdentity = true, CSharpType = "String" });
+            columns.Add(new Column() { ColumnName = "Age", IsRequire = false, IsIdentity = true, CSharpType = "Int32" });
+
+
+            var res = @" StringBuilder ssb = new StringBuilder();
+            foreach (var item in columns)
+            {
+                ssb.AppendLine(item.ColumnName );
+            }
+             return   ssb.ToString();";
+
+          
+
+            var script = ScriptRuns.GetScriptRuns(res, columns);
+
+            Console.WriteLine(script);
+            //var result = script.ContinueWithAsync<string>("new GeneratorClass().GetGeneratorString()").Result;
 
            
             //var sb = "(column.IsRequire) ? \"?\" : \"\"";
