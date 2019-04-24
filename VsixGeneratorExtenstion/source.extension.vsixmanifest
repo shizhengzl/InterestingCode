@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VsixGeneratorExtenstion.8b97afcb-f643-46a4-b023-d59c318ff35c" Version="1.0" Language="en-US" Publisher="shizheng" />
-        <DisplayName>VsixGeneratorExtenstion</DisplayName>
-        <Description xml:space="preserve">Empty VSIX Project.</Description>
+        <Identity Id="VsixGeneratorExtenstion.8b97afcb-f643-46a4-b023-d59c318ff35b" Version="1.4" Language="zh-CN" Publisher="shizheng" />
+        <DisplayName >CodeGenerator</DisplayName>
+        <Description xml:space="preserve">Code Generoator ,anthor:shizheng</Description>
+        <Icon>Resources\lion.ico</Icon>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 16.0)" />

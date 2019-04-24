@@ -3,22 +3,35 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity;
+    using System.Data.Entity.ModelConfiguration.Conventions;
     using System.Linq;
     using Core.UsuallyCommon;
-    using Core.UsuallyCommon.DataBase;
+    using Core.UsuallyCommon.DataBase; 
+    using MySql.Data.EntityFramework;
 
+    [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class DefaultSqlite : DbContext
     {
         //您的上下文已配置为从您的应用程序的配置文件(App.config 或 Web.config)
         //使用“DefaultSqlite”连接字符串。默认情况下，此连接字符串针对您的 LocalDb 实例上的
         //“VSBussinessExtenstion.DefaultSqlite”数据库。
+
         // 
         //如果您想要针对其他数据库和/或数据库提供程序，请在应用程序配置文件中修改“DefaultSqlite”
         //连接字符串。
         public DefaultSqlite()
-            : base(@"server=PC-20180428TKKF;uid=sa;pwd=95938;database=DefaultSqlite;")
+            : base(DefaultSqltiteConnection)
         {
 
+        }
+
+        //"Data Source=172.18.132.141;port=3306;Initial Catalog=DefaultSqlite;uid=root;password=123456;Charset=utf8"
+        public static string DefaultSqltiteConnection { get { return System.Configuration.ConfigurationManager.ConnectionStrings["DefaultSqlite"].ToStringExtension(); } }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();//移除复数表名的契约  
         }
 
         //为您要在模型中包含的每种实体类型都添加 DbSet。有关配置和使用 Code First  模型
@@ -125,8 +138,7 @@
     public class DataTypeConfig
     {
         [Key]
-        public Int32 Id { get; set; }
-        public DataBaseType Type { get; set; }
+        public Int32 Id { get; set; } 
 
         public string SQLServerType { get; set; }
         public string MySqlType { get; set; }

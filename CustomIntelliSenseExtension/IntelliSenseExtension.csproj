@@ -17,8 +17,8 @@
     <ProjectGuid>{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CustomIntelliSenseExtension</RootNamespace>
-    <AssemblyName>CustomIntelliSenseExtension</AssemblyName>
+    <RootNamespace>IntelliSenseExtension</RootNamespace>
+    <AssemblyName>IntelliSenseExtension</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -48,7 +48,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Intellisences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextAdornmentExtenstion.cs" />
     <Compile Include="TextAdornmentExtenstionTextViewCreationListener.cs" />
@@ -67,6 +66,12 @@
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.CoreUtility.15.0.26228\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
@@ -95,6 +100,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -111,6 +117,10 @@
     <ProjectReference Include="..\Core.UsuallyCommon\Core.UsuallyCommon.csproj">
       <Project>{9b79cc3f-88ea-463f-a6c7-c78780cbd7ef}</Project>
       <Name>Core.UsuallyCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VSBussinessExtenstion\VSBussinessExtenstion.csproj">
+      <Project>{64892dbc-9fe7-4dde-9cfc-a692969f5636}</Project>
+      <Name>VSBussinessExtenstion</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

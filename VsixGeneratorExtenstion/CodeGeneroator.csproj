@@ -23,8 +23,8 @@
     <ProjectGuid>{5E953C3E-4873-498A-8E72-FA4A8A21663A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VsixGeneratorExtenstion</RootNamespace>
-    <AssemblyName>VsixGeneratorExtenstion</AssemblyName>
+    <RootNamespace>CodeGenerator</RootNamespace>
+    <AssemblyName>CodeGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -73,6 +73,15 @@
     <Content Include="index.html" />
     <Content Include="Resources\CommandGenerator.png" />
     <Content Include="Resources\CommandGeneratorPackage.ico" />
+    <EmbeddedResource Include="Resources\generator.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Resources\Images.png" />
+    <Content Include="Resources\lion.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\niu.png" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>

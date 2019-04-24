@@ -16,6 +16,9 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 using System.Xml.XPath;
 using System.Xml.Linq;
+using VSBussinessExtenstion;
+
+
 namespace CustomIntelliSenseExtension
 {
     [Export(typeof(ICompletionSourceProvider))]
@@ -38,23 +41,15 @@ namespace CustomIntelliSenseExtension
     {
         public static List<string> chars = new List<string>();
 
-        public static List<Intellisences> listsnippet = new List<Intellisences>();
+        public static List<Intellisence> listsnippet = new List<Intellisence>();
+
+        public DefaultSqlite defaultSqlite = new DefaultSqlite();
 
         public void InitDatabaseConfig()
         {
-            //if (IsInit)
-            //    return;
             IsInit = true;
-
-            //DatabaseHelper.connectionString = @"server=.;uid=sa;pwd=sasa;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
-
-
-            DatabaseHelper.connectionString = @"server=PC-20180428TKKF;uid=sa;pwd=95938;database=DefaultSqlite;";//System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString;
-
-            var chars = DatabaseHelper.ExecuteQuery("SELECT DISTINCT StartChar FROM Intellisences").Tables[0].ToList<Intellisences>();
-            ListChar.chars = chars.Select(x => x.StartChar).ToList<string>();
-            ListChar.listsnippet = DatabaseHelper.ExecuteQuery("SELECT * FROM Intellisences").Tables[0].ToList<Intellisences>();
-
+            ListChar.listsnippet =   defaultSqlite.Intellisences.ToList();
+            ListChar.chars = ListChar.listsnippet.Select(x => x.StartChar).ToList<string>().Distinct().ToList();
         }
 
         public static bool IsInit = false;
@@ -62,6 +57,7 @@ namespace CustomIntelliSenseExtension
 
     internal class UeqtDynamicCompletionSource : ICompletionSource
     {
+        public DefaultSqlite defaultSqlite = new DefaultSqlite();
 
         public ITextBuffer m_textBuffer { get; set; }
         UeqtDynamicCompletionSourceProvider m_sourceProvider { get; set; }
@@ -101,14 +97,14 @@ namespace CustomIntelliSenseExtension
                     var mCompList = new List<Completion>();
                     try
                     {
-                        List<Intellisences> list = new List<Intellisences>();
+                        List<Intellisence> list = new List<Intellisence>();
                         list.AddRange(ListChar.listsnippet.Where(x => x.StartChar == item
                         && string.IsNullOrEmpty(x.DefinedSql)
                         && StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText })
                         ));
 
                         var sqllist = ListChar.listsnippet.Where(x => x.StartChar == item && !string.IsNullOrEmpty(x.DefinedSql));
-                        var oldConnecton = DatabaseHelper.connectionString;
+                        
                         foreach (var sql in sqllist)
                         {
                             var sqls = sql.DefinedSql.Replace("@REPLACENAME", starttext);
@@ -118,10 +114,10 @@ namespace CustomIntelliSenseExtension
                                 sqls = BatchCurrentLineContext(inputtext.Replace(replacechar, string.Empty), sqls);
 
                             }
-                            DatabaseHelper.connectionString = sql.ConnectionString;
-                            list.AddRange(DatabaseHelper.ExecuteQuery(sqls).Tables[0].ToList<Intellisences>());
-                        }
-                        DatabaseHelper.connectionString = oldConnecton;
+                            defaultSqlite.Database.Connection.ConnectionString = sql.ConnectionString; 
+                            list.AddRange(defaultSqlite.Database.SqlQuery< Intellisence>(sqls).ToList<Intellisence>());
+                            defaultSqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
+                        } 
 
                         foreach (var intellisences in list)
                         {

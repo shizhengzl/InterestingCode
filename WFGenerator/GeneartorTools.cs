@@ -552,8 +552,17 @@ namespace WFGenerator
         public static List<T> GetList<T>(DefaultSqlite sqlite)
         {
             var tables = FindTable<T>(sqlite);
-            var query = (IEnumerable<T>)
-                sqlite.GetType().GetProperty(tables).GetValue(sqlite, null);
+            IEnumerable<T> query;
+            try
+            {
+                query = (IEnumerable<T>)
+                sqlite.GetType().GetProperty(tables ).GetValue(sqlite, null);
+            }
+            catch (Exception)
+            {
+                query = (IEnumerable<T>)
+                 sqlite.GetType().GetProperty(typeof(T).Name).GetValue(sqlite, null);
+            }
             return query.ToList<T>();
 
         }
@@ -562,11 +571,13 @@ namespace WFGenerator
         {
             var metadata = ((IObjectContextAdapter)sqlite).ObjectContext.MetadataWorkspace;
 
+            var res = metadata.GetItemCollection(DataSpace.SSpace).GetItems<EntityContainer>().Single().BaseEntitySets.OfType<EntitySet>();
             var tables = metadata.GetItemCollection(DataSpace.SSpace).GetItems<EntityContainer>().Single().BaseEntitySets.OfType<EntitySet>()
                 .Where(s => !s.MetadataProperties.Contains("Type")
                 || s.MetadataProperties["Type"].ToString() == "Tables");
 
-            return tables.FirstOrDefault(x => x.Name == typeof(T).Name).Table;
+            return sqlite.GetType().GetProperties().Where(x => x.Name.Contains(typeof(T).Name)).FirstOrDefault().Name;
+            //return tables.FirstOrDefault(x => x.Name.Contains == typeof(T).Name).Table;
         }
     }
 }

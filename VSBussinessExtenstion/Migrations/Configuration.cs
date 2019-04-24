@@ -1,4 +1,4 @@
-using Core.UsuallyCommon.DataBase;
+锘縰sing Core.UsuallyCommon.DataBase;
 
 namespace VSBussinessExtenstion.Migrations
 {
@@ -20,341 +20,276 @@ namespace VSBussinessExtenstion.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
-
+      
             context.DataTypeConfigs.RemoveRange(context.DataTypeConfigs.ToList());
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-                ,
+            { 
                 SQLDBType = "SqlDbType.Int",
                 CSharpType = "Int64",
                 SQLServerType = "bigint",
-                MySqlType = "",
+                MySqlType = "bigint",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-                ,
+            { 
                 SQLDBType = "SqlDbType.Binary",
                 CSharpType = "Object",
                 SQLServerType = "binary",
-                MySqlType = "",
+                MySqlType = "binary",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-              ,
+            { 
                 SQLDBType = "SqlDbType.Bit",
                 CSharpType = "Boolean",
                 SQLServerType = "bit",
-                MySqlType = "",
+                MySqlType = "bit",
                 OracleType = "",
                 SQLiteType = ""
             });
-
-
+             
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-         ,
+            { 
                 SQLDBType = "SqlDbType.Char",
                 CSharpType = "String",
                 SQLServerType = "char",
-                MySqlType = "",
+                MySqlType = "char",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-         ,
+            { 
                 SQLDBType = "SqlDbType.DateTime",
                 CSharpType = "DateTime",
                 SQLServerType = "datetime",
-                MySqlType = "",
+                MySqlType = "datetime",
                 OracleType = "",
                 SQLiteType = ""
             });
-
-
+             
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-      ,
+            { 
                 SQLDBType = "SqlDbType.DateTime",
                 CSharpType = "DateTime",
                 SQLServerType = "datetime2",
-                MySqlType = "",
+                MySqlType = "datetime",
                 OracleType = "",
                 SQLiteType = ""
-            });
-
+            }); 
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-     ,
+            { 
                 SQLDBType = "SqlDbType.Decimal",
                 CSharpType = "Decimal",
                 SQLServerType = "decimal",
-                MySqlType = "",
+                MySqlType = "decimal",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Float",
                 CSharpType = "Double",
                 SQLServerType = "float",
-                MySqlType = "",
+                MySqlType = "float",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.UniqueIdentifier",
                 CSharpType = "Guid",
                 SQLServerType = "uniqueidentifier",
-                MySqlType = "",
+                MySqlType = "varchar",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Int32",
                 CSharpType = "Int32",
                 SQLServerType = "int",
-                MySqlType = "",
+                MySqlType = "int",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.SmallInt",
                 CSharpType = "Int16",
                 SQLServerType = "smallint",
-                MySqlType = "",
+                MySqlType = "smallint",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.TinyInt",
                 CSharpType = "Byte",
                 SQLServerType = "tinyint",
-                MySqlType = "",
+                MySqlType = "tinyint",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.NVarChar",
                 CSharpType = "String",
                 SQLServerType = "nvarchar",
-                MySqlType = "",
+                MySqlType = "nvarchar",
                 OracleType = "",
                 SQLiteType = ""
             });
 
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.VarChar",
                 CSharpType = "String",
                 SQLServerType = "varchar",
-                MySqlType = "",
+                MySqlType = "varchar",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Text",
                 CSharpType = "String",
                 SQLServerType = "text",
-                MySqlType = "",
+                MySqlType = "text",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.NText",
                 CSharpType = "String",
                 SQLServerType = "ntext",
-                MySqlType = "",
+                MySqlType = "longtext",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Image",
                 CSharpType = "Byte",
                 SQLServerType = "image",
-                MySqlType = "",
+                MySqlType = "image",
                 OracleType = "",
                 SQLiteType = ""
             });
 
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Money",
                 CSharpType = "Decimal",
                 SQLServerType = "money",
-                MySqlType = "",
+                MySqlType = "decimal",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.NChar",
                 CSharpType = "String",
                 SQLServerType = "nchar",
-                MySqlType = "",
+                MySqlType = "nchar",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Decimal",
                 CSharpType = "Decimal",
                 SQLServerType = "numeric",
-                MySqlType = "",
+                MySqlType = "decimal",
                 OracleType = "",
                 SQLiteType = ""
             });
 
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Real",
                 CSharpType = "Single",
                 SQLServerType = "real",
-                MySqlType = "",
+                MySqlType = "real",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.SmallDateTime",
                 CSharpType = "DateTime",
                 SQLServerType = "smalldatetime",
-                MySqlType = "",
+                MySqlType = "smalldatetime",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.SmallMoney",
                 CSharpType = "Decimal",
                 SQLServerType = "smallmoney",
-                MySqlType = "",
+                MySqlType = "decimal",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Timestamp",
                 CSharpType = "Byte",
                 SQLServerType = "timestamp",
-                MySqlType = "",
+                MySqlType = "timestamp",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.VarBinary",
                 CSharpType = "Byte",
                 SQLServerType = "varbinary",
-                MySqlType = "",
+                MySqlType = "varbinary",
                 OracleType = "",
                 SQLiteType = ""
             });
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.String",
                 CSharpType = "String",
                 SQLServerType = "xml",
-                MySqlType = "",
+                MySqlType = "xml",
                 OracleType = "",
                 SQLiteType = ""
             });
 
             context.DataTypeConfigs.Add(new DataTypeConfig()
-            {
-                Type = Core.UsuallyCommon.DataBaseType.SQLServer
-,
+            { 
                 SQLDBType = "SqlDbType.Variant",
                 CSharpType = "Object",
                 SQLServerType = "sql_variant",
-                MySqlType = "",
+                MySqlType = "sql_variant",
                 OracleType = "",
                 SQLiteType = ""
             });
@@ -375,79 +310,7 @@ namespace VSBussinessExtenstion.Migrations
                 };
 
                 context.Variables.Add(item); 
-            }
-
-            var ddatetime = new Variable()
-            {
-                VariableName = "@DateTime",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@DateTime",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(ddatetime);
-            var ddouble = new Variable()
-            {
-                VariableName = "@Double",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@Double",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(ddouble);
-            var ddecimal = new Variable()
-            {
-                VariableName = "@Decimal",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@Decimal",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(ddecimal);
-            var dboolean = new Variable()
-            {
-                VariableName = "@Boolean",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@Boolean",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(dboolean);
-            var dstring = new Variable()
-            {
-                VariableName = "@String",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@String",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(dstring);
-            var dint = new Variable()
-            {
-                VariableName = "@Int",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@Int",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(dint);
-
-            var dcomma = new Variable()
-            {
-                VariableName = "@Comma",
-                FirstChar = CharStatu.Default,
-                IsSystemGenerator = true,
-                ReplaceProperty = "@Comma",
-                ReplaceString = string.Empty,
-                VariableType = DataSourceType.DatabaseType
-            };
-            context.Variables.Add(dcomma);  
+            } 
             context.ConnectionStrings.RemoveRange(context.ConnectionStrings.ToList());
             context.ConnectionStrings.Add(new ConnectionString() { Type = Core.UsuallyCommon.DataBaseType.SQLServer, WindowsAuthentication = false, Connection = "SERVER={0};UID={1};PWD={2};DATABASE={3}" });
 
@@ -461,56 +324,75 @@ namespace VSBussinessExtenstion.Migrations
                                  ON a.system_type_id = b.system_type_id  AND a.user_type_id = b.user_type_id WHERE OBJECT_ID = OBJECT_ID('@TableName')"
             });
 
+            context.SQLConfigs.Add(new SQLConfig()
+            {
+                Type = Core.UsuallyCommon.DataBaseType.MySql,
+                GetDataBaseSQL = "SELECT `SCHEMA_NAME`   as DataBaseName FROM `information_schema`.`SCHEMATA`",
+                GetTableSQL = @"use information_schema;  
+                                select table_name as TableName,
+                                table_comment As TableDescription from tables where table_schema = '@DataBaseName'",
+                GetColumnSQL = @"
+                                
+
+                                use @DataBaseName;
+                                SELECT TABLE_NAME 'TableName'
+                                ,ORDINAL_POSITION 'ORDINAL_POSITION'
+                                ,COLUMN_NAME 'ColumnName'
+                                ,COLUMN_DEFAULT 'COLUMN_DEFAULT',
+                                CASE WHEN IS_NULLABLE = 'YES' THEN 1 ELSE 0 END AS 'IsRequire'
+																,DATA_TYPE 'SQLType'
+                                ,CASE WHEN  ISNULL(CHARACTER_MAXIMUM_LENGTH) = 1 THEN 0 ELSE CHARACTER_MAXIMUM_LENGTH END AS 'MaxLength'
+                                ,COLUMN_COMMENT 'ColumnDescription'
+                                
+                                FROM INFORMATION_SCHEMA.COLUMNS 聽
+                                WHERE    TABLE_NAME='@TableName';;
+                                 "
+            });
+
             context.DataBaseAddresses.RemoveRange(context.DataBaseAddresses.ToList());
-            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() { Address = ".", Password = "95938", User = "sa", DefaultDatabase = "", DBType = Core.UsuallyCommon.DataBaseType.SQLServer });
+            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() { Address = "172.18.132.141", ConnectionStrings= "Data Source=172.18.132.141;port=3306;Initial Catalog=MisSystem;uid=root;password=123456;Charset=utf8" ,Password = "123456", User = "root", DefaultDatabase = "MisSystem", DBType = Core.UsuallyCommon.DataBaseType.MySql });
 
             context.Snippets.RemoveRange(context.Snippets.ToList());
 
-            var databasedemo = new Snippet() { DataSourceType = DataSourceType.DatabaseType, IsFloder = true, Name = "DataBase Demo Folder" };
+            var databasedemo = new Snippet() { DataSourceType = DataSourceType.DatabaseType, IsFloder = true, Name = "Demo" };
             context.Snippets.Add(databasedemo);
             context.SaveChanges();
-            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.DatabaseType, OutputPath = @"C:\Generator", IsFloder = false, Name = "DataBase Demo", GeneratorFileName = "@TableName.cs", IsEnabled = true, ParentId = databasedemo.Id, Context = @"public class @TableName{
-                <%! public @ColumnType @ColumnName 
-                !%> 
-            }" });
 
-            var csharpdemo = new Snippet() { DataSourceType = DataSourceType.CSharpType, IsFloder = true, Name = "Csharp Demo Folder" };
-            context.Snippets.Add(csharpdemo);
-            context.SaveChanges();
-            context.Snippets.Add(new Snippet()
-            {
-                DataSourceType = DataSourceType.CSharpType,
-                IsFloder = false,
-                Name = "Csharp Demo",
-                GeneratorFileName = "@ClassName.cs",
-                IsEnabled = true,
-                ParentId = csharpdemo.Id,
-                Context = @"  var option = {
-                //rviceInfo格式为:命名空间.类名.方法名
-				//Slxt.Services为namespace下面的 Slxt.Services
-                serviceInfo:  '@NameSpace.@ClassName.@MethodName',
-                //Javascript对象，键值对形式，直接匹配服务端函数参数。
-                data: {<%! @MethodArgumentName : @MethodArgumentName !%> }
-                }
-                //发起GET请求
-                var vals = MapExt.postJSON(option);
-                if(vals.result){
-                    alert('删除成功');
-                    appGrid.frameElement.Query();
-                }else{
-                    alert('删除失败');
-                } "
+            var contexts = @"
+            using Chloe.Annotations;  
+            using System;  
+            using System.Collections.Generic;  using System.ComponentModel.DataAnnotations;  
+            namespace Core.Repositories.Models  
+            {      
+	            /// <summary>
+	            /// @TableDescription
+	            /// </summary>
+	            public class @TableName      
+	            {           
+		            <%!              
+		            StringBuilder sbs = new StringBuilder();
+		            foreach (var item in columns)              
+		            {                  
+			            if(item.IsIdentity || item.IsPrimarykey)                  
+			            {                     
+				             sbs.AppendLine(""[Column(IsPrimaryKey = true)]"");                      
+				             sbs.AppendLine(""[AutoIncrement]"");                   
+			            }                      
+			            sbs.AppendLine(""///<summary>"");                      
+			            sbs.AppendLine($""///{item.ColumnDescription}"");                      
+			            sbs.AppendLine(""///</summary>"");                      
+			            sbs.AppendLine($""public {item.CSharpType} {((item.IsRequire && item.CSharpType != ""String"") ? ""?"" : """")} {item.ColumnName} {{get;}} {{set;}}"");                  
+		            }              
+		            return sbs.ToString();          
+		            !%>      
+	            }  
+            }";
+
+            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.DatabaseType, OutputPath = @"C:\Generator", IsFloder = false, Name = "ClassDemo",
+                GeneratorFileName = "@TableName.cs", IsEnabled = true, ParentId = databasedemo.Id, 
+                Context = contexts
             });
-
-
-            var xmldemo = new Snippet() { DataSourceType = DataSourceType.XMLType, IsFloder = true, Name = "XML Demo Folder" };
-            context.Snippets.Add(xmldemo);
             context.SaveChanges();
-            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.XMLType, IsFloder = false, Name = "XML Demo", GeneratorFileName = "@DocumentName.cs", IsEnabled = true, ParentId = xmldemo.Id, Context = @" this is className:@ClassName 
-            this is Propertys <%! @PropertyName !%>" });
-
-            context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.StringType, IsFloder = true, Name = "String Demo" });
-
         }
     }
 }

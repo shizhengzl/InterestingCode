@@ -20,6 +20,9 @@ namespace Core.UsuallyCommon.DataBase
 
         public List<DataBase> DataBases { get; set; }
 
+
+        public string ConnectionStrings { get; set; }
+
        
 
         public string DefaultDatabase { get; set; } = "master";

@@ -8,9 +8,9 @@ namespace Core.UsuallyCommon
 {
     public enum DataBaseType
     {
-        SQLServer,
-        MYSQL,
-        Oracle,
-        SQLite
+        SQLServer = 1,
+        MySql = 2,
+        Oracle = 3,
+        SQLite =4
     }
 }

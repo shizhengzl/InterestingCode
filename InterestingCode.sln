@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitProjectALL", "UnitProje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.ConsoleLog", "Core.Console\Core.ConsoleLog.csproj", "{F9C90837-B90C-40CB-A827-1F32FA2B276A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsixGeneratorExtenstion", "VsixGeneratorExtenstion\VsixGeneratorExtenstion.csproj", "{5E953C3E-4873-498A-8E72-FA4A8A21663A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGeneroator", "VsixGeneratorExtenstion\CodeGeneroator.csproj", "{5E953C3E-4873-498A-8E72-FA4A8A21663A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomIntelliSenseExtension", "CustomIntelliSenseExtension\CustomIntelliSenseExtension.csproj", "{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliSenseExtension", "CustomIntelliSenseExtension\IntelliSenseExtension.csproj", "{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

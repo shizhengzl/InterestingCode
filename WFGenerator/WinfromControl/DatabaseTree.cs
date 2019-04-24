@@ -98,7 +98,14 @@ namespace WFGenerator.WinfromControl
                 }
                 else
                 {
-                    if (listSelect.Any(x => x.Equals(tn.Tag)))
+                    var name = string.Empty;
+                    if (tn.Tag is Table)
+                        name = ((Table)tn.Tag).TableName;
+                    if (tn.Tag is Method)
+                        name = ((Method)tn.Tag).MethodName;
+                    if (tn.Tag is Proterty)
+                        name = ((Proterty)tn.Tag).PropertyName;
+                    if (listSelect.Any(x => x.Name == name))
                         listSelect.Remove(tn);
                 }
             }
