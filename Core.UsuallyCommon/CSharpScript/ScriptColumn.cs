@@ -18,9 +18,9 @@ namespace Core.UsuallyCommon
         }
     }
 
-    public static class ScriptRuns
+    public static class ScriptsRuns
     {
-        public static string GetScriptRuns(string snippet, List<Column> columns)
+        public static string GetScriptsRuns(string snippet, List<Column> columns)
         {
             string result = string.Empty;
             try

@@ -34,7 +34,7 @@ namespace WFGenerator
             { 
                 var inittempcontext = item.Replace(SnippetReplace.Start.GetDescription(), string.Empty).Replace(SnippetReplace.End.GetDescription(), string.Empty);
                 
-                context = context.Replace(item, ScriptRuns.GetScriptRuns(inittempcontext, columns)); 
+                context = context.Replace(item, ScriptsRuns.GetScriptsRuns(inittempcontext, columns)); 
             }
             UserDeclareVarbibles(context, columns.FirstOrDefault());
             context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
