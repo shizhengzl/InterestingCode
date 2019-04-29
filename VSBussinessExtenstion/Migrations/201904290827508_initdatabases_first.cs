@@ -3,7 +3,7 @@ namespace VSBussinessExtenstion.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initdatabase : DbMigration
+    public partial class initdatabases_first : DbMigration
     {
         public override void Up()
         {

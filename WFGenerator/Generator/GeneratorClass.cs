@@ -135,9 +135,21 @@ namespace WFGenerator
 
             if (snippet.DataSourceType == DataSourceType.DatabaseType)
             {
-                Table table = listsource.FirstOrDefault().Tag as Table;
-                sh.InitColumn(table);
-                sbResult.AppendLine(DataBaseGenerator(table.Columns, snippet, generatorFile));
+                if(!generatorFile)
+                { 
+                    Table table = listsource.FirstOrDefault().Tag as Table;
+                    sh.InitColumn(table);
+                    sbResult.AppendLine(DataBaseGenerator(table.Columns, snippet, generatorFile));
+                }
+                else
+                {
+                    listsource.ForEach(x=> {
+                        var table = x.Tag as Table;
+                        sh.InitColumn(table);
+                        DataBaseGenerator(table.Columns, snippet, generatorFile);
+                    });
+                }
+                
             }
             if (snippet.DataSourceType == DataSourceType.CSharpType)
             {

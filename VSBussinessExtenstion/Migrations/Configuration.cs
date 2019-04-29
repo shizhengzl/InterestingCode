@@ -332,8 +332,6 @@ namespace VSBussinessExtenstion.Migrations
                                 select table_name as TableName,
                                 table_comment As TableDescription from tables where table_schema = '@DataBaseName'",
                 GetColumnSQL = @"
-                                
-
                                 use @DataBaseName;
                                 SELECT TABLE_NAME 'TableName'
                                 ,ORDINAL_POSITION 'ORDINAL_POSITION'
@@ -345,7 +343,7 @@ namespace VSBussinessExtenstion.Migrations
                                 ,COLUMN_COMMENT 'ColumnDescription'
                                 
                                 FROM INFORMATION_SCHEMA.COLUMNS  
-                                WHERE    TABLE_NAME='@TableName';;
+                                WHERE    TABLE_NAME='@TableName' and table_schema = '@DataBaseName';
                                  "
             });
 
@@ -358,35 +356,38 @@ namespace VSBussinessExtenstion.Migrations
             context.Snippets.Add(databasedemo);
             context.SaveChanges();
 
-            var contexts = @"
-            using Chloe.Annotations;  
-            using System;  
-            using System.Collections.Generic;  using System.ComponentModel.DataAnnotations;  
-            namespace Core.Repositories.Models  
-            {      
-	            /// <summary>
-	            /// @TableDescription
-	            /// </summary>
-	            public class @TableName      
-	            {           
-		            <%!              
-		            StringBuilder sbs = new StringBuilder();
-		            foreach (var item in columns)              
-		            {                  
-			            if(item.IsIdentity || item.IsPrimarykey)                  
-			            {                     
-				             sbs.AppendLine(""[Column(IsPrimaryKey = true)]"");                      
-				             sbs.AppendLine(""[AutoIncrement]"");                   
-			            }                      
-			            sbs.AppendLine(""///<summary>"");                      
-			            sbs.AppendLine($""///{item.ColumnDescription}"");                      
-			            sbs.AppendLine(""///</summary>"");                      
-			            sbs.AppendLine($""public {item.CSharpType} {((item.IsRequire && item.CSharpType != ""String"") ? ""?"" : """")} {item.ColumnName} {{get;}} {{set;}}"");                  
-		            }              
-		            return sbs.ToString();          
-		            !%>      
-	            }  
-            }";
+            var contexts = 
+@"using Chloe.Annotations;  
+using System;  
+using System.Collections.Generic;  
+using System.ComponentModel.DataAnnotations; 
+using System.ComponentModel;			
+namespace Core.Repositories.Models  
+{      
+	/// <summary>
+	/// @TableDescription
+	/// </summary> 
+	public class @TableName      
+	{           
+		<%!              
+		StringBuilder sbs = new StringBuilder();
+		foreach (var item in columns)              
+		{                  
+			if(item.IsIdentity || item.IsPrimarykey)                  
+			{                     
+				 sbs.AppendLine(""[Column(IsPrimaryKey = true)]"");                      
+				 sbs.AppendLine(""[AutoIncrement]"");                   
+			}                      
+			sbs.AppendLine(""///<summary>"");                      
+			sbs.AppendLine($""///{item.ColumnDescription}"");                      
+			sbs.AppendLine(""///</summary>"");      
+			sbs.AppendLine($""[Description(\""{item.ColumnDescription}\"")]"");  					
+			sbs.AppendLine($""public {item.CSharpType} {((item.IsRequire && item.CSharpType != ""String"") ? ""?"" : """")} {item.ColumnName} {{get;set;}}"");                  
+		}              
+		return sbs.ToString();          
+		!%>      
+	}  
+}";
 
             context.Snippets.Add(new Snippet() { DataSourceType = DataSourceType.DatabaseType, OutputPath = @"C:\Generator", IsFloder = false, Name = "ClassDemo",
                 GeneratorFileName = "@TableName.cs", IsEnabled = true, ParentId = databasedemo.Id, 
