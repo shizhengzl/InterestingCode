@@ -107,7 +107,7 @@ namespace VSBussinessExtenstion.Migrations
                 SQLDBType = "SqlDbType.UniqueIdentifier",
                 CSharpType = "Guid",
                 SQLServerType = "uniqueidentifier",
-                MySqlType = "varchar",
+                MySqlType = "uniqueidentifier",
                 OracleType = "",
                 SQLiteType = ""
             });

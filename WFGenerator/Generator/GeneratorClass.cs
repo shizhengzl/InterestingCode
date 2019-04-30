@@ -43,6 +43,8 @@ namespace WFGenerator
                 string filename = (ApplicationVsHelper._applicationObject == null
                  ? string.Empty : ApplicationVsHelper.VsProjectPath) + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
                 GeneratorFile(context, filename);
+
+                ApplicationVsHelper.Open(filename); 
             } 
             return context;
         }
