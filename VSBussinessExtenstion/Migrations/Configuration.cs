@@ -310,19 +310,46 @@ namespace VSBussinessExtenstion.Migrations
                 };
 
                 context.Variables.Add(item); 
-            } 
-            context.ConnectionStrings.RemoveRange(context.ConnectionStrings.ToList());
-            context.ConnectionStrings.Add(new ConnectionString() { Type = Core.UsuallyCommon.DataBaseType.SQLServer, WindowsAuthentication = false, Connection = "SERVER={0};UID={1};PWD={2};DATABASE={3}" });
-
+            }  
             context.SQLConfigs.RemoveRange(context.SQLConfigs.ToList());
             context.SQLConfigs.Add(new SQLConfig()
             {
                 Type = Core.UsuallyCommon.DataBaseType.SQLServer,
                 GetDataBaseSQL = "SELECT name AS DataBaseName FROM sys.sysdatabases ORDER BY name",
-                GetTableSQL = "USE [@DataBaseName] SELECT name AS TableName FROM sys.tables ORDER BY name",
-                GetColumnSQL = @"USE [@DataBaseName]  SELECT a.name as ColumnName,b.name AS Type FROM sys.columns a INNER JOIN sys.types b 
-                                 ON a.system_type_id = b.system_type_id  AND a.user_type_id = b.user_type_id WHERE OBJECT_ID = OBJECT_ID('@TableName')"
-            });
+                GetTableSQL = @"USE [@DataBaseName] select a.name AS TableName,ISNULL(b.value,'') AS TableDescription from sys.tables a LEFT JOIN  sys.extended_properties  b 
+                                on a.object_id = b.major_id AND  b.minor_id = 0 ORDER BY a.name",
+                GetColumnSQL = @"USE [@DataBaseName] 
+                                select
+                                col.name as ColumnName,
+                                col.is_identity IsIdentity,
+                                (case when col.is_nullable = 0 then 1 else 0 end) as IsRequire,
+                                convert(int,col.max_length) as MaxLength,
+                                tp.name as SQLType,
+                                ep.value as ColumnDescription,
+                                convert(bit,(
+                                    select count(*) from sys.sysobjects
+                                    where parent_obj=obj.id
+                                    and name=(
+                                        select top 1 name from sys.sysindexes ind
+                                        inner join sys.sysindexkeys indkey
+                                        on ind.indid=indkey.indid
+                                        and indkey.colid=col.column_id
+                                        and indkey.id=obj.id
+                                        where ind.id=obj.id
+                                        and ind.name like 'PK_%'
+                                    )
+                                )) as IsPrimarykey
+                                from sys.sysobjects obj
+                                inner join sys.columns col
+                                on obj.id = col.object_id
+                                left join sys.systypes tp
+                                on col.system_type_id=tp.xusertype
+                                left join sys.extended_properties ep
+                                on ep.major_id=obj.id
+                                and ep.minor_id=col.column_id
+                                and ep.name='MS_Description'
+                                where obj.name= '@TableName'"
+                                            });
 
             context.SQLConfigs.Add(new SQLConfig()
             {

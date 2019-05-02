@@ -11,10 +11,12 @@ using System.Windows.Forms;
 using VSBussinessExtenstion.DataBaseHelper;
 using DatabaseHelper = Core.UsuallyCommon.DatabaseHelper;
 
+
 namespace WFGenerator
 {
     public class GeneratorClass
     {
+        DefaultSqlite defaultsqlite = new DefaultSqlite();
         public void GeneratorFile(string context, string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -24,6 +26,22 @@ namespace WFGenerator
 
         public string DataBaseGenerator(List<Column> columns, Snippet snippet, Boolean generatorFile)
         {
+            columns = columns.Where(x => x.IsSelect).ToList();
+
+            // 处理controls
+            columns.ForEach(x => {
+                if(!string.IsNullOrEmpty(x.SearchControls))
+                    x.SearchControls = ReplaceDataBase(
+                        defaultsqlite.Controls.FirstOrDefault(y=>y.ControlName == x.SearchControls).ControlText, columns.First(), true);
+                if (!string.IsNullOrEmpty(x.GridControls))
+                    x.GridControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.GridControls).ControlText, columns.First(), true);
+                if (!string.IsNullOrEmpty(x.CreateControls))
+                    x.CreateControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.CreateControls).ControlText, columns.First(), true);
+                if (!string.IsNullOrEmpty(x.ModifyControls))
+                    x.ModifyControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.ModifyControls).ControlText, columns.First(), true);
+            }
+            ); 
+
             if (string.IsNullOrEmpty(snippet.OutputPath))
                 snippet.OutputPath = @"C:\Generator\";
             string context = snippet.Context;
@@ -50,7 +68,7 @@ namespace WFGenerator
 
         public string UserDeclareVarbibles(string context, Column column)
         { 
-            var defaultsqlite = new DefaultSqlite();
+            
             var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
             foreach (var varbable in noSystemVarbables)
             {
@@ -139,13 +157,18 @@ namespace WFGenerator
                 { 
                     Table table = listsource.FirstOrDefault().Tag as Table;
                     sh.InitColumn(table);
+
+                    SelectColumn selectColumn = new SelectColumn(table);
+                    DialogResult diaResult = selectColumn.ShowDialog();
                     sbResult.AppendLine(DataBaseGenerator(table.Columns, snippet, generatorFile));
                 }
                 else
                 {
                     listsource.ForEach(x=> {
                         var table = x.Tag as Table;
-                        sh.InitColumn(table);
+                        sh.InitColumn(table); SelectColumn selectColumn = new SelectColumn(table);
+                        DialogResult diaResult = selectColumn.ShowDialog();
+
                         DataBaseGenerator(table.Columns, snippet, generatorFile);
                     });
                 }

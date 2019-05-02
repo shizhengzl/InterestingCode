@@ -20,7 +20,12 @@ namespace WFGenerator
 
         public bool IsInsert { get; set; }
 
-        public List<Type> enumList = new List<Type>() { typeof(DataBaseType), typeof(DataSourceType), typeof(CharStatu) };
+        public List<Type> enumList = new List<Type>() {
+            typeof(DataBaseType),
+            typeof(DataSourceType),
+            typeof(CharStatu),
+            typeof(ControlMode)
+        };
         public WindowExtension(T objects, bool isInsert,GeneartorTools tools)
         {
             IsInsert = isInsert;

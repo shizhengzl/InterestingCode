@@ -37,24 +37,27 @@
             this.groupGenerator = new System.Windows.Forms.GroupBox();
             this.tabControlGeneartor = new System.Windows.Forms.TabControl();
             this.tabPageStruct = new System.Windows.Forms.TabPage();
-            this.txtGenerator = new System.Windows.Forms.TextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tGenerator = new System.Windows.Forms.ToolStripButton();
             this.tabPageData = new System.Windows.Forms.TabPage();
             this.PanSelectAndSnippet = new System.Windows.Forms.Panel();
             this.gbSnippet = new System.Windows.Forms.GroupBox();
-            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.CMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CMS新建模板 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CMS修改 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CMS删除 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CMS启用 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CMS禁用 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CMS看生成代码 = new System.Windows.Forms.ToolStripMenuItem();
             this.bgselect = new System.Windows.Forms.GroupBox();
             this.tabControlSelect = new System.Windows.Forms.TabControl();
             this.tabPageSelectSQL = new System.Windows.Forms.TabPage();
             this.gtree = new System.Windows.Forms.GroupBox();
-            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.toolStripTreeServer = new System.Windows.Forms.ToolStrip();
             this.tsAdd = new System.Windows.Forms.ToolStripButton();
             this.tsRemove = new System.Windows.Forms.ToolStripButton();
             this.tsRefresh = new System.Windows.Forms.ToolStripButton();
             this.tabPageSelectClass = new System.Windows.Forms.TabPage();
-            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
             this.tabPageSelectXML = new System.Windows.Forms.TabPage();
             this.TreeViewXML = new System.Windows.Forms.TreeView();
             this.gbleft = new System.Windows.Forms.GroupBox();
@@ -83,7 +86,6 @@
             this.btnCheckSQL = new System.Windows.Forms.Button();
             this.btnExportSQL = new System.Windows.Forms.Button();
             this.groupDataSourceOne = new System.Windows.Forms.GroupBox();
-            this.DataBaseSearch = new WFGenerator.WinfromControl.DatabaseTree();
             this.groupSearch = new System.Windows.Forms.GroupBox();
             this.comTragetDatabase = new System.Windows.Forms.ComboBox();
             this.comSourceDatabase = new System.Windows.Forms.ComboBox();
@@ -96,6 +98,11 @@
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
+            this.SnippetTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.ServerTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.ClassTree = new WFGenerator.WinfromControl.DatabaseTree();
+            this.DataBaseSearch = new WFGenerator.WinfromControl.DatabaseTree();
+            this.txtGenerator = new WFGenerator.SyntaxTextBox();
             this.statusStripMessage.SuspendLayout();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
@@ -105,6 +112,7 @@
             this.toolStrip1.SuspendLayout();
             this.PanSelectAndSnippet.SuspendLayout();
             this.gbSnippet.SuspendLayout();
+            this.CMS.SuspendLayout();
             this.bgselect.SuspendLayout();
             this.tabControlSelect.SuspendLayout();
             this.tabPageSelectSQL.SuspendLayout();
@@ -137,7 +145,7 @@
             // 
             // tsmessage
             // 
-            this.tsmessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.tsmessage.ForeColor = System.Drawing.Color.Red;
             this.tsmessage.Name = "tsmessage";
             this.tsmessage.Size = new System.Drawing.Size(61, 17);
             this.tsmessage.Text = "Message";
@@ -205,18 +213,6 @@
             this.tabPageStruct.Text = "Struct Generator";
             this.tabPageStruct.UseVisualStyleBackColor = true;
             // 
-            // txtGenerator
-            // 
-            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtGenerator.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtGenerator.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.txtGenerator.Location = new System.Drawing.Point(3, 28);
-            this.txtGenerator.Multiline = true;
-            this.txtGenerator.Name = "txtGenerator";
-            this.txtGenerator.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtGenerator.Size = new System.Drawing.Size(501, 554);
-            this.txtGenerator.TabIndex = 1;
-            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -267,20 +263,63 @@
             this.gbSnippet.TabStop = false;
             this.gbSnippet.Text = "Snippet";
             // 
-            // SnippetTree
+            // CMS
             // 
-            this.SnippetTree.CheckBoxes = true;
-            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SnippetTree.listSnippet = null;
-            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
-            this.SnippetTree.Name = "SnippetTree";
-            this.SnippetTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
-            this.SnippetTree.sh = null;
-            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
-            this.SnippetTree.sqlite = null;
-            this.SnippetTree.TabIndex = 0;
-            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
-            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
+            this.CMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CMS新建模板,
+            this.CMS修改,
+            this.CMS删除,
+            this.CMS启用,
+            this.CMS禁用,
+            this.CMS看生成代码});
+            this.CMS.Name = "CMS";
+            this.CMS.Size = new System.Drawing.Size(137, 136);
+            // 
+            // CMS新建模板
+            // 
+            this.CMS新建模板.Image = ((System.Drawing.Image)(resources.GetObject("CMS新建模板.Image")));
+            this.CMS新建模板.Name = "CMS新建模板";
+            this.CMS新建模板.Size = new System.Drawing.Size(136, 22);
+            this.CMS新建模板.Text = "新建模板";
+            // 
+            // CMS修改
+            // 
+            this.CMS修改.Image = ((System.Drawing.Image)(resources.GetObject("CMS修改.Image")));
+            this.CMS修改.Name = "CMS修改";
+            this.CMS修改.Size = new System.Drawing.Size(136, 22);
+            this.CMS修改.Text = "修改";
+            // 
+            // CMS删除
+            // 
+            this.CMS删除.Image = ((System.Drawing.Image)(resources.GetObject("CMS删除.Image")));
+            this.CMS删除.Name = "CMS删除";
+            this.CMS删除.Size = new System.Drawing.Size(136, 22);
+            this.CMS删除.Text = "删除";
+            this.CMS删除.Click += new System.EventHandler(this.CMS删除_Click);
+            // 
+            // CMS启用
+            // 
+            this.CMS启用.Image = ((System.Drawing.Image)(resources.GetObject("CMS启用.Image")));
+            this.CMS启用.Name = "CMS启用";
+            this.CMS启用.Size = new System.Drawing.Size(136, 22);
+            this.CMS启用.Text = "启用";
+            this.CMS启用.Click += new System.EventHandler(this.CMS启用_Click);
+            // 
+            // CMS禁用
+            // 
+            this.CMS禁用.Image = ((System.Drawing.Image)(resources.GetObject("CMS禁用.Image")));
+            this.CMS禁用.Name = "CMS禁用";
+            this.CMS禁用.Size = new System.Drawing.Size(136, 22);
+            this.CMS禁用.Text = "禁用";
+            this.CMS禁用.Click += new System.EventHandler(this.CMS禁用_Click);
+            // 
+            // CMS看生成代码
+            // 
+            this.CMS看生成代码.Image = ((System.Drawing.Image)(resources.GetObject("CMS看生成代码.Image")));
+            this.CMS看生成代码.Name = "CMS看生成代码";
+            this.CMS看生成代码.Size = new System.Drawing.Size(136, 22);
+            this.CMS看生成代码.Text = "看生成代码";
+            this.CMS看生成代码.Click += new System.EventHandler(this.CMS看生成代码_Click);
             // 
             // bgselect
             // 
@@ -327,20 +366,6 @@
             this.gtree.TabIndex = 2;
             this.gtree.TabStop = false;
             this.gtree.Text = "Tree";
-            // 
-            // ServerTree
-            // 
-            this.ServerTree.CheckBoxes = true;
-            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ServerTree.listSnippet = null;
-            this.ServerTree.Location = new System.Drawing.Point(3, 42);
-            this.ServerTree.Name = "ServerTree";
-            this.ServerTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
-            this.ServerTree.sh = null;
-            this.ServerTree.Size = new System.Drawing.Size(287, 235);
-            this.ServerTree.sqlite = null;
-            this.ServerTree.TabIndex = 1;
-            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // toolStripTreeServer
             // 
@@ -389,20 +414,6 @@
             this.tabPageSelectClass.TabIndex = 1;
             this.tabPageSelectClass.Text = "Class";
             this.tabPageSelectClass.UseVisualStyleBackColor = true;
-            // 
-            // ClassTree
-            // 
-            this.ClassTree.CheckBoxes = true;
-            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ClassTree.listSnippet = null;
-            this.ClassTree.Location = new System.Drawing.Point(3, 3);
-            this.ClassTree.Name = "ClassTree";
-            this.ClassTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
-            this.ClassTree.sh = null;
-            this.ClassTree.Size = new System.Drawing.Size(293, 280);
-            this.ClassTree.sqlite = null;
-            this.ClassTree.TabIndex = 0;
-            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
             // 
             // tabPageSelectXML
             // 
@@ -719,20 +730,6 @@
             this.groupDataSourceOne.TabStop = false;
             this.groupDataSourceOne.Text = "DataSource";
             // 
-            // DataBaseSearch
-            // 
-            this.DataBaseSearch.CheckBoxes = true;
-            this.DataBaseSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DataBaseSearch.listSnippet = null;
-            this.DataBaseSearch.Location = new System.Drawing.Point(3, 195);
-            this.DataBaseSearch.Name = "DataBaseSearch";
-            this.DataBaseSearch.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
-            this.DataBaseSearch.sh = null;
-            this.DataBaseSearch.Size = new System.Drawing.Size(388, 433);
-            this.DataBaseSearch.sqlite = null;
-            this.DataBaseSearch.TabIndex = 1;
-            this.DataBaseSearch.treeType = WFGenerator.TreeType.DataBase;
-            // 
             // groupSearch
             // 
             this.groupSearch.Controls.Add(this.comTragetDatabase);
@@ -856,6 +853,80 @@
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
             // 
+            // SnippetTree
+            // 
+            this.SnippetTree.CheckBoxes = true;
+            this.SnippetTree.ContextMenuStrip = this.CMS;
+            this.SnippetTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SnippetTree.listSnippet = null;
+            this.SnippetTree.Location = new System.Drawing.Point(3, 17);
+            this.SnippetTree.Name = "SnippetTree";
+            this.SnippetTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.SnippetTree.sh = null;
+            this.SnippetTree.Size = new System.Drawing.Size(307, 279);
+            this.SnippetTree.sqlite = null;
+            this.SnippetTree.TabIndex = 0;
+            this.SnippetTree.treeType = WFGenerator.TreeType.DataBase;
+            this.SnippetTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SnippetTree_NodeMouseDoubleClick);
+            // 
+            // ServerTree
+            // 
+            this.ServerTree.CheckBoxes = true;
+            this.ServerTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ServerTree.listSnippet = null;
+            this.ServerTree.Location = new System.Drawing.Point(3, 42);
+            this.ServerTree.Name = "ServerTree";
+            this.ServerTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.ServerTree.sh = null;
+            this.ServerTree.Size = new System.Drawing.Size(287, 235);
+            this.ServerTree.sqlite = null;
+            this.ServerTree.TabIndex = 1;
+            this.ServerTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
+            // ClassTree
+            // 
+            this.ClassTree.CheckBoxes = true;
+            this.ClassTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ClassTree.listSnippet = null;
+            this.ClassTree.Location = new System.Drawing.Point(3, 3);
+            this.ClassTree.Name = "ClassTree";
+            this.ClassTree.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.ClassTree.sh = null;
+            this.ClassTree.Size = new System.Drawing.Size(293, 280);
+            this.ClassTree.sqlite = null;
+            this.ClassTree.TabIndex = 0;
+            this.ClassTree.treeType = WFGenerator.TreeType.DataBase;
+            // 
+            // DataBaseSearch
+            // 
+            this.DataBaseSearch.CheckBoxes = true;
+            this.DataBaseSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DataBaseSearch.listSnippet = null;
+            this.DataBaseSearch.Location = new System.Drawing.Point(3, 195);
+            this.DataBaseSearch.Name = "DataBaseSearch";
+            this.DataBaseSearch.selectDataSoruceType = WFGenerator.SelectDataSoruceType.DataBase;
+            this.DataBaseSearch.sh = null;
+            this.DataBaseSearch.Size = new System.Drawing.Size(388, 433);
+            this.DataBaseSearch.sqlite = null;
+            this.DataBaseSearch.TabIndex = 1;
+            this.DataBaseSearch.treeType = WFGenerator.TreeType.DataBase;
+            // 
+            // txtGenerator
+            // 
+            this.txtGenerator.AcceptsTab = true;
+            this.txtGenerator.CaseSensitive = false;
+            this.txtGenerator.ConfigFile = "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\VisualStudio\\15.0_6bad1949\\Project" +
+    "Assemblies\\v0kskxfq01\\csharp.xml";
+            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenerator.FilterAutoComplete = true;
+            this.txtGenerator.Location = new System.Drawing.Point(3, 28);
+            this.txtGenerator.MaxUndoRedoSteps = 50;
+            this.txtGenerator.Name = "txtGenerator";
+            this.txtGenerator.Size = new System.Drawing.Size(501, 554);
+            this.txtGenerator.TabIndex = 1;
+            this.txtGenerator.Text = "";
+            this.txtGenerator.WordWrap = false;
+            // 
             // GeneartorTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -863,6 +934,7 @@
             this.ClientSize = new System.Drawing.Size(1215, 686);
             this.Controls.Add(this.tabControlALL);
             this.Controls.Add(this.statusStripMessage);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GeneartorTools";
             this.Text = "GeneratorTools";
             this.Load += new System.EventHandler(this.GeneartorTools_Load);
@@ -878,6 +950,7 @@
             this.toolStrip1.PerformLayout();
             this.PanSelectAndSnippet.ResumeLayout(false);
             this.gbSnippet.ResumeLayout(false);
+            this.CMS.ResumeLayout(false);
             this.bgselect.ResumeLayout(false);
             this.tabControlSelect.ResumeLayout(false);
             this.tabPageSelectSQL.ResumeLayout(false);
@@ -951,7 +1024,6 @@
         private System.Windows.Forms.TabControl tabControlGeneartor;
         private System.Windows.Forms.TabPage tabPageStruct;
         private System.Windows.Forms.TabPage tabPageData;
-        private System.Windows.Forms.TextBox txtGenerator;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tGenerator;
         private System.Windows.Forms.TabControl tabControlSource;
@@ -977,6 +1049,14 @@
         private System.Windows.Forms.ComboBox comTragetDatabase;
         private System.Windows.Forms.ComboBox comSourceDatabase;
         private System.Windows.Forms.ToolStripStatusLabel tsmessage;
+        private System.Windows.Forms.ContextMenuStrip CMS;
+        private System.Windows.Forms.ToolStripMenuItem CMS新建模板;
+        private System.Windows.Forms.ToolStripMenuItem CMS修改;
+        private System.Windows.Forms.ToolStripMenuItem CMS删除;
+        private System.Windows.Forms.ToolStripMenuItem CMS启用;
+        private System.Windows.Forms.ToolStripMenuItem CMS禁用;
+        private System.Windows.Forms.ToolStripMenuItem CMS看生成代码;
+        private SyntaxTextBox txtGenerator;
     }
 }
 

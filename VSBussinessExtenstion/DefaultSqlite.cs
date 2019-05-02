@@ -9,7 +9,7 @@
     using Core.UsuallyCommon.DataBase; 
     using MySql.Data.EntityFramework;
 
-    [DbConfigurationType(typeof(MySqlEFConfiguration))]
+    //[DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class DefaultSqlite : DbContext
     {
         //您的上下文已配置为从您的应用程序的配置文件(App.config 或 Web.config)
@@ -42,18 +42,26 @@
         public virtual DbSet<DataTypeConfig> DataTypeConfigs { get; set; }
         public virtual DbSet<DataBaseAddress> DataBaseAddresses { get; set; }
         public virtual DbSet<Variable> Variables { get; set; }
-        public virtual DbSet<ConnectionString> ConnectionStrings { get; set; }
 
         public virtual DbSet<Snippet> Snippets { get; set; }
 
         public virtual DbSet<Intellisence> Intellisences { get; set; }
-    }
 
-    //public class MyEntity
-    //{
-    //    public int Id { get; set; }
-    //    public string Name { get; set; }
-    //}
+        public virtual DbSet<Control> Controls { get; set; }
+    }
+    
+    public class Control
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public string ControlName { get; set; } 
+
+        public string ControlText { get; set; } 
+        public string CsharpType { get; set; }
+
+        public ControlMode ControlMode { get; set; }
+    }
 
     public class Intellisence
     {
@@ -100,17 +108,7 @@
         public bool IsSelectGenerator { get; set; }
     }
 
-    public class ConnectionString
-    {
-        [Key]
-        public Int32 Id { get; set; }
 
-        public DataBaseType Type { get; set; }
-
-        public string Connection { get; set; }
-
-        public bool WindowsAuthentication { get; set; }
-    }
 
     public class SQLConfig
     {
@@ -180,5 +178,12 @@
         ToUpper = 2,
         ToLower = 1,
         Default = 0
+    }
+
+    public enum ControlMode
+    {
+        Search = 0 ,
+        Create = 1 ,
+        Modify = 2
     }
 }

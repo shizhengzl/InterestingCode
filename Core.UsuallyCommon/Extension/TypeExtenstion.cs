@@ -11,7 +11,25 @@ using System.Threading.Tasks;
 namespace Core.UsuallyCommon
 {
     public static class TypeExtenstion
-    { 
+    {
+        public static void SetPropertyValue(this object instance, string propertyName, object value)
+        {
+            var propertyInfos = instance.GetType().GetProperties().ToList();
+            var property = (propertyInfos.FirstOrDefault(x => x.Name == propertyName));
+            if (property != null)
+            {
+                if (IsNullableType(property.PropertyType))
+                    property.SetValue(instance, value, null);
+                else
+                    property.SetValue(instance, Convert.ChangeType(value, property.PropertyType), null);
+            }
+
+        }
+
+        private static bool IsNullableType(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
+        }
 
         // 获取文件扩展名
         public static string GetFileExtension(this object obj)
