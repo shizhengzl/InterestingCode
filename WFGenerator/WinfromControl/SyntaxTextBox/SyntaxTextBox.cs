@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.UsuallyCommon;
 using System.Xml.Serialization;
-using System.Drawing;
+using System.Drawing; 
 
 namespace WFGenerator
 {
@@ -248,7 +248,8 @@ namespace WFGenerator
             char[] sperators = mSeperators.GetAsCharArray();
 
             //Replacing "\" to "\\" for RTF...
-            string[] lines = Text.Replace("\\", "\\\\").Replace("{", "\\{").Replace("}", "\\}").Split('\n');
+            string[] lines = Text.Replace("\\", "\\\\").Replace("{", "\\{").Replace("}", "\\}")
+                .Split('\n');
             for (int lineCounter = 0; lineCounter < lines.Length; lineCounter++)
             {
                 if (lineCounter != 0)
@@ -256,7 +257,12 @@ namespace WFGenerator
                     AddNewLine(sb);
                 }
                 string line = lines[lineCounter];
-                string[] tokens = mCaseSesitive ? line.Split(sperators) : line.ToUpper().Split(sperators);
+                string[] tokens = mCaseSesitive ? line.Split(sperators
+                    //,StringSplitOptions.RemoveEmptyEntries
+                    )
+                    : line.ToUpper().Split(sperators
+                    //, StringSplitOptions.RemoveEmptyEntries
+                    );
                 if (tokens.Length == 0)
                 {
                     sb.Append(line);
@@ -361,7 +367,7 @@ namespace WFGenerator
                         if (bAddToken)
                         {
                             //Print text with default settings...
-                            sb.Append(line.Substring(i, curToken.Length));
+                           sb.Append(line.Substring(i, curToken.Length));
                             i += curToken.Length;
                         }
                     }
@@ -434,12 +440,14 @@ namespace WFGenerator
                         {
                             switch ((Keys)(int)m.WParam)
                             {
-                                case Keys.Down:
+                                case Keys.Down: 
+                                case Keys.Right:
+
                                     {
                                         if (mAutoForm.Items.Count != 0 && mAutoForm.SelectedIndex < mAutoForm.Items.Count - 1)
                                             mAutoForm.SelectedIndex = (mAutoForm.SelectedIndex + 1) % mAutoForm.Items.Count;
                                         return;
-                                    }
+                                    } 
                                 case Keys.Up:
                                     {
                                         if (mAutoForm.Items.Count != 0 && mAutoForm.SelectedIndex > 0)
@@ -470,6 +478,7 @@ namespace WFGenerator
                                     }
                                 case Keys.Tab:
                                 case Keys.Enter:
+                                case Keys.Space:
                                     {
                                         AcceptAutoCompleteItem();
                                         return;
@@ -485,8 +494,9 @@ namespace WFGenerator
                         else
                         {
                             // ctrl + shift + space
-                            if (((Keys)(int)m.WParam == Keys.Space) &&
-                                ((Win32.GetKeyState(Win32.VK_CONTROL) & Win32.KS_KEYDOWN) != 0))
+                            if (((Keys)(int)m.WParam == Keys.OemPeriod)
+                                 || (((Keys)(int)m.WParam == Keys.J) && ((Win32.GetKeyState(Win32.VK_CONTROL) & Win32.KS_KEYDOWN) != 0))
+                                )
                             {
                                 CompleteWord();
                             }
@@ -756,6 +766,7 @@ namespace WFGenerator
         /// </summary>
         private void SetAutoCompleteSize()
         {
+            mAutoForm.Width = 600;
             mAutoForm.Height = Math.Min(
                 Math.Max(mAutoForm.Items.Count, 1) * mAutoForm.ItemHeight + 4,
                 mAutoForm.MaximumSize.Height);
@@ -781,10 +792,10 @@ namespace WFGenerator
             Screen screen = Screen.FromPoint(cursorLocation);
             Point optimalLocation = new Point(PointToScreen(cursorLocation).X - 15, (int)(PointToScreen(cursorLocation).Y + Font.Size * 2 + 2));
             Rectangle desiredPlace = new Rectangle(optimalLocation, mAutoForm.Size);
-            desiredPlace.Width = 152;
+            desiredPlace.Width = 250;
             if (desiredPlace.Left < screen.Bounds.Left)
             {
-                desiredPlace.X = screen.Bounds.Left;
+                desiredPlace.X = screen.Bounds.Left ;
             }
             if (desiredPlace.Right > screen.Bounds.Right)
             {
@@ -796,8 +807,10 @@ namespace WFGenerator
             }
             if (!moveHorizontly)
             {
-                desiredPlace.X = mAutoForm.Left;
+                desiredPlace.X = mAutoForm.Left ;
             }
+
+            desiredPlace.X = desiredPlace.X + 20;
 
             mAutoForm.Bounds = desiredPlace;
         }

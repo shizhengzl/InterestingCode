@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Specialized;
@@ -34,6 +34,7 @@ namespace WFGenerator
             get
             {
                 if (lstCompleteItems.SelectedItems.Count == 0) return null;
+                //lstCompleteItems.SelectedItems[0].BackColor = Color.SkyBlue;
                 return (string)lstCompleteItems.SelectedItems[0].Text;
             }
         }
@@ -71,11 +72,13 @@ namespace WFGenerator
             // 
             // lstCompleteItems
             // 
-            this.lstCompleteItems.BackColor = System.Drawing.Color.SteelBlue;
+            this.lstCompleteItems.BackColor = System.Drawing.Color.White;
+            this.lstCompleteItems.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstCompleteItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colHeader});
             this.lstCompleteItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstCompleteItems.Font = new System.Drawing.Font("����", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lstCompleteItems.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lstCompleteItems.ForeColor = System.Drawing.Color.Red;
             this.lstCompleteItems.FullRowSelect = true;
             this.lstCompleteItems.GridLines = true;
             this.lstCompleteItems.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
@@ -84,27 +87,29 @@ namespace WFGenerator
             this.lstCompleteItems.Location = new System.Drawing.Point(0, 0);
             this.lstCompleteItems.MultiSelect = false;
             this.lstCompleteItems.Name = "lstCompleteItems";
-            this.lstCompleteItems.Size = new System.Drawing.Size(250, 300);
+            this.lstCompleteItems.Size = new System.Drawing.Size(380, 300);
             this.lstCompleteItems.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstCompleteItems.TabIndex = 1;
             this.lstCompleteItems.UseCompatibleStateImageBehavior = false;
             this.lstCompleteItems.View = System.Windows.Forms.View.Details;
             this.lstCompleteItems.DoubleClick += new System.EventHandler(this.lstCompleteItems_DoubleClick);
             this.lstCompleteItems.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lstCompleteItems_KeyUp);
+            this.lstCompleteItems.Width = 380;
+            this.lstCompleteItems.SelectedIndexChanged += LstCompleteItems_SelectedIndexChanged;
             // 
             // colHeader
             // 
-            this.colHeader.Width = 188;
+            this.colHeader.Width = 380;
             // 
             // AutoCompleteForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
-            this.ClientSize = new System.Drawing.Size(250, 300);
+            this.ClientSize = new System.Drawing.Size(380, 300);
             this.ControlBox = false;
             this.Controls.Add(this.lstCompleteItems);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(250, 300);
+            this.MaximumSize = new System.Drawing.Size(380, 300);
             this.MinimizeBox = false;
             this.Name = "AutoCompleteForm";
             this.ShowInTaskbar = false;
@@ -115,7 +120,22 @@ namespace WFGenerator
             this.ResumeLayout(false);
 
         }
-		#endregion
+
+        private void LstCompleteItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //lstCompleteItems.SelectedItems[0].BackColor = Color.SkyBlue;
+            if (this.lstCompleteItems.SelectedItems.Count > 0)
+            {
+
+                lstCompleteItems.SelectedItems[0].SubItems[0].ForeColor = Color.Blue;
+
+            
+
+      
+            }
+          
+        }
+        #endregion
 
         ///////////////////////////////////////////////////////////////////////
         ///
@@ -169,6 +189,8 @@ namespace WFGenerator
 
             // ColumnHeader control ??? No use ???
             colHeader.Width = lstCompleteItems.Width - 20;
+
+            
         }
 
         void AcceptText()

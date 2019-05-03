@@ -51,6 +51,18 @@ namespace WFGenerator
             }
         }
 
+        public static void Close(string filePath)
+        {
+            try
+            {
+                _applicationObject.ActiveDocument.Close();
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+            }
+        }
+
         // 打开文件
         public static void Open(string name)
         {

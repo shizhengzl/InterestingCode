@@ -3,6 +3,8 @@ using System.Collections;
 using System.Xml.Serialization;
 using System.Drawing;
 using System.Windows.Forms;
+using Core.UsuallyCommon.DataBase;
+using System.Linq;
 
 namespace WFGenerator
 {
@@ -12,7 +14,7 @@ namespace WFGenerator
     [Serializable()]
     public class DescriptorCollection : ILoadDefaultData, IXmlSerializable
 	{
-		private ArrayList mInnerList = new ArrayList();
+		public ArrayList mInnerList = new ArrayList();
 
         public DescriptorCollection()
 		{
@@ -162,8 +164,10 @@ namespace WFGenerator
 
             Add(new Descriptor("new",       Color.Blue,      null, DescriptorType.Word,         DescriptorRecognition.WholeWord,  true));
             Add(new Descriptor("this",      Color.Blue,      null, DescriptorType.Word,         DescriptorRecognition.WholeWord,  true));
-            Add(new Descriptor("<%", Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
-            Add(new Descriptor("%>", Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
+            Add(new Descriptor("<%!", Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
+            Add(new Descriptor("!%>", Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
+
+          
         }
         #endregion
 
@@ -194,6 +198,12 @@ namespace WFGenerator
                             mInnerList.Add(desc);
                     }
                 }
+
+                typeof(Column).GetProperties().ToList().ForEach(x => {
+                    mInnerList.Add(new Descriptor(x.Name, Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
+
+                });
+
             }
             catch (Exception ex)
             {

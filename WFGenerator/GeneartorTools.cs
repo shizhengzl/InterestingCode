@@ -33,7 +33,7 @@ namespace WFGenerator
     public partial class GeneartorTools : Form
     {
         //实例化Logger对象，默认logger的名称是当前类的名称（包括类所在的命名空间名称）
-        Logger logger = LogManager.GetCurrentClassLogger();
+        Logger logger = LogManager.GetLogger("NLogs");
         public GeneartorTools(DTE2 applicationObject = null)
         {
             ApplicationVsHelper._applicationObject = applicationObject;
@@ -58,13 +58,15 @@ namespace WFGenerator
 
             ClassTree.ImageList = imageList;
             ClassTree.treeType = TreeType.Class;
+
+            generatorClass = new GeneratorClass(this.tsmessage);
         }
 
         #region Variabled 
         public DefaultSqlite sqlite = new DefaultSqlite();
         public ServicesAddressHelper sh = new ServicesAddressHelper();
         public List<Table> listAllTalbe = new List<Table>();
-        public GeneratorClass generatorClass = new GeneratorClass();
+        public GeneratorClass generatorClass { get; set; }
         #endregion
 
         #region SystemConfig
@@ -608,6 +610,40 @@ namespace WFGenerator
                     ShowText(snippet);
                 }
             }
+        }
+
+        private void SnippetTree_MouseDown(object sender, MouseEventArgs e)
+        {
+            TreeNode node = SnippetTree.GetNodeAt(e.X, e.Y);
+            if (node != null)
+            {
+                SnippetTree.SelectedNode = node;
+                Snippet sp = (Snippet)node.Tag;
+                this.CMS新建模板.Visible = sp.IsFloder;
+            }
+            else
+                this.CMS新建模板.Visible = false;
+        }
+
+        private void CMS新建模板_Click(object sender, EventArgs e)
+        { 
+            Snippet sp = (Snippet)SnippetTree.SelectedNode.Tag;
+
+            SetSnippet ss = new SetSnippet(null, sp);
+            ss.ShowDialog();
+            SnippetTree.Refreshs();
+        }
+
+        private void CMS修改_Click(object sender, EventArgs e)
+        {
+            Snippet sp = (Snippet)SnippetTree.SelectedNode.Tag;
+            Snippet parent = null;
+            var parentNote = SnippetTree.SelectedNode.Parent;
+            if (parentNote != null)
+                parent = (Snippet)parentNote.Tag;
+            SetSnippet ss = new SetSnippet(sp, parent);
+            ss.ShowDialog();
+            SnippetTree.Refreshs();
         }
     }
 

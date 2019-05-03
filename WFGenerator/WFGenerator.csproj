@@ -173,6 +173,12 @@
     <Compile Include="SelectColumn.designer.cs">
       <DependentUpon>SelectColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="SetSnippet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetSnippet.Designer.cs">
+      <DependentUpon>SetSnippet.cs</DependentUpon>
+    </Compile>
     <Compile Include="WinfromControl\Combobox\PerPixelAlphaForm.cs" />
     <Compile Include="WinfromControl\Combobox\TaskNotifier.cs">
       <SubType>Form</SubType>
@@ -227,6 +233,9 @@
     </Compile>
     <EmbeddedResource Include="SelectColumn.resx">
       <DependentUpon>SelectColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetSnippet.resx">
+      <DependentUpon>SetSnippet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinfromControl\Combobox\TreeCombox\TreeComboBox.resx">
       <DependentUpon>TreeComboBox.cs</DependentUpon>
