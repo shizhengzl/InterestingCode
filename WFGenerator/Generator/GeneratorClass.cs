@@ -42,18 +42,20 @@ namespace WFGenerator
                 {
                     if (!string.IsNullOrEmpty(x.SearchControls))
                         x.SearchControls = ReplaceDataBase(
-                            defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.SearchControls).ControlText, columns.First(), true);
+                            defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.SearchControls).ControlText, x, true);
                     if (!string.IsNullOrEmpty(x.GridControls))
-                        x.GridControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.GridControls).ControlText, columns.First(), true);
+                        x.GridControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.GridControls).ControlText, x, true);
                     if (!string.IsNullOrEmpty(x.CreateControls))
-                        x.CreateControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.CreateControls).ControlText, columns.First(), true);
+                        x.CreateControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.CreateControls).ControlText, x, true);
                     if (!string.IsNullOrEmpty(x.ModifyControls))
-                        x.ModifyControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.ModifyControls).ControlText, columns.First(), true);
+                        x.ModifyControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.ModifyControls).ControlText, x, true);
                 }
                 );
 
                 if (string.IsNullOrEmpty(snippet.OutputPath))
                     snippet.OutputPath = @"C:\Generator\";
+                if (string.IsNullOrEmpty(snippet.GeneratorFileName))
+                    snippet.GeneratorFileName = "@TableName.cs";
                 string context = snippet.Context;
                 var listReplace = StringHelper.GetStringListByStartAndEndInner(context, SnippetReplace.Start.GetDescription(), SnippetReplace.End.GetDescription());
 
@@ -78,10 +80,16 @@ namespace WFGenerator
                 GeneratorFile(context, filename); 
 
                 if(ApplicationVsHelper._applicationObject != null)
-                { 
-                    ApplicationVsHelper.Open(filename);
-                    if (!generatorFile) 
-                        ApplicationVsHelper.Close(filename);
+                {
+                    var ext = filename.GetFileExtension();
+                    List<string> vs = new List<string>() { ".cs",".js",".aspx",".cshtml"};
+                    if (vs.Any(x=>x == ext))
+                    {
+                        ApplicationVsHelper.Open(filename);
+                        if (!generatorFile)
+                            ApplicationVsHelper.Close(filename);
+                    }
+              
                 }
                 context = IoHelper.FileReader(filename);
                 messages.Text = $"生成完成........";

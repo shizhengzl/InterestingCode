@@ -61,6 +61,8 @@
         public string CsharpType { get; set; }
 
         public ControlMode ControlMode { get; set; }
+
+        public bool IsDefault { get; set; }
     }
 
     public class Intellisence
@@ -183,7 +185,8 @@
     public enum ControlMode
     {
         Search = 0 ,
-        Create = 1 ,
-        Modify = 2
+        Grid = 1 ,
+        Create = 2 ,
+        Modify = 3
     }
 }

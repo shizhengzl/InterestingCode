@@ -322,7 +322,7 @@ namespace VSBussinessExtenstion.Migrations
                                 select
                                 col.name as ColumnName,
                                 col.is_identity IsIdentity,
-                                (case when col.is_nullable = 0 then 1 else 0 end) as IsRequire,
+                                convert(bit,(case when col.is_nullable = 0 then 1 else 0 end)) as IsRequire,
                                 convert(int,col.max_length) as MaxLength,
                                 tp.name as SQLType,
                                 ep.value as ColumnDescription,
@@ -375,8 +375,9 @@ namespace VSBussinessExtenstion.Migrations
             });
 
             context.DataBaseAddresses.RemoveRange(context.DataBaseAddresses.ToList());
-            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress() { Address = "172.18.132.141", ConnectionStrings= "Data Source=172.18.132.141;port=3306;Initial Catalog=MisSystem;uid=root;password=123456;Charset=utf8" ,Password = "123456", User = "root", DefaultDatabase = "MisSystem", DBType = Core.UsuallyCommon.DataBaseType.MySql });
-
+            context.DataBaseAddresses.Add(new Core.UsuallyCommon.DataBase.DataBaseAddress()
+            { Address = ".", ConnectionStrings= "server=.;uid=sa;pwd=sasa;database=GameTest;" ,Password = "sasa", User = "sa", DefaultDatabase = "GameTest", DBType = Core.UsuallyCommon.DataBaseType.SQLServer });
+            //{ Address = "172.18.132.141", ConnectionStrings = "Data Source=172.18.132.141;port=3306;Initial Catalog=MisSystem;uid=root;password=123456;Charset=utf8" ,Password = "123456", User = "root", DefaultDatabase = "MisSystem", DBType = Core.UsuallyCommon.DataBaseType.MySql });
             context.Snippets.RemoveRange(context.Snippets.ToList());
 
             var databasedemo = new Snippet() { DataSourceType = DataSourceType.DatabaseType, IsFloder = true, Name = "Demo" };

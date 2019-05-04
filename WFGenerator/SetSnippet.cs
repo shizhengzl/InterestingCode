@@ -22,6 +22,8 @@ namespace WFGenerator
             BindDataSourceType();
             _father = father;
             _snippet = snippet;
+
+            txtParentId.Text = father.Name;
             if (snippet!= null)
             {
 
@@ -35,6 +37,8 @@ namespace WFGenerator
                 IsMergin.Checked = snippet.IsMergin;
                 IsAutoFind.Checked = snippet.IsAutoFind;
                 IsSelectGenerator.Checked = snippet.IsSelectGenerator;
+
+                txtGeneratorFileName.Text = snippet.GeneratorFileName;
 
                 txtText.Text = snippet.Context;
             }
@@ -71,6 +75,7 @@ namespace WFGenerator
             _snippet.IsAutoFind = IsAutoFind.Checked;
             _snippet.IsSelectGenerator = IsSelectGenerator.Checked;
             _snippet.Context  = txtText.Text ;
+            _snippet.GeneratorFileName = txtGeneratorFileName.Text;
 
             if(!isEdit)
             {

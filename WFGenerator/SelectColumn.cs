@@ -56,23 +56,11 @@ namespace  WFGenerator
 
             table.Columns.ForEach(x=> {
                 var types = x.CSharpType.ToUpper();
-                 
 
-                // 处理Grid
-                var search = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && y.CsharpType.ToUpper().Contains(types));
-                if(search != null) 
-                    x.GridControls = search.ControlName; 
-
-                var create = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create 
-                         && y.CsharpType.ToUpper().Contains(types));
-                if (create != null)
-                    x.CreateControls = create.ControlName;
-               
-                var modify = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify
-                         && y.CsharpType.ToUpper().Contains(types));
-
-                if (modify != null)
-                    x.ModifyControls = modify.ControlName;
+                x.SearchControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
+                x.GridControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
+                x.CreateControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
+                x.ModifyControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
 
             });
 
@@ -162,16 +150,26 @@ namespace  WFGenerator
                 var cindex = this.datagrid.CurrentCell.ColumnIndex;
                 if (cindex == 1 || cindex == 2 || cindex == 3 || cindex == 4)
                 {
+                    List<VSBussinessExtenstion.Control> list = new List<VSBussinessExtenstion.Control>();
+                    if (cindex == 1)
+                        list = controls.Where(x => x.ControlMode == ControlMode.Search).ToList();
+                    if (cindex == 2)
+                        list = controls.Where(x => x.ControlMode == ControlMode.Grid).ToList();
+                    if (cindex == 3)
+                        list  = controls.Where(x => x.ControlMode == ControlMode.Create).ToList();
+                    if (cindex == 4)
+                        list = controls.Where(x => x.ControlMode == ControlMode.Modify).ToList();
+                     
+
+                    Score_ComboBox.DataSource = list;
                     Rectangle rect = datagrid.GetCellDisplayRectangle(datagrid.CurrentCell.ColumnIndex, datagrid.CurrentCell.RowIndex, false);
-                    var  Value = datagrid.CurrentCell.Value.ToStringExtension();
-
-                    Score_ComboBox.Text = Value;
-
+                  
+                    Score_ComboBox.Text = datagrid.CurrentCell.Value.ToStringExtension();
                     Score_ComboBox.Left = rect.Left;
                     Score_ComboBox.Top = rect.Top;
                     Score_ComboBox.Width = rect.Width;
                     Score_ComboBox.Height = rect.Height;
-                    Score_ComboBox.Visible = true;
+                    Score_ComboBox.Visible = true; 
                 }
                 else
                 {

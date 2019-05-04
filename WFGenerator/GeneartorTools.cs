@@ -214,13 +214,14 @@ namespace WFGenerator
             var snippet = e.Node.Tag as Snippet;
             if (snippet.IsFloder)
                 return;
-            txtGenerator.Text = string.Empty;
+           
             ShowText(snippet); 
 
         }
 
         public void ShowText(Snippet snippet)
         {
+            txtGenerator.Text = string.Empty;
             SelectDataSoruceType selecttype = Core.UsuallyCommon.Extensions.EnumParse<SelectDataSoruceType>(tabControlSelect.SelectedIndex.ToString());
 
             switch (selecttype)
