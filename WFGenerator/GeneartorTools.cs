@@ -18,6 +18,7 @@ using Core.UsuallyCommon;
 using System.Reflection;
 using System.Xml;
 using EnvDTE80;
+using NLog;
 
 namespace WFGenerator
 {
@@ -31,6 +32,8 @@ namespace WFGenerator
     }
     public partial class GeneartorTools : Form
     {
+        //实例化Logger对象，默认logger的名称是当前类的名称（包括类所在的命名空间名称）
+        Logger logger = LogManager.GetLogger("NLogs");
         public GeneartorTools(DTE2 applicationObject = null)
         {
             ApplicationVsHelper._applicationObject = applicationObject;
@@ -55,27 +58,28 @@ namespace WFGenerator
 
             ClassTree.ImageList = imageList;
             ClassTree.treeType = TreeType.Class;
+
+            generatorClass = new GeneratorClass(this.tsmessage);
         }
 
         #region Variabled 
         public DefaultSqlite sqlite = new DefaultSqlite();
         public ServicesAddressHelper sh = new ServicesAddressHelper();
         public List<Table> listAllTalbe = new List<Table>();
-        public GeneratorClass generatorClass = new GeneratorClass();
+        public GeneratorClass generatorClass { get; set; }
         #endregion
 
         #region SystemConfig
-
+        
         public void InitSystemConfig()
-        {
-            InitClass<ConnectionString>();
+        { 
             InitClass<DataBaseAddress>();
             InitClass<SQLConfig>();
             InitClass<Variable>();
             InitClass<DataTypeConfig>();
             InitClass<Snippet>();
             InitClass<Intellisence>();
-            
+            InitClass<VSBussinessExtenstion.Control>();
         }
 
         public void InitClass<T>() where T : class, new()
@@ -210,6 +214,13 @@ namespace WFGenerator
             var snippet = e.Node.Tag as Snippet;
             if (snippet.IsFloder)
                 return;
+           
+            ShowText(snippet); 
+
+        }
+
+        public void ShowText(Snippet snippet)
+        {
             txtGenerator.Text = string.Empty;
             SelectDataSoruceType selecttype = Core.UsuallyCommon.Extensions.EnumParse<SelectDataSoruceType>(tabControlSelect.SelectedIndex.ToString());
 
@@ -227,12 +238,7 @@ namespace WFGenerator
                     break;
             }
         }
-
-        private void tGeneratorFile_Click(object sender, EventArgs e)
-        {
-
-        }
-
+ 
         private void txtXmlSelect_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -289,8 +295,7 @@ namespace WFGenerator
         private void btnSelectFolder_Click(object sender, EventArgs e)
         {
 
-        }
-        #endregion
+        } 
 
         private void tabControlALL_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -302,6 +307,7 @@ namespace WFGenerator
                     break;
             }
         }
+        #endregion
 
         #region SQLCompare
 
@@ -545,6 +551,101 @@ namespace WFGenerator
         }
         #endregion
 
+        private void CMS启用_Click(object sender, EventArgs e)
+        {
+            if (SnippetTree.SelectedNode != null)
+            {
+                Snippet snippet = (Snippet)SnippetTree.SelectedNode.Tag;
+                List<Snippet> listEnabled = new List<Snippet>();
+                GetChildSnippet(snippet, ref listEnabled);
+                foreach (Snippet sp in listEnabled)
+                    sqlite.Snippets.FirstOrDefault(x => x.Id == sp.Id).IsEnabled = true;
+                sqlite.SaveChanges();
+                SnippetTree.Refreshs();
+            }
+        }
+
+        public List<Snippet> GetChildSnippet(Snippet sp, ref List<Snippet> list)
+        {
+            list.Add(sp);
+            List<Snippet> childList = sqlite.Snippets.Where(x => x.ParentId == sp.Id).ToList();
+            foreach (Snippet s in childList)
+            {
+                GetChildSnippet(s, ref list);
+            }
+            return list;
+        }
+
+        private void CMS禁用_Click(object sender, EventArgs e)
+        {
+            if (SnippetTree.SelectedNode != null)
+            {
+                Snippet snippet = (Snippet)SnippetTree.SelectedNode.Tag;
+                List<Snippet> listEnabled = new List<Snippet>();
+                GetChildSnippet(snippet, ref listEnabled);
+                foreach (Snippet sp in listEnabled)
+                    sqlite.Snippets.FirstOrDefault(x => x.Id == sp.Id).IsEnabled = false;
+                sqlite.SaveChanges();
+                SnippetTree.Refreshs();
+            }
+        }
+
+        private void CMS删除_Click(object sender, EventArgs e)
+        {
+            if (SnippetTree.SelectedNode != null)
+            {
+                Snippet snippet = (Snippet)SnippetTree.SelectedNode.Tag;
+                List<Snippet> listDelete = new List<Snippet>();
+                GetChildSnippet(snippet, ref listDelete);
+                sqlite.Snippets.RemoveRange(listDelete);
+            }
+         }
+
+        private void CMS看生成代码_Click(object sender, EventArgs e)
+        {
+            if (SnippetTree.SelectedNode != null)
+            {
+                Snippet snippet = (Snippet)SnippetTree.SelectedNode.Tag;
+                if(!snippet.IsFloder)
+                {
+                    ShowText(snippet);
+                }
+            }
+        }
+
+        private void SnippetTree_MouseDown(object sender, MouseEventArgs e)
+        {
+            TreeNode node = SnippetTree.GetNodeAt(e.X, e.Y);
+            if (node != null)
+            {
+                SnippetTree.SelectedNode = node;
+                Snippet sp = (Snippet)node.Tag;
+                this.CMS新建模板.Visible = sp.IsFloder;
+            }
+            else
+                this.CMS新建模板.Visible = false;
+        }
+
+        private void CMS新建模板_Click(object sender, EventArgs e)
+        { 
+            Snippet sp = (Snippet)SnippetTree.SelectedNode.Tag;
+
+            SetSnippet ss = new SetSnippet(null, sp);
+            ss.ShowDialog();
+            SnippetTree.Refreshs();
+        }
+
+        private void CMS修改_Click(object sender, EventArgs e)
+        {
+            Snippet sp = (Snippet)SnippetTree.SelectedNode.Tag;
+            Snippet parent = null;
+            var parentNote = SnippetTree.SelectedNode.Parent;
+            if (parentNote != null)
+                parent = (Snippet)parentNote.Tag;
+            SetSnippet ss = new SetSnippet(sp, parent);
+            ss.ShowDialog();
+            SnippetTree.Refreshs();
+        }
     }
 
     public class ExtenstionClass

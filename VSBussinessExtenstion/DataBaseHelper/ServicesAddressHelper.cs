@@ -98,9 +98,8 @@ namespace VSBussinessExtenstion.DataBaseHelper
                 string getDatabaseSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == baseAddress.DBType).GetDataBaseSQL.Replace("@DataBaseName",baseAddress.DefaultDatabase);
 
                 ChangeDataBase(baseAddress);
-                var c= dbContext.Database.SqlQuery<DataBase>(getDatabaseSql).ToList<DataBase>();
                 baseAddress.DataBases = dbContext.Database.SqlQuery<DataBase>(getDatabaseSql).ToList<DataBase>().Where(x =>
-                string.IsNullOrEmpty(baseAddress.DefaultDatabase) || x.DataBaseName == baseAddress.DefaultDatabase).ToList<DataBase>();
+                string.IsNullOrEmpty(baseAddress.DefaultDatabase) || x.DataBaseName.ToUpper() == baseAddress.DefaultDatabase.ToUpper()).ToList<DataBase>();
                 baseAddress.DataBases.ForEach(x => x.Address = baseAddress.Address);
                 baseAddress.DataBases.ForEach(x => x.User = baseAddress.User);
                 baseAddress.DataBases.ForEach(x => x.Password = baseAddress.Password);
@@ -154,19 +153,20 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         public void InitColumn(Table table)
         {
-           
             string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL.Replace("@DataBaseName", table.DataBaseName).Replace("@TableName", table.TableName);
             ChangeDataBase(table);
             table.Columns = dbContext.Database.SqlQuery<Column>(getColumnSql).ToList<Column>();
 
-            table.Columns.ForEach(x => x.Address = table.Address);
-            table.Columns.ForEach(x => x.DataBaseName = table.DataBaseName);
-            table.Columns.ForEach(x => x.User = table.User);
-            table.Columns.ForEach(x => x.Password = table.Password);
-            table.Columns.ForEach(x => x.DBType = table.DBType);
-            table.Columns.ForEach(x => x.TableName = table.TableName); 
-            table.Columns.ForEach(x => x.Key = table.Key);
-            table.Columns.ForEach(x => x.TableDescription = table.TableDescription); 
+            table.Columns.ForEach(x => { x.Address = table.Address;
+                x.DataBaseName = table.DataBaseName;
+                x.User = table.User;
+                x.Password = table.Password;
+                x.DBType = table.DBType;
+                x.TableName = table.TableName;
+                x.Key = table.Key;
+                x.TableDescription = table.TableDescription;
+                x.IsSelect = true;
+            });     
             BackConnection();
             table.Columns.ForEach(x => x.CSharpType = GetColumnType(x.DBType, x.SQLType));
         }
