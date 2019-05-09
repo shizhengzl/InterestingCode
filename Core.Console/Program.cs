@@ -34,9 +34,6 @@ namespace Core.ConsoleLog
 
           
 
-            var script = ScriptRuns.GetScriptRuns(res, columns);
-
-            Console.WriteLine(script);
             //var result = script.ContinueWithAsync<string>("new GeneratorClass().GetGeneratorString()").Result;
 
            

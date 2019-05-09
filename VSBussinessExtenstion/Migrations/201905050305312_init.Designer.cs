@@ -7,13 +7,13 @@ namespace VSBussinessExtenstion.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class initdatabases : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initdatabases));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201905020206190_initdatabases"; }
+            get { return "201905050305312_init"; }
         }
         
         string IMigrationMetadata.Source
