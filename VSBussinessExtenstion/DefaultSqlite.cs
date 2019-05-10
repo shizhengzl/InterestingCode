@@ -63,6 +63,8 @@
         public ControlMode ControlMode { get; set; }
 
         public bool IsDefault { get; set; }
+
+        public bool NeedDataSource { get; set; }
     }
 
     public class Intellisence

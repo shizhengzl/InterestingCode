@@ -57,11 +57,18 @@ namespace  WFGenerator
             table.Columns.ForEach(x=> {
                 var types = x.CSharpType.ToUpper();
 
-                x.SearchControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
-                x.GridControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
-                x.CreateControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
-                x.ModifyControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && (y.CsharpType.ToUpper().Contains(types) || y.IsDefault))?.ControlName;
-
+                x.SearchControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && (y.CsharpType.ToUpper().Contains(types) ))?.ControlName;
+                x.GridControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && (y.CsharpType.ToUpper().Contains(types) ))?.ControlName;
+                x.CreateControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && (y.CsharpType.ToUpper().Contains(types) ))?.ControlName;
+                x.ModifyControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && (y.CsharpType.ToUpper().Contains(types)))?.ControlName;
+                if(string.IsNullOrEmpty(x.SearchControls))
+                    x.SearchControls= controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && y.IsDefault)?.ControlName;
+                if (string.IsNullOrEmpty(x.GridControls))
+                    x.GridControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && y.IsDefault)?.ControlName;
+                if (string.IsNullOrEmpty(x.CreateControls))
+                    x.CreateControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && y.IsDefault)?.ControlName;
+                if (string.IsNullOrEmpty(x.ModifyControls))
+                    x.ModifyControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && y.IsDefault)?.ControlName;
             });
 
               
@@ -81,8 +88,7 @@ namespace  WFGenerator
             var property = typeof(Column).GetProperties().ToList().Skip(cindex).FirstOrDefault();
 
             column.SetPropertyValue(property.Name, ((ComboBox)sender).SelectedValue);
-
-            DataBind();
+            
         }
 
         private void Score_ComboBox_Leave(object sender, EventArgs e)
