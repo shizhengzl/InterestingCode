@@ -204,9 +204,7 @@ namespace WFGenerator
                             break;
                     }
                 }
-            }
-
-            tsmessage.Text = "......生成完成";
+            } 
         }
 
         private void SnippetTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)

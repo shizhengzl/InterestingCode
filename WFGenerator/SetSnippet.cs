@@ -63,10 +63,11 @@ namespace WFGenerator
             {
                 _snippet = defaultSqlite.Snippets.FirstOrDefault(x => x.Id == _snippet.Id);
             }
+            var minId = defaultSqlite.Snippets.OrderBy(x => x.Id).First();
 
             _snippet.Name = txtName.Text;
             _snippet.DataSourceType =  txtDataSourceType.Text.ToEnum<DataSourceType>();
-            _snippet.ParentId = _father.Id;
+            _snippet.ParentId = _father == null ? minId.Id :  _father.Id;
             _snippet.OutputPath = txtOutputPath.Text;
 
             _snippet.IsFloder = IsFloder.Checked;

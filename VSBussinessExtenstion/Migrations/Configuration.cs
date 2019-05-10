@@ -368,7 +368,8 @@ namespace VSBussinessExtenstion.Migrations
 																,DATA_TYPE 'SQLType'
                                 ,CASE WHEN  ISNULL(CHARACTER_MAXIMUM_LENGTH) = 1 THEN 0 ELSE CHARACTER_MAXIMUM_LENGTH END AS 'MaxLength'
                                 ,COLUMN_COMMENT 'ColumnDescription'
-                                
+                                ,CASE WHEN COLUMN_KEY = 'PRI' THEN 1 ELSE 0 END AS IsPrimarykey
+								,CASE WHEN EXTRA ='auto_increment'  THEN 1 ELSE 0 END AS IsIdentity
                                 FROM INFORMATION_SCHEMA.COLUMNS  
                                 WHERE    TABLE_NAME='@TableName' and table_schema = '@DataBaseName';
                                  "

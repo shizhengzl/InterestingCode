@@ -92,7 +92,7 @@ namespace WFGenerator
               
                 }
                 context = IoHelper.FileReader(filename);
-                messages.Text = $"生成完成........";
+                messages.Text += $"生成完成........";
                 return context;
 
             }
