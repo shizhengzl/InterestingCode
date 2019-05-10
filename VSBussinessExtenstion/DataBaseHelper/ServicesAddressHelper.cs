@@ -12,76 +12,7 @@ using System.Linq;
 namespace VSBussinessExtenstion.DataBaseHelper
 {
 
-
-    public class Actions
-    {
-         
-        ///  <summary>
-        /// 主键
-        /// </summary>
-        public Int64 Id { get; set; }
-
-
-        ///  <summary>
-        /// 动作点名称
-        /// </summary>
-        public String ActionName { get; set; }
-
-        ///  <summary>
-        /// 父级动作点ID
-        /// </summary>
-        public Int64? ParentActionId { get; set; }
-
-        ///  <summary>
-        /// 动作点描述
-        /// </summary>
-        public String ActionDescrition { get; set; }
-
-        ///  <summary>
-        /// 菜单ID
-        /// </summary>
-        public Int64? MenuId { get; set; }
-
-        ///  <summary>
-        /// 是否启用
-        /// </summary>
-        public Boolean? IsAvailable { get; set; }
-
-        ///  <summary>
-        /// 创建人ID
-        /// </summary>
-        public Int64? CreateNameId { get; set; }
-
-        ///  <summary>
-        /// 创建人
-        /// </summary>
-        public String CreateName { get; set; }
-
-        ///  <summary>
-        /// 创建时间
-        /// </summary>
-        public DateTime? CreateTime { get; set; }
-
-        ///  <summary>
-        /// 修改人ID
-        /// </summary>
-        public Int64? ModifyNameId { get; set; }
-
-        ///  <summary>
-        /// 修改人
-        /// </summary>
-        public String ModifyName { get; set; }
-
-        ///  <summary>
-        /// 修改时间
-        /// </summary>
-        public DateTime? ModifyTime { get; set; }
-
-        /// <summary>
-        /// 前后端标识
-        /// </summary>
-        public Boolean? Scope { get; set; }
-    }
+     
     public class ServicesAddressHelper
     {
         public DefaultSqlite dbContext = new DefaultSqlite();
@@ -166,6 +97,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
                 x.Key = table.Key;
                 x.TableDescription = table.TableDescription;
                 x.IsSelect = true;
+                x.ConnectionStrings = table.ConnectionStrings;
             });     
             BackConnection();
             table.Columns.ForEach(x => x.CSharpType = GetColumnType(x.DBType, x.SQLType));

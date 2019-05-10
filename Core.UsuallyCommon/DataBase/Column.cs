@@ -28,10 +28,28 @@ namespace Core.UsuallyCommon.DataBase
 
         public string SQLType { get; set; }
 
-
+        public ControlDataSource ControlDataSources { get; set; }
         public string GetValue(string name)
         {
             return this.GetType().GetProperty(name).GetValue(this, null).ToStringExtension();
         }
+    }
+
+
+    public class ControlDataSource
+    {
+
+        public int Id { get; set; }
+
+        public String DataSourceUrl { get; set; }
+
+        public String DataSourceName { get; set; }
+
+        public String DataSourceInit { get; set; }
+
+        public String DataSourceKey { get; set; }
+
+
+        public String DataSourceVlaue { get; set; }
     }
 }

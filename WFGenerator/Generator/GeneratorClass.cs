@@ -36,6 +36,19 @@ namespace WFGenerator
             try
             {
                 columns = columns.Where(x => x.IsSelect).ToList();
+
+
+             
+
+                if (string.IsNullOrEmpty(snippet.OutputPath))
+                    snippet.OutputPath = @"C:\Generator\";
+                if (string.IsNullOrEmpty(snippet.GeneratorFileName))
+                    snippet.GeneratorFileName = "@TableName.cs";
+                string context = snippet.Context;
+
+                messages.Text = $"开始替自定义变量........";
+                UserDeclareVarbibles(context, columns.FirstOrDefault());
+
                 messages.Text = $"正在处理控件数据........";
                 // 处理controls
                 columns.ForEach(x =>
@@ -52,11 +65,6 @@ namespace WFGenerator
                 }
                 );
 
-                if (string.IsNullOrEmpty(snippet.OutputPath))
-                    snippet.OutputPath = @"C:\Generator\";
-                if (string.IsNullOrEmpty(snippet.GeneratorFileName))
-                    snippet.GeneratorFileName = "@TableName.cs";
-                string context = snippet.Context;
                 var listReplace = StringHelper.GetStringListByStartAndEndInner(context, SnippetReplace.Start.GetDescription(), SnippetReplace.End.GetDescription());
 
                 context = snippet.Context;
@@ -67,8 +75,7 @@ namespace WFGenerator
 
                     context = context.Replace(item, ScriptsRuns.GetScriptsRuns(inittempcontext, columns));
                 }
-                messages.Text = $"开始替自定义变量........";
-                UserDeclareVarbibles(context, columns.FirstOrDefault());
+         
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
 
 
@@ -104,26 +111,65 @@ namespace WFGenerator
             return string.Empty;
         }
 
+       
 
         public string UserDeclareVarbibles(string context, Column column)
         {
             try
             {
+                var controls = defaultsqlite.Controls.ToList();
                 var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
+                messages.Text = $"初始化自定义变的数据库连接........";
+               
+
                 foreach (var varbable in noSystemVarbables)
                 {
+                    StringBuilder sb = new StringBuilder();
                     if (context.IndexOf(varbable.VariableName) > -1)
                     {
-                        var sql = ReplaceDataBase(varbable.ReplaceString, column, true);
-                        if (string.IsNullOrEmpty(DatabaseHelper.connectionString))
-                            DatabaseHelper.connectionString = $"server={column.Address};uid={column.User};pwd={column.Password};database={column.DataBaseName};";
+                        var text = varbable.ReplaceString;
+                        if (varbable.VariableType == DataSourceType.DatabaseType)
+                        {
+                            defaultsqlite.Database.Connection.ConnectionString = column.ConnectionStrings;
+                            var sql = ReplaceDataBase(varbable.ReplaceString, column, true);
+                            var replacestring = defaultsqlite.Database.SqlQuery<string>(sql).ToString();
+                            context = context.Replace(varbable.VariableName, replacestring);
+                            defaultsqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
+                        }
+                        if(varbable.VariableType == DataSourceType.CSharpType)
+                        {
+                            var searchcontrol = controls.FirstOrDefault(x => x.ControlName == column.SearchControls);
+                            if(searchcontrol != null)
+                            { 
+                                if(!string.IsNullOrEmpty(text))
+                                { 
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.ControlDataSources, true));
+                                }
+                            }
 
-                        messages.Text = $"初始化自定义变的数据库连接........";
-                        var replacestring = DatabaseHelper.ExecuteQuery(sql).Tables[0].Rows[0][0].ToString();
-                        context = context.Replace(varbable.VariableName, replacestring);
-                        messages.Text = $"替换自定义变量完成........";
+                            var createcontrol = controls.FirstOrDefault(x => x.ControlName == column.CreateControls);
+                            if (createcontrol != null)
+                            { 
+                                if (!string.IsNullOrEmpty(text))
+                                {
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.ControlDataSources, true));
+                                }
+                            }
+                              
+                            var modifycontrol = controls.FirstOrDefault(x => x.ControlName == column.ModifyControls);
+                            if (modifycontrol != null)
+                            { 
+                                if (!string.IsNullOrEmpty(text))
+                                {
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.ControlDataSources, true));
+                                }
+                            }
+                        }
                     }
+
+                    context = context.Replace(varbable.VariableName, sb.ToString());
                 }
+                messages.Text = $"替换自定义变量完成........";
                 return context;
 
             }
