@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Core.UsuallyCommon;
 using VSBussinessExtenstion;
 
-namespace  WFGenerator
+namespace WFGenerator
 
 {
     public partial class SelectColumn : Form
@@ -22,7 +22,7 @@ namespace  WFGenerator
 
         public DefaultSqlite dbcontext = new DefaultSqlite();
 
-        public List<VSBussinessExtenstion.Control> controls = new List<VSBussinessExtenstion.Control>();
+        public List<Core.UsuallyCommon.DataBase.Control> controls = new List<Core.UsuallyCommon.DataBase.Control>();
 
         public void DataBindCompobox()
         {
@@ -51,44 +51,74 @@ namespace  WFGenerator
         }
 
         public void DataBind()
-        {
-           
-
-            table.Columns.ForEach(x=> {
-                var types = x.CSharpType.ToUpper();
-
-                x.SearchControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && (y.CsharpType.ToUpper().Contains(types) ))?.ControlName;
-                x.GridControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && (y.CsharpType.ToUpper().Contains(types) ))?.ControlName;
-                x.CreateControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && (y.CsharpType.ToUpper().Contains(types) ))?.ControlName;
-                x.ModifyControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && (y.CsharpType.ToUpper().Contains(types)))?.ControlName;
-                if(string.IsNullOrEmpty(x.SearchControls))
-                    x.SearchControls= controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && y.IsDefault)?.ControlName;
-                if (string.IsNullOrEmpty(x.GridControls))
-                    x.GridControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && y.IsDefault)?.ControlName;
+        { 
+            table.Columns.ForEach(x =>
+            {
                 if (string.IsNullOrEmpty(x.CreateControls))
-                    x.CreateControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && y.IsDefault)?.ControlName;
-                if (string.IsNullOrEmpty(x.ModifyControls))
-                    x.ModifyControls = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && y.IsDefault)?.ControlName;
+                {
+                    var types = x.CSharpType.ToUpper();
+
+                    var serachcontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && (y.CsharpType.ToUpper().Contains(types)));
+                    var gridcontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && (y.CsharpType.ToUpper().Contains(types)));
+                    var createcontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && (y.CsharpType.ToUpper().Contains(types)));
+                    var modifycontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && (y.CsharpType.ToUpper().Contains(types)));
+                    if (serachcontrols == null)
+                        serachcontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Search && y.IsDefault);
+                    if (gridcontrols == null)
+                        gridcontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Grid && y.IsDefault);
+                    if (createcontrols == null)
+                        createcontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Create && y.IsDefault);
+                    if (modifycontrols == null)
+                        modifycontrols = controls.FirstOrDefault(y => y.ControlMode == ControlMode.Modify && y.IsDefault);
+
+                    x.SearchControl = serachcontrols;
+                    x.GridControl = gridcontrols;
+                    x.CreateControl = createcontrols;
+                    x.ModifyControl = modifycontrols;
+
+                    x.SearchControls = serachcontrols?.ControlName;
+                    x.GridControls = gridcontrols?.ControlName;
+                    x.CreateControls = createcontrols?.ControlName;
+                    x.ModifyControls = modifycontrols?.ControlName;
+                }
             });
 
-              
+
 
             this.datagrid.DataSource = table.Columns;
             this.datagrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-             
+
         }
 
         private void Score_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var cindex = datagrid.CurrentCell.ColumnIndex ;
-            var rindex = datagrid.CurrentCell.RowIndex ;
-
-            var column = table.Columns.Skip(rindex).FirstOrDefault();
+            var cindex = datagrid.CurrentCell.ColumnIndex;
+            var rindex = datagrid.CurrentCell.RowIndex;
 
             var property = typeof(Column).GetProperties().ToList().Skip(cindex).FirstOrDefault();
 
-            column.SetPropertyValue(property.Name, ((ComboBox)sender).SelectedValue);
-            
+            var controlname = ((ComboBox)sender).Text;
+            var c = controls.FirstOrDefault(x => x.ControlName == controlname.ToStringExtension());
+
+            var s = new Core.UsuallyCommon.DataBase.Control()
+            {
+                Id = c.Id,
+                ControlDataSources = c.ControlDataSources,
+                ControlMode = c.ControlMode,
+                ControlName = c.ControlName,
+                ControlText = c.ControlText
+            ,
+                CsharpType = c.CsharpType,
+                IsDefault = c.IsDefault,
+                NeedDataSource = c.NeedDataSource
+            };
+
+
+
+            table.Columns[rindex].SetPropertyValue(property.Name, controlname);
+            table.Columns[rindex].SetPropertyValue(property.Name.TrimEnd('s') ,s);
+          
+
         }
 
         private void Score_ComboBox_Leave(object sender, EventArgs e)
@@ -98,10 +128,11 @@ namespace  WFGenerator
                 ComboBox bx = (ComboBox)sender;
                 //int row_index = this.datagrid.CurrentCell.RowIndex;
                 this.Score_ComboBox.Visible = false;
+                  
             }
             catch (Exception ex)
             {
-            } 
+            }
         }
 
         private void tok_Click(object sender, EventArgs e)
@@ -118,15 +149,60 @@ namespace  WFGenerator
                         if (pi.PropertyType.IsGenericType)
                             continue;
                         col.SetPropertyValue(pi.Name, datagrid.Rows[i].Cells[pi.Name].Value);
-                        //col.GetType().GetProperty(pi.Name).SetValue(col, Convert.ChangeType(datagrid.Rows[i].Cells[pi.Name].Value, datagrid.Rows[i].Cells[pi.Name].ValueType), null);
                     }
                 }
+                var search = table.Columns.Where(x => (x.SearchControl != null && x.SearchControl.NeedDataSource)
+                || (x.GridControl != null && x.GridControl.NeedDataSource)
+                || (x.CreateControl != null && x.CreateControl.NeedDataSource)
+                || (x.ModifyControl != null && x.ModifyControl.NeedDataSource)).ToList<Column>();
+
+                foreach (var s in search)
+                {
+                    ControlDataSource cd = new ControlDataSource();
+                    if (s.SearchControl != null && s.SearchControl.NeedDataSource)
+                    {
+                        SelectDataSource selectDataSource = new SelectDataSource(s, s.SearchControl.ControlDataSources,"查询列");
+                        if (selectDataSource.ShowDialog() == DialogResult.OK)
+                        {
+                            s.SearchControl.ControlDataSources = selectDataSource._controlDataSource;
+                        }
+                    }
+
+                    if (s.GridControl != null && s.GridControl.NeedDataSource)
+                    {
+                        SelectDataSource selectDataSource = new SelectDataSource(s, s.GridControl.ControlDataSources, "列表");
+                        if (selectDataSource.ShowDialog() == DialogResult.OK)
+                        {
+                            s.GridControl.ControlDataSources = selectDataSource._controlDataSource;
+                        }
+                    }
+                    if (s.CreateControl != null && s.CreateControl.NeedDataSource)
+                    {
+                        SelectDataSource selectDataSource = new SelectDataSource(s, s.CreateControl.ControlDataSources, "创建列");
+                        if (selectDataSource.ShowDialog() == DialogResult.OK)
+                        {
+                            s.CreateControl.ControlDataSources = selectDataSource._controlDataSource;
+                        }
+                    }
+
+                    if (s.ModifyControl != null && s.ModifyControl.NeedDataSource)
+                    {
+                        SelectDataSource selectDataSource = new SelectDataSource(s, s.ModifyControl.ControlDataSources, "修改列");
+                        if (selectDataSource.ShowDialog() == DialogResult.OK)
+                        {
+                            s.ModifyControl.ControlDataSources = selectDataSource._controlDataSource;
+                        }
+                    }
+
+                }
+
+
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
         }
 
@@ -156,26 +232,26 @@ namespace  WFGenerator
                 var cindex = this.datagrid.CurrentCell.ColumnIndex;
                 if (cindex == 1 || cindex == 2 || cindex == 3 || cindex == 4)
                 {
-                    List<VSBussinessExtenstion.Control> list = new List<VSBussinessExtenstion.Control>();
+                    List<Core.UsuallyCommon.DataBase.Control> list = new List<Core.UsuallyCommon.DataBase.Control>();
                     if (cindex == 1)
                         list = controls.Where(x => x.ControlMode == ControlMode.Search).ToList();
                     if (cindex == 2)
                         list = controls.Where(x => x.ControlMode == ControlMode.Grid).ToList();
                     if (cindex == 3)
-                        list  = controls.Where(x => x.ControlMode == ControlMode.Create).ToList();
+                        list = controls.Where(x => x.ControlMode == ControlMode.Create).ToList();
                     if (cindex == 4)
                         list = controls.Where(x => x.ControlMode == ControlMode.Modify).ToList();
-                     
 
-                    Score_ComboBox.DataSource = list;
+                    Core.UsuallyCommon.DataBase.Control[] con = new Core.UsuallyCommon.DataBase.Control[list.Count];
+                    list.CopyTo(con);
+                    Score_ComboBox.DataSource = con.ToList();
                     Rectangle rect = datagrid.GetCellDisplayRectangle(datagrid.CurrentCell.ColumnIndex, datagrid.CurrentCell.RowIndex, false);
-                  
-                    Score_ComboBox.Text = datagrid.CurrentCell.Value.ToStringExtension();
+                     
                     Score_ComboBox.Left = rect.Left;
                     Score_ComboBox.Top = rect.Top;
                     Score_ComboBox.Width = rect.Width;
                     Score_ComboBox.Height = rect.Height;
-                    Score_ComboBox.Visible = true; 
+                    Score_ComboBox.Visible = true;
                 }
                 else
                 {

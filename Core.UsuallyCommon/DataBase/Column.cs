@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -21,21 +22,53 @@ namespace Core.UsuallyCommon.DataBase
         public string CSharpType { get; set; }
         public bool IsIdentity { get; set; }
         public bool IsPrimarykey { get; set;}
-        public Int32? MaxLength { get; set; }
+        public Int64? MaxLength { get; set; }
         public bool IsRequire { get; set; } 
         public byte Scale { get; set; }
         public string DefaultValue { get; set; }
 
         public string SQLType { get; set; }
 
-        public ControlDataSource ControlDataSources { get; set; }
-        public string GetValue(string name)
+      
+
+        public Control SearchControl { get; set; }
+
+        public Control GridControl { get; set; }
+
+        public Control CreateControl { get; set; }
+
+        public Control ModifyControl { get; set; }
+
+              public string GetValue(string name)
         {
             return this.GetType().GetProperty(name).GetValue(this, null).ToStringExtension();
         }
     }
+    public class Control
+    {
+        [Key]
+        public int Id { get; set; }
 
+        public string ControlName { get; set; }
 
+        public string ControlText { get; set; }
+        public string CsharpType { get; set; }
+
+        public ControlMode ControlMode { get; set; }
+
+        public bool IsDefault { get; set; }
+
+        public bool NeedDataSource { get; set; }
+
+        public ControlDataSource ControlDataSources { get; set; }
+    }
+    public enum ControlMode
+    {
+        Search = 0,
+        Grid = 1,
+        Create = 2,
+        Modify = 3
+    }
     public class ControlDataSource
     {
 
@@ -48,8 +81,8 @@ namespace Core.UsuallyCommon.DataBase
         public String DataSourceInit { get; set; }
 
         public String DataSourceKey { get; set; }
-
-
+         
         public String DataSourceVlaue { get; set; }
+        public String DataSourceParentId { get; set; }
     }
 }

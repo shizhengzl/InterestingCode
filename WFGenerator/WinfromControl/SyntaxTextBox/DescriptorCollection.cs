@@ -203,7 +203,10 @@ namespace WFGenerator
                     mInnerList.Add(new Descriptor(x.Name, Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
                     mInnerList.Add(new Descriptor("@" + x.Name, Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
                 });
-
+                typeof(ControlDataSource).GetProperties().ToList().ForEach(x => {
+                    //mInnerList.Add(new Descriptor(x.Name, Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
+                    mInnerList.Add(new Descriptor("@" + x.Name, Color.Red, null, DescriptorType.Word, DescriptorRecognition.WholeWord, true));
+                });
             }
             catch (Exception ex)
             {

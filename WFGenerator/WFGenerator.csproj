@@ -174,6 +174,18 @@
     <Compile Include="SelectColumn.designer.cs">
       <DependentUpon>SelectColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelectDataSource.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectDataSource.Designer.cs">
+      <DependentUpon>SelectDataSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectTables.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectTables.Designer.cs">
+      <DependentUpon>SelectTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetSnippet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,6 +246,12 @@
     </Compile>
     <EmbeddedResource Include="SelectColumn.resx">
       <DependentUpon>SelectColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectDataSource.resx">
+      <DependentUpon>SelectDataSource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectTables.resx">
+      <DependentUpon>SelectTables.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetSnippet.resx">
       <DependentUpon>SetSnippet.cs</DependentUpon>

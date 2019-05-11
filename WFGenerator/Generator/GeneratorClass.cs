@@ -36,10 +36,6 @@ namespace WFGenerator
             try
             {
                 columns = columns.Where(x => x.IsSelect).ToList();
-
-
-             
-
                 if (string.IsNullOrEmpty(snippet.OutputPath))
                     snippet.OutputPath = @"C:\Generator\";
                 if (string.IsNullOrEmpty(snippet.GeneratorFileName))
@@ -47,27 +43,49 @@ namespace WFGenerator
                 string context = snippet.Context;
 
                 messages.Text = $"开始替自定义变量........";
-                UserDeclareVarbibles(context, columns.FirstOrDefault());
+                context = UserDeclareVarbibles(context, columns);
 
                 messages.Text = $"正在处理控件数据........";
                 // 处理controls
                 columns.ForEach(x =>
                 {
                     if (!string.IsNullOrEmpty(x.SearchControls))
-                        x.SearchControls = ReplaceDataBase(
-                            defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.SearchControls).ControlText, x, true);
+                    {
+                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.SearchControls);
+                        x.SearchControls = ReplaceDataBase(control.ControlText, x, true);
+                        if (x.SearchControl.ControlDataSources != null)
+                            x.SearchControls = ReplaceDataBase(x.SearchControls, x.SearchControl.ControlDataSources, true);
+                    }
+
                     if (!string.IsNullOrEmpty(x.GridControls))
-                        x.GridControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.GridControls).ControlText, x, true);
+                    {
+                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.GridControls);
+                        x.GridControls = ReplaceDataBase(control.ControlText, x, true);
+                        if (x.GridControl.ControlDataSources != null)
+                            x.GridControls = ReplaceDataBase(x.GridControls, x.GridControl.ControlDataSources, true);
+                    }
+
                     if (!string.IsNullOrEmpty(x.CreateControls))
-                        x.CreateControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.CreateControls).ControlText, x, true);
+                    {
+                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.CreateControls);
+                        x.CreateControls = ReplaceDataBase(control.ControlText, x, true);
+                        if (x.CreateControl.ControlDataSources != null)
+                            x.CreateControls = ReplaceDataBase(x.CreateControls, x.CreateControl.ControlDataSources, true);
+                    }
+
                     if (!string.IsNullOrEmpty(x.ModifyControls))
-                        x.ModifyControls = ReplaceDataBase(defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.ModifyControls).ControlText, x, true);
+                    {
+                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.ModifyControls);
+                        x.ModifyControls = ReplaceDataBase(control.ControlText, x, true);
+                        if (x.ModifyControl.ControlDataSources != null)
+                            x.ModifyControls = ReplaceDataBase(x.ModifyControls, x.ModifyControl.ControlDataSources, true);
+                    }
+
                 }
                 );
 
                 var listReplace = StringHelper.GetStringListByStartAndEndInner(context, SnippetReplace.Start.GetDescription(), SnippetReplace.End.GetDescription());
-
-                context = snippet.Context;
+                
                 messages.Text = $"开始替换模板变量........";
                 foreach (var item in listReplace)
                 {
@@ -75,7 +93,7 @@ namespace WFGenerator
 
                     context = context.Replace(item, ScriptsRuns.GetScriptsRuns(inittempcontext, columns));
                 }
-         
+
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
 
 
@@ -84,19 +102,19 @@ namespace WFGenerator
                 + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
 
                 messages.Text = $"开始生成文件........";
-                GeneratorFile(context, filename); 
+                GeneratorFile(context, filename);
 
-                if(ApplicationVsHelper._applicationObject != null)
+                if (ApplicationVsHelper._applicationObject != null)
                 {
                     var ext = filename.GetFileExtension();
-                    List<string> vs = new List<string>() { ".cs",".js",".aspx",".cshtml"};
-                    if (vs.Any(x=>x == ext))
+                    List<string> vs = new List<string>() { ".cs", ".js", ".aspx", ".cshtml" };
+                    if (vs.Any(x => x == ext))
                     {
                         ApplicationVsHelper.Open(filename);
                         if (!generatorFile)
                             ApplicationVsHelper.Close(filename);
                     }
-              
+
                 }
                 context = IoHelper.FileReader(filename);
                 messages.Text += $"生成完成........";
@@ -111,58 +129,49 @@ namespace WFGenerator
             return string.Empty;
         }
 
-       
 
-        public string UserDeclareVarbibles(string context, Column column)
+
+        public string UserDeclareVarbibles(string context, List<Column> columns)
         {
             try
             {
                 var controls = defaultsqlite.Controls.ToList();
                 var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
                 messages.Text = $"初始化自定义变的数据库连接........";
-               
+
 
                 foreach (var varbable in noSystemVarbables)
                 {
                     StringBuilder sb = new StringBuilder();
                     if (context.IndexOf(varbable.VariableName) > -1)
-                    {
-                        var text = varbable.ReplaceString;
-                        if (varbable.VariableType == DataSourceType.DatabaseType)
-                        {
-                            defaultsqlite.Database.Connection.ConnectionString = column.ConnectionStrings;
-                            var sql = ReplaceDataBase(varbable.ReplaceString, column, true);
-                            var replacestring = defaultsqlite.Database.SqlQuery<string>(sql).ToString();
-                            context = context.Replace(varbable.VariableName, replacestring);
-                            defaultsqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
-                        }
-                        if(varbable.VariableType == DataSourceType.CSharpType)
-                        {
-                            var searchcontrol = controls.FirstOrDefault(x => x.ControlName == column.SearchControls);
-                            if(searchcontrol != null)
-                            { 
-                                if(!string.IsNullOrEmpty(text))
-                                { 
-                                    sb.AppendLine(this.ReplaceDataBase(text, column.ControlDataSources, true));
-                                }
+                    { 
+                        foreach (var column in columns)
+                        { 
+                            var text = varbable.ReplaceString;
+                            if (varbable.VariableType == DataSourceType.DatabaseType)
+                            {
+                                defaultsqlite.Database.Connection.ConnectionString = column.ConnectionStrings;
+                                var sql = ReplaceDataBase(varbable.ReplaceString, column, true);
+                                var replacestring = defaultsqlite.Database.SqlQuery<string>(sql).ToString();
+                                context = context.Replace(varbable.VariableName, replacestring);
+                                defaultsqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
                             }
+                            if (varbable.VariableType == DataSourceType.CSharpType)
+                            {
+                                var searchcontrol = controls.FirstOrDefault(x => x.ControlName == column.SearchControls);
+                                if (column.SearchControl?.ControlDataSources != null)
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.SearchControl.ControlDataSources, true));
 
-                            var createcontrol = controls.FirstOrDefault(x => x.ControlName == column.CreateControls);
-                            if (createcontrol != null)
-                            { 
-                                if (!string.IsNullOrEmpty(text))
-                                {
-                                    sb.AppendLine(this.ReplaceDataBase(text, column.ControlDataSources, true));
-                                }
-                            }
-                              
-                            var modifycontrol = controls.FirstOrDefault(x => x.ControlName == column.ModifyControls);
-                            if (modifycontrol != null)
-                            { 
-                                if (!string.IsNullOrEmpty(text))
-                                {
-                                    sb.AppendLine(this.ReplaceDataBase(text, column.ControlDataSources, true));
-                                }
+
+                                var createcontrol = controls.FirstOrDefault(x => x.ControlName == column.CreateControls);
+                                if (column.CreateControl?.ControlDataSources != null)
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.CreateControl.ControlDataSources, true));
+
+
+                                var modifycontrol = controls.FirstOrDefault(x => x.ControlName == column.ModifyControls);
+                                if (column.ModifyControl?.ControlDataSources != null)
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.ModifyControl.ControlDataSources, true));
+
                             }
                         }
                     }
@@ -177,8 +186,8 @@ namespace WFGenerator
             {
                 logger.Error(ex);
                 messages.Text = $"生成出错:{ex.Message}........";
-            } 
-            return string.Empty; 
+            }
+            return string.Empty;
         }
 
         public string ClassGenerator(List<Method> methods, List<Proterty> proterties, Snippet snippet, bool generatorFile)
@@ -332,11 +341,11 @@ namespace WFGenerator
             var listProperty = t.GetPropertyList();
             foreach (var property in listProperty)
             {
-                if (string.IsNullOrEmpty(property) )
+                if (string.IsNullOrEmpty(property))
                     continue;
                 var value = t.GetPropertyValue(property);
                 value = string.IsNullOrEmpty(value) ? property : value;
-             
+
                 if (context.IndexOf($"@{property}") >= 0)
                 {
 

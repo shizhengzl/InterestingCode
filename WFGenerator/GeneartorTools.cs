@@ -79,7 +79,7 @@ namespace WFGenerator
             InitClass<DataTypeConfig>();
             InitClass<Snippet>();
             InitClass<Intellisence>();
-            InitClass<VSBussinessExtenstion.Control>();
+            InitClass<Core.UsuallyCommon.DataBase.Control>();
         }
 
         public void InitClass<T>() where T : class, new()

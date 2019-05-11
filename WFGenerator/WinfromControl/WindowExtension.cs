@@ -1,4 +1,5 @@
 ﻿using Core.UsuallyCommon;
+using Core.UsuallyCommon.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -38,7 +39,8 @@ namespace WFGenerator
             Int32 startIndexY = 20;
             foreach (var proprety in propretylist)
             {
-                if (proprety.PropertyType.Name == "List`1")
+                if (proprety.PropertyType.Name == "List`1" 
+                    || (!proprety.PropertyType.Namespace.StartsWith("System") && !enumList.Any(x=>x.Name == proprety.PropertyType.Name)))
                     continue;
                 var val = proprety.GetValue(objects, null).ToStringExtension();
                 Label label = new Label() { Name = $"lbl{proprety.Name}", Text = proprety.Name };

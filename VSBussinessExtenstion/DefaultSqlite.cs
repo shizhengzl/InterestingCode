@@ -50,22 +50,7 @@
         public virtual DbSet<Control> Controls { get; set; }
     }
     
-    public class Control
-    {
-        [Key]
-        public int Id { get; set; }
-
-        public string ControlName { get; set; } 
-
-        public string ControlText { get; set; } 
-        public string CsharpType { get; set; }
-
-        public ControlMode ControlMode { get; set; }
-
-        public bool IsDefault { get; set; }
-
-        public bool NeedDataSource { get; set; }
-    }
+   
 
     public class Intellisence
     {
@@ -184,11 +169,5 @@
         Default = 0
     }
 
-    public enum ControlMode
-    {
-        Search = 0 ,
-        Grid = 1 ,
-        Create = 2 ,
-        Modify = 3
-    }
+
 }
