@@ -23,6 +23,7 @@
             : base(DefaultSqltiteConnection)
         {
 
+            this.Configuration.AutoDetectChangesEnabled = false;
         }
 
         //"Data Source=172.18.132.141;port=3306;Initial Catalog=DefaultSqlite;uid=root;password=123456;Charset=utf8"

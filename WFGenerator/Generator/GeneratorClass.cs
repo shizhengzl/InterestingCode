@@ -16,6 +16,9 @@ namespace WFGenerator
 {
     public class GeneratorClass
     {
+
+        public string DefaltPath = @"C:\Generator\";
+
         Logger logger = LogManager.GetLogger("NLogs");
         public ToolStripStatusLabel messages { get; set; }
         public GeneratorClass(ToolStripStatusLabel _messages)
@@ -37,7 +40,7 @@ namespace WFGenerator
             {
                 columns = columns.Where(x => x.IsSelect).ToList();
                 if (string.IsNullOrEmpty(snippet.OutputPath))
-                    snippet.OutputPath = @"C:\Generator\";
+                    snippet.OutputPath = DefaltPath;
                 if (string.IsNullOrEmpty(snippet.GeneratorFileName))
                     snippet.GeneratorFileName = "@TableName.cs";
                 string context = snippet.Context;
@@ -97,9 +100,8 @@ namespace WFGenerator
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
 
 
-                string filename = (string.IsNullOrEmpty(ApplicationVsHelper.VsProjectPath) || !generatorFile
-                    ? snippet.OutputPath.Replace("/", "\\") : ApplicationVsHelper.VsProjectPath)
-                + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
+                string filename = ApplicationVsHelper.VsProjectPath.ToStringExtension()
+                + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
 
                 messages.Text = $"开始生成文件........";
                 GeneratorFile(context, filename);
@@ -129,7 +131,23 @@ namespace WFGenerator
             return string.Empty;
         }
 
+        public void AppendCode(Core.UsuallyCommon.DataBase.Control control, Column column)
+        {
+            var url = control.AppendCodeUrl;
+            if(string.IsNullOrEmpty(control.AppendCodeUrl))
+            {
+                url = DefaltPath + "AppendCode.cs";
+            }
+            url = this.ReplaceDataBase(url, control.ControlDataSources, true);
+            url = this.ReplaceDataBase(url, column, true);
 
+            string filename = !string.IsNullOrEmpty(control.AppendCodeUrl) ? ApplicationVsHelper.VsProjectPath.ToStringExtension() : string.Empty  + url;
+
+            var code = this.ReplaceDataBase(control.AppendCode, control.ControlDataSources, true);
+            code = this.ReplaceDataBase(code, column, true);
+             
+             
+        }
 
         public string UserDeclareVarbibles(string context, List<Column> columns)
         {

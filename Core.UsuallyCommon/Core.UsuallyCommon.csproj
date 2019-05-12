@@ -204,6 +204,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSharpScript\ClassHelper.cs" />
     <Compile Include="CSharpScript\ScriptColumn.cs" />
     <Compile Include="DataBase\DataBaseType.cs" />
     <Compile Include="DataBase\Column.cs" />

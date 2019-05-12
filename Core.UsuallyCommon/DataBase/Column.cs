@@ -60,6 +60,10 @@ namespace Core.UsuallyCommon.DataBase
 
         public bool NeedDataSource { get; set; }
 
+        public string AppendCodeUrl { get; set; }
+
+        public string AppendCode { get; set; }
+
         public ControlDataSource ControlDataSources { get; set; }
     }
     public enum ControlMode

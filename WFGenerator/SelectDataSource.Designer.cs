@@ -40,7 +40,6 @@
             this.comvalue = new System.Windows.Forms.ComboBox();
             this.comparent = new System.Windows.Forms.ComboBox();
             this.btnChose = new System.Windows.Forms.Button();
-            this.btnEnum = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txturl
@@ -141,28 +140,17 @@
             // 
             this.btnChose.Location = new System.Drawing.Point(388, 81);
             this.btnChose.Name = "btnChose";
-            this.btnChose.Size = new System.Drawing.Size(75, 23);
+            this.btnChose.Size = new System.Drawing.Size(141, 23);
             this.btnChose.TabIndex = 16;
-            this.btnChose.Text = "选择表";
+            this.btnChose.Text = "SelectDataSource";
             this.btnChose.UseVisualStyleBackColor = true;
             this.btnChose.Click += new System.EventHandler(this.btnChose_Click);
-            // 
-            // btnEnum
-            // 
-            this.btnEnum.Location = new System.Drawing.Point(469, 81);
-            this.btnEnum.Name = "btnEnum";
-            this.btnEnum.Size = new System.Drawing.Size(75, 23);
-            this.btnEnum.TabIndex = 17;
-            this.btnEnum.Text = "选择枚举";
-            this.btnEnum.UseVisualStyleBackColor = true;
-            this.btnEnum.Click += new System.EventHandler(this.btnEnum_Click);
             // 
             // SelectDataSource
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(642, 349);
-            this.Controls.Add(this.btnEnum);
             this.Controls.Add(this.btnChose);
             this.Controls.Add(this.comparent);
             this.Controls.Add(this.comvalue);
@@ -197,6 +185,5 @@
         private System.Windows.Forms.ComboBox comvalue;
         private System.Windows.Forms.ComboBox comparent;
         private System.Windows.Forms.Button btnChose;
-        private System.Windows.Forms.Button btnEnum;
     }
 }

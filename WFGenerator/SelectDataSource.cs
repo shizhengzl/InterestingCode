@@ -9,12 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VSBussinessExtenstion.DataBaseHelper;
+using Core.UsuallyCommon;
 
 namespace WFGenerator
 {
     public partial class SelectDataSource : Form
     {
-        public SelectDataSource(Column c, ControlDataSource controlDataSource,string name)
+        public SelectDataSource(Column c, ControlDataSource controlDataSource, string name)
         {
             InitializeComponent();
             this.Text = $"为表{c.TableName}列{c.ColumnName}--{name}选择数据源";
@@ -24,29 +25,27 @@ namespace WFGenerator
         public ControlDataSource _controlDataSource { get; set; }
 
         private void btnChose_Click(object sender, EventArgs e)
-        {
-
+        { 
             SelectTables selectTables = new SelectTables(table);
             DialogResult dia = selectTables.ShowDialog();
             if (dia == DialogResult.OK)
             {
                 table = selectTables.table;
             }
-                sh.InitColumn(table);
-            InitData();
-
-
+            sh.InitColumn(table);
+            InitData(); 
         }
         public ServicesAddressHelper sh = new ServicesAddressHelper();
         public Table table = new Table();
         private void btnEnum_Click(object sender, EventArgs e)
         {
 
+
         }
 
         public void GetData()
-        { 
-            _controlDataSource =   new ControlDataSource()
+        {
+            _controlDataSource = new ControlDataSource()
             {
                 DataSourceKey = comkey.Text,
                 DataSourceUrl = txturl.Text,
