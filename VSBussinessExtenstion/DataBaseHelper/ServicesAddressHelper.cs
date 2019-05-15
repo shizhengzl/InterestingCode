@@ -84,6 +84,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
 
         public void InitColumn(Table table)
         {
+            var controls = dbContext.Controls.ToList();
             string getColumnSql = dbContext.SQLConfigs.FirstOrDefault(x => x.Type == table.DBType).GetColumnSQL.Replace("@DataBaseName", table.DataBaseName).Replace("@TableName", table.TableName);
             ChangeDataBase(table);
             table.Columns = dbContext.Database.SqlQuery<Column>(getColumnSql).ToList<Column>();
@@ -98,6 +99,7 @@ namespace VSBussinessExtenstion.DataBaseHelper
                 x.TableDescription = table.TableDescription;
                 x.IsSelect = true;
                 x.ConnectionStrings = table.ConnectionStrings;
+                x.CreateControl = controls.FirstOrDefault(y => y.ControlName == x.CreateControls); 
             });     
             BackConnection();
             table.Columns.ForEach(x => x.CSharpType = GetColumnType(x.DBType, x.SQLType));

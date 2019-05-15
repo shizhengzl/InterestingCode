@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using VSBussinessExtenstion.DataBaseHelper;
 using DatabaseHelper = Core.UsuallyCommon.DatabaseHelper;
 using NLog;
+using System.IO;
 
 namespace WFGenerator
 {
@@ -34,62 +35,62 @@ namespace WFGenerator
             Core.UsuallyCommon.IoHelper.CreateFile(path, context);
         }
 
-        public string DataBaseGenerator(List<Column> columns, Snippet snippet, Boolean generatorFile)
+        public string DataBaseGenerator(List<Column> columns, Snippet snippet,ref StringBuilder messages)
         {
             try
             {
                 columns = columns.Where(x => x.IsSelect).ToList();
-                if (string.IsNullOrEmpty(snippet.OutputPath))
-                    snippet.OutputPath = DefaltPath;
-                if (string.IsNullOrEmpty(snippet.GeneratorFileName))
-                    snippet.GeneratorFileName = "@TableName.cs";
                 string context = snippet.Context;
-
-                messages.Text = $"开始替自定义变量........";
-                context = UserDeclareVarbibles(context, columns);
-
-                messages.Text = $"正在处理控件数据........";
+                if (string.IsNullOrEmpty(snippet.OutputPath))
+                { 
+                    snippet.OutputPath = DefaltPath;
+                    messages.AppendLine($"没有设置生成路劲，系统初始化路劲为：{snippet.OutputPath}");
+                }
+                   
+                if (string.IsNullOrEmpty(snippet.GeneratorFileName))
+                {
+                    snippet.GeneratorFileName = "@TableName.cs";
+                    messages.AppendLine($"没有设置生成文件名，系统初始化文件名为：{snippet.GeneratorFileName}");
+                } 
+                context = UserDeclareVarbibles(context, columns,ref messages); 
                 // 处理controls
                 columns.ForEach(x =>
                 {
                     if (!string.IsNullOrEmpty(x.SearchControls))
-                    {
-                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.SearchControls);
-                        x.SearchControls = ReplaceDataBase(control.ControlText, x, true);
+                    { 
+                        x.SearchControls = ReplaceDataBase(x.SearchControl.ControlText, x, true);
                         if (x.SearchControl.ControlDataSources != null)
                             x.SearchControls = ReplaceDataBase(x.SearchControls, x.SearchControl.ControlDataSources, true);
                     }
 
                     if (!string.IsNullOrEmpty(x.GridControls))
-                    {
-                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.GridControls);
-                        x.GridControls = ReplaceDataBase(control.ControlText, x, true);
+                    { 
+                        x.GridControls = ReplaceDataBase(x.GridControl.ControlText, x, true);
                         if (x.GridControl.ControlDataSources != null)
                             x.GridControls = ReplaceDataBase(x.GridControls, x.GridControl.ControlDataSources, true);
                     }
 
                     if (!string.IsNullOrEmpty(x.CreateControls))
-                    {
-                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.CreateControls);
-                        x.CreateControls = ReplaceDataBase(control.ControlText, x, true);
+                    { 
+                        x.CreateControls = ReplaceDataBase(x.CreateControl.ControlText, x, true);
                         if (x.CreateControl.ControlDataSources != null)
-                            x.CreateControls = ReplaceDataBase(x.CreateControls, x.CreateControl.ControlDataSources, true);
-                    }
-
+                        {
+                            x.CreateControls = ReplaceDataBase(x.CreateControls, x.CreateControl.ControlDataSources, true); 
+                            AppendCode(x.CreateControl, x);
+                        } 
+                    } 
                     if (!string.IsNullOrEmpty(x.ModifyControls))
-                    {
-                        var control = defaultsqlite.Controls.FirstOrDefault(y => y.ControlName == x.ModifyControls);
-                        x.ModifyControls = ReplaceDataBase(control.ControlText, x, true);
+                    { 
+                        x.ModifyControls = ReplaceDataBase(x.ModifyControl.ControlText, x, true);
                         if (x.ModifyControl.ControlDataSources != null)
                             x.ModifyControls = ReplaceDataBase(x.ModifyControls, x.ModifyControl.ControlDataSources, true);
                     }
-
                 }
                 );
 
                 var listReplace = StringHelper.GetStringListByStartAndEndInner(context, SnippetReplace.Start.GetDescription(), SnippetReplace.End.GetDescription());
-                
-                messages.Text = $"开始替换模板变量........";
+
+                messages.AppendLine($"开始替换模板变量........");
                 foreach (var item in listReplace)
                 {
                     var inittempcontext = item.Replace(SnippetReplace.Start.GetDescription(), string.Empty).Replace(SnippetReplace.End.GetDescription(), string.Empty);
@@ -99,34 +100,33 @@ namespace WFGenerator
 
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
 
-
+                System.Text.UTF8Encoding ut = new UTF8Encoding();
+                context = ut.GetString(ut.GetBytes(context));
                 string filename = ApplicationVsHelper.VsProjectPath.ToStringExtension()
                 + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
 
-                messages.Text = $"开始生成文件........";
-                GeneratorFile(context, filename);
+                messages.AppendLine($"开始生成文件........");
 
-                if (ApplicationVsHelper._applicationObject != null)
+                if(snippet.IsAutoFind)
                 {
-                    var ext = filename.GetFileExtension();
-                    List<string> vs = new List<string>() { ".cs", ".js", ".aspx", ".cshtml" };
-                    if (vs.Any(x => x == ext))
+                    List<string> list = new List<string>();
+                    IoHelper.GetFiles(filename.GetFileDirectory(), filename.GetFileName() + filename.GetFileExtension(), ref list);
+                    if(list.Count > 0)
                     {
-                        ApplicationVsHelper.Open(filename);
-                        if (!generatorFile)
-                            ApplicationVsHelper.Close(filename);
+                        filename = list.FirstOrDefault();
                     }
-
                 }
+                GeneratorFile(context, filename);
+                ApplicationVsHelper.Open(filename);
                 context = IoHelper.FileReader(filename);
-                messages.Text += $"生成完成........";
+                messages.AppendLine($"生成完成........");
                 return context;
 
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-                messages.Text = $"生成出错:{ex.Message}........";
+                messages.AppendLine($"生成出错:{ex.Message}........");
             }
             return string.Empty;
         }
@@ -134,81 +134,94 @@ namespace WFGenerator
         public void AppendCode(Core.UsuallyCommon.DataBase.Control control, Column column)
         {
             var url = control.AppendCodeUrl;
-            if(string.IsNullOrEmpty(control.AppendCodeUrl))
-            {
-                url = DefaltPath + "AppendCode.cs";
-            }
             url = this.ReplaceDataBase(url, control.ControlDataSources, true);
             url = this.ReplaceDataBase(url, column, true);
 
-            string filename = !string.IsNullOrEmpty(control.AppendCodeUrl) ? ApplicationVsHelper.VsProjectPath.ToStringExtension() : string.Empty  + url;
+
+            string filename = (!string.IsNullOrEmpty(control.AppendCodeUrl)
+                ? ApplicationVsHelper.VsProjectPath.ToStringExtension() : string.Empty) + url;
 
             var code = this.ReplaceDataBase(control.AppendCode, control.ControlDataSources, true);
             code = this.ReplaceDataBase(code, column, true);
-             
-             
+
+            if (string.IsNullOrEmpty(control.AppendCodeUrl) || !File.Exists(filename))
+            {
+                url = DefaltPath + "AppendCode.cs";
+                // 创建文件
+                Core.UsuallyCommon.IoHelper.CreateFile(url, code);
+            }
+            else
+            {
+                // append code
+                if (filename.GetFileExtension() == ".cs")
+                {
+                    // apend code
+                    CompileUnitParser.AppendCode(filename, control.AppendCode);
+                    ApplicationVsHelper.Open(filename);
+                }
+                else
+                {
+                    // show 
+                }
+            }
+
+
+
         }
 
-        public string UserDeclareVarbibles(string context, List<Column> columns)
+        public string UserDeclareVarbibles(string context, List<Column> columns,ref StringBuilder messages)
         {
             try
-            {
-                var controls = defaultsqlite.Controls.ToList();
-                var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
-                messages.Text = $"初始化自定义变的数据库连接........";
-
+            { 
+                var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList(); 
 
                 foreach (var varbable in noSystemVarbables)
                 {
                     StringBuilder sb = new StringBuilder();
                     if (context.IndexOf(varbable.VariableName) > -1)
-                    { 
-                        foreach (var column in columns)
-                        { 
-                            var text = varbable.ReplaceString;
-                            if (varbable.VariableType == DataSourceType.DatabaseType)
-                            {
-                                defaultsqlite.Database.Connection.ConnectionString = column.ConnectionStrings;
-                                var sql = ReplaceDataBase(varbable.ReplaceString, column, true);
-                                var replacestring = defaultsqlite.Database.SqlQuery<string>(sql).ToString();
-                                context = context.Replace(varbable.VariableName, replacestring);
-                                defaultsqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
-                            }
+                    {
+                        messages.AppendLine($"找到自定义变量:{varbable.VariableName}");
+                        var text = varbable.ReplaceString;
+                        if (varbable.VariableType == DataSourceType.DatabaseType)
+                        {
+                            defaultsqlite.Database.Connection.ConnectionString = columns.FirstOrDefault().ConnectionStrings;
+                            var sql = ReplaceDataBase(varbable.ReplaceString, columns.FirstOrDefault(), true);
+                            messages.AppendLine($"改变量为数据库变量SQL:{sql}，执行数据库连接：{columns.FirstOrDefault().ConnectionStrings}");
+                            var replacestring = defaultsqlite.Database.SqlQuery<string>(sql).ToString();
+                            context = context.Replace(varbable.VariableName, replacestring);
+                            defaultsqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
+                        }
+                        columns.ForEach(column => {
+                            
                             if (varbable.VariableType == DataSourceType.CSharpType)
-                            {
-                                var searchcontrol = controls.FirstOrDefault(x => x.ControlName == column.SearchControls);
+                            { 
                                 if (column.SearchControl?.ControlDataSources != null)
                                     sb.AppendLine(this.ReplaceDataBase(text, column.SearchControl.ControlDataSources, true));
-
-
-                                var createcontrol = controls.FirstOrDefault(x => x.ControlName == column.CreateControls);
+                                if (column.GridControl?.ControlDataSources != null)
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.GridControl.ControlDataSources, true)); 
                                 if (column.CreateControl?.ControlDataSources != null)
-                                    sb.AppendLine(this.ReplaceDataBase(text, column.CreateControl.ControlDataSources, true));
-
-
-                                var modifycontrol = controls.FirstOrDefault(x => x.ControlName == column.ModifyControls);
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.CreateControl.ControlDataSources, true)); 
                                 if (column.ModifyControl?.ControlDataSources != null)
                                     sb.AppendLine(this.ReplaceDataBase(text, column.ModifyControl.ControlDataSources, true));
 
                             }
-                        }
+                        }); 
                     }
 
                     context = context.Replace(varbable.VariableName, sb.ToString());
-                }
-                messages.Text = $"替换自定义变量完成........";
+                } 
                 return context;
 
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-                messages.Text = $"生成出错:{ex.Message}........";
+                messages.AppendLine($"生成出错:{ex.Message}........");
             }
             return string.Empty;
         }
 
-        public string ClassGenerator(List<Method> methods, List<Proterty> proterties, Snippet snippet, bool generatorFile)
+        public string ClassGenerator(List<Method> methods, List<Proterty> proterties, Snippet snippet)
         {
             try
             {
@@ -254,14 +267,13 @@ namespace WFGenerator
                             result = this.ReplaceDataBase(result, proertyslist.FirstOrDefault(), true);
                     }
                     sbResult.AppendLine(result);
-                    if (generatorFile)
-                    {
-                        string filename = (ApplicationVsHelper._applicationObject == null
-                          ? string.Empty : ApplicationVsHelper.VsProjectPath)
-                          + snippet.OutputPath.Replace("/", "\\") + "\\"
-                          + this.ReplaceDataBase(snippet.GeneratorFileName, methods.FirstOrDefault(), true);
-                        GeneratorFile(result, filename);
-                    }
+
+                    string filename = (ApplicationVsHelper._applicationObject == null
+                      ? string.Empty : ApplicationVsHelper.VsProjectPath)
+                      + snippet.OutputPath.Replace("/", "\\") + "\\"
+                      + this.ReplaceDataBase(snippet.GeneratorFileName, methods.FirstOrDefault(), true);
+                    GeneratorFile(result, filename);
+
                 }
                 return sb.ToString();
 
@@ -275,74 +287,19 @@ namespace WFGenerator
         }
 
 
-        public string GetGenerator(Snippet snippet, object datasource, ServicesAddressHelper sh = null
-           , Boolean generatorFile = false)
-        {
-            if (snippet.IsFloder)
-            {
-                messages.Text = $"请选择模板，而非文件夹生成。";
-                return string.Empty;
-            }
-            List<TreeNode> listsource = datasource as List<TreeNode>;
-            if (listsource.Count == 0)
-            {
-                messages.Text = $"请选表来生成。";
-                return string.Empty;
-            }
-
-            StringBuilder sbResult = new StringBuilder();
-
+        public string GetGenerator(Snippet snippet, List<Column> columns,ref StringBuilder sbResult)
+        {  
             if (snippet.DataSourceType == DataSourceType.DatabaseType)
             {
-                if (!generatorFile)
-                {
-                    Table table = listsource.FirstOrDefault().Tag as Table;
-                    messages.Text = $"初始化表结构数据........";
-                    sh.InitColumn(table);
-                    if (snippet.IsSelectGenerator)
-                    {
-                        SelectColumn selectColumn = new SelectColumn(table);
-                        DialogResult diaResult = selectColumn.ShowDialog();
-                    }
-
-                    sbResult.AppendLine(DataBaseGenerator(table.Columns, snippet, generatorFile));
-                }
-                else
-                {
-                    listsource.ForEach(x =>
-                    {
-                        var table = x.Tag as Table;
-                        sh.InitColumn(table);
-
-                        if (snippet.IsSelectGenerator)
-                        {
-                            SelectColumn selectColumn = new SelectColumn(table);
-                            DialogResult diaResult = selectColumn.ShowDialog();
-                        }
-
-
-                        DataBaseGenerator(table.Columns, snippet, generatorFile);
-                    });
-                }
-
+               return DataBaseGenerator(columns, snippet,ref sbResult);
             }
             if (snippet.DataSourceType == DataSourceType.CSharpType)
             {
                 List<Method> methods = new List<Method>();
-                List<Proterty> proterties = new List<Proterty>();
-                foreach (TreeNode note in listsource)
-                {
-                    if (note.Tag != null)
-                    {
-                        if (note.Tag is Method)
-                            methods.Add(note.Tag as Method);
-                        if (note.Tag is Proterty)
-                            proterties.Add(note.Tag as Proterty);
-                    }
-                }
-                sbResult.AppendLine(ClassGenerator(methods, proterties, snippet, generatorFile));
+                List<Proterty> proterties = new List<Proterty>(); 
+                return ClassGenerator(methods, proterties, snippet);
             }
-            return sbResult.ToStringExtension();
+            return string.Empty;
         }
 
         public string ReplaceDataBase<T>(string context, T t, bool nochange = false) where T : class

@@ -196,7 +196,17 @@ namespace WFGenerator
                     switch (selecttype)
                     {
                         case SelectDataSoruceType.DataBase:
-                            generatorClass.GetGenerator(snippet, ServerTree.listSelect, sh, true);
+                            List<TreeNode> listsource = ServerTree.listSelect as List<TreeNode>;
+                            listsource.ForEach(x =>
+                            {
+                                var table = x.Tag as Table;
+                                sh.InitColumn(table);
+                                StringBuilder sb = new StringBuilder();
+                                generatorClass.GetGenerator(snippet,table.Columns,ref sb);
+
+                                txtGenerator.Text = sb.ToString();
+                            });
+                           
                             break;
                         case SelectDataSoruceType.Class:
                             break;
@@ -226,11 +236,23 @@ namespace WFGenerator
             {
                 case SelectDataSoruceType.DataBase:
                     if (snippet.DataSourceType == DataSourceType.DatabaseType)
-                        txtGenerator.AppendText(generatorClass.GetGenerator(snippet, ServerTree.listSelect, sh));
+                    {
+                        List<TreeNode> listsource = ServerTree.listSelect as List<TreeNode>; 
+                        if(listsource.FirstOrDefault() == null)
+                        {
+                            txtGenerator.Text = "请选择表";
+                            return;
+                        }
+                        var table = listsource.FirstOrDefault().Tag as Table;
+                        sh.InitColumn(table);
+                        StringBuilder sb = new StringBuilder();
+                        generatorClass.GetGenerator(snippet, table.Columns, ref sb); 
+                        txtGenerator.Text = sb.ToString();  
+                    } 
                     break;
                 case SelectDataSoruceType.Class:
-                    if (snippet.DataSourceType == DataSourceType.CSharpType)
-                        txtGenerator.AppendText(generatorClass.GetGenerator(snippet, ClassTree.listSelect));
+                    //if (snippet.DataSourceType == DataSourceType.CSharpType)
+                    //    txtGenerator.AppendText(generatorClass.GetGenerator(snippet, ClassTree.listSelect));
                     break;
                 case SelectDataSoruceType.XML:
                     break;

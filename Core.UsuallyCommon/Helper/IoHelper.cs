@@ -219,6 +219,39 @@ namespace Core.UsuallyCommon
             bw.Write(buff, 0, buff.Length);
             bw.Close();
             fs.Close();
+        } 
+
+        /// <summary>
+        /// 判断文件夹是否存在文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="FileName"></param>
+        /// <param name="list"></param>
+        public static void GetFiles(string filePath, string FileName, ref List<string> list)
+        {
+            if (!System.IO.Directory.Exists(filePath))
+                return;
+            try
+            {
+                DirectoryInfo folder = new DirectoryInfo(filePath);
+                FileInfo[] chldFiles = folder.GetFiles("*.*");
+                foreach (FileInfo chlFile in chldFiles)
+                {
+                    if (chlFile.Name == FileName)
+                    {
+                        list.Add(chlFile.FullName);
+                    } 
+                }
+                DirectoryInfo[] chldFolders = folder.GetDirectories();
+                foreach (DirectoryInfo chldFolder in chldFolders)
+                {
+                    GetFiles(chldFolder.FullName, FileName,ref list);
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+            } 
         }
     }
 }

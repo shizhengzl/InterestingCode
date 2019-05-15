@@ -164,7 +164,7 @@ namespace WFGenerator
                         SelectDataSource selectDataSource = new SelectDataSource(s, s.SearchControl.ControlDataSources,"查询列");
                         if (selectDataSource.ShowDialog() == DialogResult.OK)
                         {
-                            s.SearchControl.ControlDataSources = selectDataSource._controlDataSource;
+                            table.Columns.FirstOrDefault(x=>x.ColumnName == s.ColumnName).SearchControl.ControlDataSources = selectDataSource._controlDataSource;
                         }
                     }
 
@@ -173,7 +173,7 @@ namespace WFGenerator
                         SelectDataSource selectDataSource = new SelectDataSource(s, s.GridControl.ControlDataSources, "列表");
                         if (selectDataSource.ShowDialog() == DialogResult.OK)
                         {
-                            s.GridControl.ControlDataSources = selectDataSource._controlDataSource;
+                            table.Columns.FirstOrDefault(x => x.ColumnName == s.ColumnName).GridControl.ControlDataSources = selectDataSource._controlDataSource;
                         }
                     }
                     if (s.CreateControl != null && s.CreateControl.NeedDataSource)
@@ -181,7 +181,7 @@ namespace WFGenerator
                         SelectDataSource selectDataSource = new SelectDataSource(s, s.CreateControl.ControlDataSources, "创建列");
                         if (selectDataSource.ShowDialog() == DialogResult.OK)
                         {
-                            s.CreateControl.ControlDataSources = selectDataSource._controlDataSource;
+                            table.Columns.FirstOrDefault(x => x.ColumnName == s.ColumnName).CreateControl.ControlDataSources = selectDataSource._controlDataSource;
                         }
                     }
 
@@ -190,7 +190,7 @@ namespace WFGenerator
                         SelectDataSource selectDataSource = new SelectDataSource(s, s.ModifyControl.ControlDataSources, "修改列");
                         if (selectDataSource.ShowDialog() == DialogResult.OK)
                         {
-                            s.ModifyControl.ControlDataSources = selectDataSource._controlDataSource;
+                            table.Columns.FirstOrDefault(x => x.ColumnName == s.ColumnName).ModifyControl.ControlDataSources = selectDataSource._controlDataSource;
                         }
                     }
 
