@@ -45,7 +45,7 @@ namespace Core.UsuallyCommon
         /// <returns></returns>
         public static string FileReader(string Path)
         {
-            StreamReader dvStreamReader = new StreamReader(Path, Encoding.GetEncoding("GB2312"));
+            StreamReader dvStreamReader = new StreamReader(Path, Encoding.Default);
             string result = dvStreamReader.ReadToEnd();
             dvStreamReader.Close();
             return result;
@@ -60,7 +60,7 @@ namespace Core.UsuallyCommon
         {
             //StreamWriter writer = new FileInfo(path).CreateText();
             FileStream fs = new FileStream(path, FileMode.Create);
-            StreamWriter writer = new StreamWriter(fs, Encoding.GetEncoding("GB2312"));
+            StreamWriter writer = new StreamWriter(fs, Encoding.Default);
             writer.Flush();
             writer.Write(content);
             writer.Close();
@@ -75,7 +75,7 @@ namespace Core.UsuallyCommon
         public static void FileOverWrite(string path, string content)
         {
 
-            StreamWriter writer = new StreamWriter(path, false, Encoding.GetEncoding("GB2312"));
+            StreamWriter writer = new StreamWriter(path, false, Encoding.Default);
             writer.Flush();
             writer.Write(content);
             writer.Close();
@@ -98,7 +98,7 @@ namespace Core.UsuallyCommon
             }
             else
             {
-                StreamWriter writer = new StreamWriter(Path, false, Encoding.GetEncoding("GB2312"));
+                StreamWriter writer = new StreamWriter(Path, false, Encoding.Default);
                 writer.Flush();
                 writer.Write(Content);
                 writer.Close();
@@ -237,7 +237,7 @@ namespace Core.UsuallyCommon
                 FileInfo[] chldFiles = folder.GetFiles("*.*");
                 foreach (FileInfo chlFile in chldFiles)
                 {
-                    if (chlFile.Name == FileName)
+                    if (chlFile.Name.ToUpper() == FileName.ToUpper())
                     {
                         list.Add(chlFile.FullName);
                     } 

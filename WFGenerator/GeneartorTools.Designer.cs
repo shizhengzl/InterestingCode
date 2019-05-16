@@ -104,6 +104,7 @@
             this.tabPageSystemConfig = new System.Windows.Forms.TabPage();
             this.tabControlSet = new System.Windows.Forms.TabControl();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
+            this.tmessages = new WFGenerator.SyntaxTextBox();
             this.statusStripMessage.SuspendLayout();
             this.tabControlALL.SuspendLayout();
             this.tabPageSQLGeneartor.SuspendLayout();
@@ -211,6 +212,7 @@
             // 
             // tabPageStruct
             // 
+            this.tabPageStruct.Controls.Add(this.tmessages);
             this.tabPageStruct.Controls.Add(this.txtGenerator);
             this.tabPageStruct.Controls.Add(this.toolStrip1);
             this.tabPageStruct.Location = new System.Drawing.Point(4, 22);
@@ -225,14 +227,14 @@
             // 
             this.txtGenerator.AcceptsTab = true;
             this.txtGenerator.CaseSensitive = false;
-            this.txtGenerator.ConfigFile = "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\VisualStudio\\15.0_6bad1949\\Project" +
-    "Assemblies\\nhdkjn3g01\\csharp.xml";
-            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenerator.ConfigFile = "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\VisualStudio\\16.0_dfcede3a\\Project" +
+    "Assemblies\\tkov_xq101\\csharp.xml";
+            this.txtGenerator.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtGenerator.FilterAutoComplete = true;
             this.txtGenerator.Location = new System.Drawing.Point(3, 28);
             this.txtGenerator.MaxUndoRedoSteps = 50;
             this.txtGenerator.Name = "txtGenerator";
-            this.txtGenerator.Size = new System.Drawing.Size(501, 554);
+            this.txtGenerator.Size = new System.Drawing.Size(501, 420);
             this.txtGenerator.TabIndex = 1;
             this.txtGenerator.Text = "";
             this.txtGenerator.WordWrap = false;
@@ -938,6 +940,22 @@
             this.openFile.FileName = "openFileDialog1";
             this.openFile.Multiselect = true;
             // 
+            // tmessages
+            // 
+            this.tmessages.AcceptsTab = true;
+            this.tmessages.CaseSensitive = false;
+            this.tmessages.ConfigFile = "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\VisualStudio\\16.0_dfcede3a\\Project" +
+    "Assemblies\\tkov_xq101\\csharp.xml";
+            this.tmessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tmessages.FilterAutoComplete = true;
+            this.tmessages.Location = new System.Drawing.Point(3, 448);
+            this.tmessages.MaxUndoRedoSteps = 50;
+            this.tmessages.Name = "tmessages";
+            this.tmessages.Size = new System.Drawing.Size(501, 134);
+            this.tmessages.TabIndex = 2;
+            this.tmessages.Text = "";
+            this.tmessages.WordWrap = false;
+            // 
             // GeneartorTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1069,6 +1087,7 @@
         private System.Windows.Forms.ToolStripMenuItem CMS看生成代码;
         private SyntaxTextBox txtGenerator;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private SyntaxTextBox tmessages;
     }
 }
 

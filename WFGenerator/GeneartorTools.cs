@@ -202,9 +202,9 @@ namespace WFGenerator
                                 var table = x.Tag as Table;
                                 sh.InitColumn(table);
                                 StringBuilder sb = new StringBuilder();
-                                generatorClass.GetGenerator(snippet,table.Columns,ref sb);
+                                txtGenerator.Text = generatorClass.GetGenerator(snippet,table,ref sb);
 
-                                txtGenerator.Text = sb.ToString();
+                                tmessages.Text = sb.ToString();
                             });
                            
                             break;
@@ -246,8 +246,8 @@ namespace WFGenerator
                         var table = listsource.FirstOrDefault().Tag as Table;
                         sh.InitColumn(table);
                         StringBuilder sb = new StringBuilder();
-                        generatorClass.GetGenerator(snippet, table.Columns, ref sb); 
-                        txtGenerator.Text = sb.ToString();  
+                        txtGenerator.Text = generatorClass.GetGenerator(snippet, table, ref sb); 
+                        tmessages.Text = sb.ToString();  
                     } 
                     break;
                 case SelectDataSoruceType.Class:
@@ -617,7 +617,8 @@ namespace WFGenerator
                 Snippet snippet = (Snippet)SnippetTree.SelectedNode.Tag;
                 List<Snippet> listDelete = new List<Snippet>();
                 GetChildSnippet(snippet, ref listDelete);
-                sqlite.Snippets.RemoveRange(listDelete);
+                listDelete.ForEach(x => sqlite.Snippets.Remove(sqlite.Snippets.FirstOrDefault(y=>y.Id == x.Id)));
+                 
             }
          }
 

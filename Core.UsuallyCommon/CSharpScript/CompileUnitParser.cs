@@ -347,7 +347,7 @@ namespace Core.UsuallyCommon
         public static string MergeFile(string oldFilePath, string newPath, string content)
         {
             IoHelper.CreateFile(newPath, content);
-            content = CompileUnitParser.CompareCompilationUnit(newPath, oldFilePath);
+            content = CompileUnitParser.CompareCompilationUnit(oldFilePath, newPath);
             return content;
         }
     }

@@ -32,55 +32,58 @@ namespace WFGenerator
         {
             if (string.IsNullOrEmpty(path))
                 return;
-            Core.UsuallyCommon.IoHelper.CreateFile(path, context);
+            if (File.Exists(path))
+                IoHelper.FileOverWrite(path, context);
+            else
+                Core.UsuallyCommon.IoHelper.CreateFile(path, context);
         }
 
-        public string DataBaseGenerator(List<Column> columns, Snippet snippet,ref StringBuilder messages)
+        public string DataBaseGenerator(List<Column> columns, Snippet snippet, ref StringBuilder messages)
         {
             try
             {
                 columns = columns.Where(x => x.IsSelect).ToList();
                 string context = snippet.Context;
                 if (string.IsNullOrEmpty(snippet.OutputPath))
-                { 
+                {
                     snippet.OutputPath = DefaltPath;
                     messages.AppendLine($"没有设置生成路劲，系统初始化路劲为：{snippet.OutputPath}");
                 }
-                   
+
                 if (string.IsNullOrEmpty(snippet.GeneratorFileName))
                 {
                     snippet.GeneratorFileName = "@TableName.cs";
                     messages.AppendLine($"没有设置生成文件名，系统初始化文件名为：{snippet.GeneratorFileName}");
-                } 
-                context = UserDeclareVarbibles(context, columns,ref messages); 
+                }
+                context = UserDeclareVarbibles(context, columns, ref messages);
                 // 处理controls
                 columns.ForEach(x =>
                 {
                     if (!string.IsNullOrEmpty(x.SearchControls))
-                    { 
+                    {
                         x.SearchControls = ReplaceDataBase(x.SearchControl.ControlText, x, true);
                         if (x.SearchControl.ControlDataSources != null)
                             x.SearchControls = ReplaceDataBase(x.SearchControls, x.SearchControl.ControlDataSources, true);
                     }
 
                     if (!string.IsNullOrEmpty(x.GridControls))
-                    { 
+                    {
                         x.GridControls = ReplaceDataBase(x.GridControl.ControlText, x, true);
                         if (x.GridControl.ControlDataSources != null)
                             x.GridControls = ReplaceDataBase(x.GridControls, x.GridControl.ControlDataSources, true);
                     }
 
                     if (!string.IsNullOrEmpty(x.CreateControls))
-                    { 
+                    {
                         x.CreateControls = ReplaceDataBase(x.CreateControl.ControlText, x, true);
                         if (x.CreateControl.ControlDataSources != null)
                         {
-                            x.CreateControls = ReplaceDataBase(x.CreateControls, x.CreateControl.ControlDataSources, true); 
+                            x.CreateControls = ReplaceDataBase(x.CreateControls, x.CreateControl.ControlDataSources, true);
                             AppendCode(x.CreateControl, x);
-                        } 
-                    } 
+                        }
+                    }
                     if (!string.IsNullOrEmpty(x.ModifyControls))
-                    { 
+                    {
                         x.ModifyControls = ReplaceDataBase(x.ModifyControl.ControlText, x, true);
                         if (x.ModifyControl.ControlDataSources != null)
                             x.ModifyControls = ReplaceDataBase(x.ModifyControls, x.ModifyControl.ControlDataSources, true);
@@ -100,25 +103,45 @@ namespace WFGenerator
 
                 context = this.ReplaceDataBase(context, columns.FirstOrDefault(), true);
 
-                System.Text.UTF8Encoding ut = new UTF8Encoding();
-                context = ut.GetString(ut.GetBytes(context));
-                string filename = ApplicationVsHelper.VsProjectPath.ToStringExtension()
-                + snippet.OutputPath.Replace("/", "\\") + "\\" + this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
+                 
+                string filename = this.ReplaceDataBase(snippet.GeneratorFileName, columns.FirstOrDefault(), true);
 
-                messages.AppendLine($"开始生成文件........");
+                string url = DefaltPath + filename;
+                messages.AppendLine($"自动默认路径：{url}");
+                string generatorurl = ApplicationVsHelper.VsProjectPath.ToStringExtension()
+                          + snippet.OutputPath.Replace("/", "\\") + "\\" + filename;
+                messages.AppendLine($"生成到工程路劲：{generatorurl}");
+           
 
-                if(snippet.IsAutoFind)
+                if (snippet.IsAutoFind && !string.IsNullOrEmpty(generatorurl))
                 {
+                    messages.AppendLine($"启用了自动查找文件{generatorurl.GetFileDirectory()}下的文件：{generatorurl.GetFileName() + generatorurl.GetFileExtension()}");
                     List<string> list = new List<string>();
-                    IoHelper.GetFiles(filename.GetFileDirectory(), filename.GetFileName() + filename.GetFileExtension(), ref list);
-                    if(list.Count > 0)
+                    IoHelper.GetFiles(generatorurl.GetFileDirectory(), generatorurl.GetFileName() + generatorurl.GetFileExtension(), ref list);
+                    if (list.Count > 0)
                     {
-                        filename = list.FirstOrDefault();
+                        generatorurl = list.FirstOrDefault();
+                        messages.AppendLine($"自动查找的路劲：{generatorurl}");
                     }
                 }
-                GeneratorFile(context, filename);
-                ApplicationVsHelper.Open(filename);
-                context = IoHelper.FileReader(filename);
+
+                GeneratorFile(context, url);
+                if (snippet.IsMergin && File.Exists(generatorurl))
+                {
+                    messages.AppendLine($"启用了自动合并功能");
+                    context = CompileUnitParser.MergeFile(generatorurl,url, context);
+                }
+
+               
+
+                if (!string.IsNullOrEmpty(generatorurl))
+                { 
+                    GeneratorFile(context, generatorurl);
+                    ApplicationVsHelper.Open(generatorurl);
+                }
+
+               
+                context = IoHelper.FileReader(url);
                 messages.AppendLine($"生成完成........");
                 return context;
 
@@ -134,6 +157,8 @@ namespace WFGenerator
         public void AppendCode(Core.UsuallyCommon.DataBase.Control control, Column column)
         {
             var url = control.AppendCodeUrl;
+            if (string.IsNullOrEmpty(url))
+                return;
             url = this.ReplaceDataBase(url, control.ControlDataSources, true);
             url = this.ReplaceDataBase(url, column, true);
 
@@ -169,11 +194,11 @@ namespace WFGenerator
 
         }
 
-        public string UserDeclareVarbibles(string context, List<Column> columns,ref StringBuilder messages)
+        public string UserDeclareVarbibles(string context, List<Column> columns, ref StringBuilder messages)
         {
             try
-            { 
-                var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList(); 
+            {
+                var noSystemVarbables = defaultsqlite.Variables.Where(x => !x.IsSystemGenerator).ToList();
 
                 foreach (var varbable in noSystemVarbables)
                 {
@@ -191,25 +216,26 @@ namespace WFGenerator
                             context = context.Replace(varbable.VariableName, replacestring);
                             defaultsqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
                         }
-                        columns.ForEach(column => {
-                            
+                        columns.ForEach(column =>
+                        {
+
                             if (varbable.VariableType == DataSourceType.CSharpType)
-                            { 
+                            {
                                 if (column.SearchControl?.ControlDataSources != null)
                                     sb.AppendLine(this.ReplaceDataBase(text, column.SearchControl.ControlDataSources, true));
                                 if (column.GridControl?.ControlDataSources != null)
-                                    sb.AppendLine(this.ReplaceDataBase(text, column.GridControl.ControlDataSources, true)); 
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.GridControl.ControlDataSources, true));
                                 if (column.CreateControl?.ControlDataSources != null)
-                                    sb.AppendLine(this.ReplaceDataBase(text, column.CreateControl.ControlDataSources, true)); 
+                                    sb.AppendLine(this.ReplaceDataBase(text, column.CreateControl.ControlDataSources, true));
                                 if (column.ModifyControl?.ControlDataSources != null)
                                     sb.AppendLine(this.ReplaceDataBase(text, column.ModifyControl.ControlDataSources, true));
 
                             }
-                        }); 
+                        });
                     }
 
                     context = context.Replace(varbable.VariableName, sb.ToString());
-                } 
+                }
                 return context;
 
             }
@@ -287,16 +313,22 @@ namespace WFGenerator
         }
 
 
-        public string GetGenerator(Snippet snippet, List<Column> columns,ref StringBuilder sbResult)
-        {  
+        public string GetGenerator(Snippet snippet,Table table , ref StringBuilder sbResult)
+        {
             if (snippet.DataSourceType == DataSourceType.DatabaseType)
             {
-               return DataBaseGenerator(columns, snippet,ref sbResult);
+
+                if (snippet.IsSelectGenerator)
+                {
+                    SelectColumn selectColumn = new SelectColumn(table);
+                    DialogResult diaResult = selectColumn.ShowDialog();
+                }
+                return DataBaseGenerator(table.Columns, snippet, ref sbResult);
             }
             if (snippet.DataSourceType == DataSourceType.CSharpType)
             {
                 List<Method> methods = new List<Method>();
-                List<Proterty> proterties = new List<Proterty>(); 
+                List<Proterty> proterties = new List<Proterty>();
                 return ClassGenerator(methods, proterties, snippet);
             }
             return string.Empty;

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VSBussinessExtenstion;
 using Core.UsuallyCommon;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity;
 
 namespace WFGenerator
 {
@@ -26,7 +28,7 @@ namespace WFGenerator
             txtParentId.Text = father.Name;
             if (snippet!= null)
             {
-
+                snippet = defaultSqlite.Snippets.AsNoTracking().FirstOrDefault(x => x.Id == _snippet.Id);
                 txtName.Text = snippet.Name;
                 txtDataSourceType.Text = snippet.DataSourceType.ToString();
                 txtParentId.Text = father == null ? string.Empty :  father.Name;
@@ -63,6 +65,8 @@ namespace WFGenerator
             {
                 _snippet = defaultSqlite.Snippets.FirstOrDefault(x => x.Id == _snippet.Id);
             }
+
+
             var minId = defaultSqlite.Snippets.OrderBy(x => x.Id).First();
 
             _snippet.Name = txtName.Text;
@@ -82,7 +86,12 @@ namespace WFGenerator
             {
                 defaultSqlite.Snippets.Add(_snippet);
             }
-
+            else
+            {
+                DbEntityEntry entry = defaultSqlite.Entry<Snippet>(_snippet);
+                var entity = defaultSqlite.Set(typeof(Snippet)).Attach(_snippet);
+                entry.State = EntityState.Modified;
+            } 
             defaultSqlite.SaveChanges();
             this.Close();
         }
