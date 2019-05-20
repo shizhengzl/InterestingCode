@@ -955,10 +955,10 @@ namespace WFGenerator
         /// Sends a win32 message to get the scrollbars' position.
         /// </summary>
         /// <returns>a POINT structore containing horizontal and vertical scrollbar position.</returns>
-        private unsafe Win32.POINT GetScrollPos()
+        private  Win32.POINT GetScrollPos()
         {
             Win32.POINT res = new Win32.POINT();
-            IntPtr ptr = new IntPtr(&res);
+            IntPtr ptr = new IntPtr(res.x);
             Win32.SendMessage(Handle, Win32.EM_GETSCROLLPOS, 0, ptr);
             return res;
 
@@ -968,9 +968,9 @@ namespace WFGenerator
         /// Sends a win32 message to set scrollbars position.
         /// </summary>
         /// <param name="point">a POINT conatining H/Vscrollbar scrollpos.</param>
-        private unsafe void SetScrollPos(Win32.POINT point)
+        private  void SetScrollPos(Win32.POINT point)
         {
-            IntPtr ptr = new IntPtr(&point);
+            IntPtr ptr = new IntPtr(point.x);
             Win32.SendMessage(Handle, Win32.EM_SETSCROLLPOS, 0, ptr);
         }
         #endregion
