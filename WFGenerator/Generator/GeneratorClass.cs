@@ -38,7 +38,7 @@ namespace WFGenerator
                 Core.UsuallyCommon.IoHelper.CreateFile(path, context);
         }
 
-        public string DataBaseGenerator(List<Column> columns, Snippet snippet, ref StringBuilder messages)
+        public string DataBaseGenerator(List<Column> columns, Snippet snippet, ref StringBuilder messages,bool isLook = true)
         {
             try
             {
@@ -130,18 +130,18 @@ namespace WFGenerator
                 {
                     messages.AppendLine($"启用了自动合并功能");
                     context = CompileUnitParser.MergeFile(generatorurl,url, context);
+                    GeneratorFile(context, url);
                 }
 
-               
-
-                if (!string.IsNullOrEmpty(generatorurl))
+                var hasFormat = !string.IsNullOrEmpty(generatorurl) && !isLook;
+                if (hasFormat)
                 { 
                     GeneratorFile(context, generatorurl);
                     ApplicationVsHelper.Open(generatorurl);
                 }
 
                
-                context = IoHelper.FileReader(url);
+                context = IoHelper.FileReader(hasFormat ? generatorurl : url);
                 messages.AppendLine($"生成完成........");
                 return context;
 
@@ -313,7 +313,7 @@ namespace WFGenerator
         }
 
 
-        public string GetGenerator(Snippet snippet,Table table , ref StringBuilder sbResult)
+        public string GetGenerator(Snippet snippet,Table table , ref StringBuilder sbResult,bool IsLook)
         {
             if (snippet.DataSourceType == DataSourceType.DatabaseType)
             {
@@ -323,7 +323,7 @@ namespace WFGenerator
                     SelectColumn selectColumn = new SelectColumn(table);
                     DialogResult diaResult = selectColumn.ShowDialog();
                 }
-                return DataBaseGenerator(table.Columns, snippet, ref sbResult);
+                return DataBaseGenerator(table.Columns, snippet, ref sbResult, IsLook);
             }
             if (snippet.DataSourceType == DataSourceType.CSharpType)
             {
