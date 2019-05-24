@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGeneroator", "VsixGener
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliSenseExtension", "CustomIntelliSenseExtension\IntelliSenseExtension.csproj", "{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeHttpClient", "CodeHttpClient", "{5E9261EE-9F84-4F81-89F6-8FB49598887E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeHttpClient", "CodeHttpClient\CodeHttpClient.csproj", "{D07F6A8D-11E5-43A4-BB9C-4730C273B87C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,10 @@ Global
 		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EA7D8D7-BF2F-48E6-BA90-7A6D0493DDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D07F6A8D-11E5-43A4-BB9C-4730C273B87C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07F6A8D-11E5-43A4-BB9C-4730C273B87C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07F6A8D-11E5-43A4-BB9C-4730C273B87C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D07F6A8D-11E5-43A4-BB9C-4730C273B87C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +68,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{64892DBC-9FE7-4DDE-9CFC-A692969F5636} = {89DA4A79-A641-46C3-BE0A-3DCA7E757B5B}
 		{A956895F-90D2-4C4F-B0B0-2E9119D8088A} = {89DA4A79-A641-46C3-BE0A-3DCA7E757B5B}
+		{D07F6A8D-11E5-43A4-BB9C-4730C273B87C} = {5E9261EE-9F84-4F81-89F6-8FB49598887E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A787D1C-6AAE-4935-9D78-9CE296064F65}

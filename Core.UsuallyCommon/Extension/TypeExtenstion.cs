@@ -99,6 +99,24 @@ namespace Core.UsuallyCommon
             return result;
         }
 
+        // guid trim
+        public static Decimal ToDecimal(this object obj)
+        {
+            Decimal result = 0;
+            if (obj != null)
+                Decimal.TryParse(obj.ToString(), out result);
+            return result;
+        }
+
+        // guid trim
+        public static DateTime ToDateTime(this object obj)
+        {
+            DateTime result = DateTime.MaxValue;
+            if (obj != null)
+                DateTime.TryParse(obj.ToString(), out result);
+            return result;
+        }
+
         public static List<String> GetPropertyList(this object objects) 
         {
             PropertyInfo[] propertys = objects.GetType().GetProperties();
