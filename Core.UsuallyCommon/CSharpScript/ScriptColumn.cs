@@ -26,7 +26,7 @@ namespace Core.UsuallyCommon
 
             var options =
                ScriptOptions.Default
-              .AddReferences("System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")
+              //.AddReferences("System.Runtime, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")
               .AddImports("System.Text");
             result = CSharpScript.RunAsync(snippet, options, new ScriptColumn(columns)).Result.ReturnValue.ToStringExtension();
 

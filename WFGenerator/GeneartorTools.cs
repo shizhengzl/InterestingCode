@@ -197,14 +197,14 @@ namespace WFGenerator
                     {
                         case SelectDataSoruceType.DataBase:
                             List<TreeNode> listsource = ServerTree.listSelect as List<TreeNode>;
+                            tmessages.Text = string.Empty;
                             listsource.ForEach(x =>
                             {
                                 var table = x.Tag as Table;
                                 sh.InitColumn(table);
                                 StringBuilder sb = new StringBuilder();
-                                txtGenerator.Text = generatorClass.GetGenerator(snippet,table,ref sb);
-
-                                tmessages.Text = sb.ToString();
+                                txtGenerator.Text = generatorClass.GetGenerator(snippet,table,ref sb,false); 
+                                tmessages.AppendText(sb.ToString());
                             });
                            
                             break;
@@ -246,7 +246,7 @@ namespace WFGenerator
                         var table = listsource.FirstOrDefault().Tag as Table;
                         sh.InitColumn(table);
                         StringBuilder sb = new StringBuilder();
-                        txtGenerator.Text = generatorClass.GetGenerator(snippet, table, ref sb); 
+                        txtGenerator.Text = generatorClass.GetGenerator(snippet, table, ref sb,true); 
                         tmessages.Text = sb.ToString();  
                     } 
                     break;
