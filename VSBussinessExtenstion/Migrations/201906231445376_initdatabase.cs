@@ -3,7 +3,7 @@ namespace VSBussinessExtenstion.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class init : DbMigration
+    public partial class initdatabase : DbMigration
     {
         public override void Up()
         {
@@ -12,11 +12,31 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ControlName = c.String(unicode: false),
-                        ControlText = c.String(unicode: false),
-                        CsharpType = c.String(unicode: false),
+                        ControlName = c.String(),
+                        ControlText = c.String(),
+                        CsharpType = c.String(),
                         ControlMode = c.Int(nullable: false),
                         IsDefault = c.Boolean(nullable: false),
+                        NeedDataSource = c.Boolean(nullable: false),
+                        AppendCodeUrl = c.String(),
+                        AppendCode = c.String(),
+                        ControlDataSources_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.ControlDataSource", t => t.ControlDataSources_Id)
+                .Index(t => t.ControlDataSources_Id);
+            
+            CreateTable(
+                "dbo.ControlDataSource",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        DataSourceUrl = c.String(),
+                        DataSourceName = c.String(),
+                        DataSourceInit = c.String(),
+                        DataSourceKey = c.String(),
+                        DataSourceVlaue = c.String(),
+                        DataSourceParentId = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -25,12 +45,12 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Address = c.String(unicode: false),
-                        User = c.String(unicode: false),
-                        Password = c.String(unicode: false),
+                        Address = c.String(),
+                        User = c.String(),
+                        Password = c.String(),
                         DBType = c.Int(nullable: false),
-                        ConnectionStrings = c.String(unicode: false),
-                        DefaultDatabase = c.String(unicode: false),
+                        ConnectionStrings = c.String(),
+                        DefaultDatabase = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -39,12 +59,12 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        SQLServerType = c.String(unicode: false),
-                        MySqlType = c.String(unicode: false),
-                        OracleType = c.String(unicode: false),
-                        SQLiteType = c.String(unicode: false),
-                        CSharpType = c.String(unicode: false),
-                        SQLDBType = c.String(unicode: false),
+                        SQLServerType = c.String(),
+                        MySqlType = c.String(),
+                        OracleType = c.String(),
+                        SQLiteType = c.String(),
+                        CSharpType = c.String(),
+                        SQLDBType = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -53,12 +73,12 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        StartChar = c.String(unicode: false),
-                        DisplayText = c.String(unicode: false),
-                        InsertionText = c.String(unicode: false),
-                        Description = c.String(unicode: false),
-                        DefinedSql = c.String(unicode: false),
-                        ConnectionString = c.String(unicode: false),
+                        StartChar = c.String(),
+                        DisplayText = c.String(),
+                        InsertionText = c.String(),
+                        Description = c.String(),
+                        DefinedSql = c.String(),
+                        ConnectionString = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -67,12 +87,12 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(unicode: false),
+                        Name = c.String(),
                         ParentId = c.Int(nullable: false),
                         DataSourceType = c.Int(nullable: false),
-                        Context = c.String(unicode: false),
-                        OutputPath = c.String(unicode: false),
-                        GeneratorFileName = c.String(unicode: false),
+                        Context = c.String(),
+                        OutputPath = c.String(),
+                        GeneratorFileName = c.String(),
                         IsFloder = c.Boolean(nullable: false),
                         IsEnabled = c.Boolean(nullable: false),
                         IsMergin = c.Boolean(nullable: false),
@@ -87,14 +107,14 @@ namespace VSBussinessExtenstion.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Type = c.Int(nullable: false),
-                        GetDataBaseSQL = c.String(unicode: false),
-                        GetTableSQL = c.String(unicode: false),
-                        GetColumnSQL = c.String(unicode: false),
-                        GetProducuteSQL = c.String(unicode: false),
-                        GetViewSQL = c.String(unicode: false),
-                        GetIndexSQL = c.String(unicode: false),
-                        GetSYNONYMSQL = c.String(unicode: false),
-                        GetWhereSQL = c.String(unicode: false),
+                        GetDataBaseSQL = c.String(),
+                        GetTableSQL = c.String(),
+                        GetColumnSQL = c.String(),
+                        GetProducuteSQL = c.String(),
+                        GetViewSQL = c.String(),
+                        GetIndexSQL = c.String(),
+                        GetSYNONYMSQL = c.String(),
+                        GetWhereSQL = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -103,9 +123,9 @@ namespace VSBussinessExtenstion.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        VariableName = c.String(unicode: false),
-                        ReplaceProperty = c.String(unicode: false),
-                        ReplaceString = c.String(unicode: false),
+                        VariableName = c.String(),
+                        ReplaceProperty = c.String(),
+                        ReplaceString = c.String(),
                         FirstChar = c.Int(nullable: false),
                         IsSystemGenerator = c.Boolean(nullable: false),
                         VariableType = c.Int(nullable: false),
@@ -116,12 +136,15 @@ namespace VSBussinessExtenstion.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.Control", "ControlDataSources_Id", "dbo.ControlDataSource");
+            DropIndex("dbo.Control", new[] { "ControlDataSources_Id" });
             DropTable("dbo.Variable");
             DropTable("dbo.SQLConfig");
             DropTable("dbo.Snippet");
             DropTable("dbo.Intellisence");
             DropTable("dbo.DataTypeConfig");
             DropTable("dbo.DataBaseAddress");
+            DropTable("dbo.ControlDataSource");
             DropTable("dbo.Control");
         }
     }

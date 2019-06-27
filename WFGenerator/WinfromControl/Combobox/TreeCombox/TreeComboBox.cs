@@ -129,7 +129,7 @@ namespace WFGenerator
                         // add proj
                         foreach (ProjectItem item in project.ProjectItems)
                         {
-                            if (item.SubProject == null || item.SubProject.UniqueName == null)
+                            if (item.SubProject == null || item.SubProject.UniqueName == null || string.IsNullOrEmpty(item.SubProject.FullName))
                                 continue;
                             bool isFloder = item.SubProject != null && item.SubProject.ProjectItems != null;
                             TreeNode tn = new TreeNode();

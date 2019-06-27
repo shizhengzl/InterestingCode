@@ -70,21 +70,9 @@
     <Compile Include="DataBaseHelper\DataBaseHelper.cs" />
     <Compile Include="DataBaseHelper\ServicesAddressHelper.cs" />
     <Compile Include="DefaultSqlite.cs" />
-    <Compile Include="Migrations\201905050305312_init.cs" />
-    <Compile Include="Migrations\201905050305312_init.Designer.cs">
-      <DependentUpon>201905050305312_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905100847459_AddColumns.cs" />
-    <Compile Include="Migrations\201905100847459_AddColumns.Designer.cs">
-      <DependentUpon>201905100847459_AddColumns.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905110926018_initsb.cs" />
-    <Compile Include="Migrations\201905110926018_initsb.Designer.cs">
-      <DependentUpon>201905110926018_initsb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905111537381_appcodes.cs" />
-    <Compile Include="Migrations\201905111537381_appcodes.Designer.cs">
-      <DependentUpon>201905111537381_appcodes.cs</DependentUpon>
+    <Compile Include="Migrations\201906231445376_initdatabase.cs" />
+    <Compile Include="Migrations\201906231445376_initdatabase.Designer.cs">
+      <DependentUpon>201906231445376_initdatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,17 +88,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905050305312_init.resx">
-      <DependentUpon>201905050305312_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905100847459_AddColumns.resx">
-      <DependentUpon>201905100847459_AddColumns.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905110926018_initsb.resx">
-      <DependentUpon>201905110926018_initsb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905111537381_appcodes.resx">
-      <DependentUpon>201905111537381_appcodes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906231445376_initdatabase.resx">
+      <DependentUpon>201906231445376_initdatabase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

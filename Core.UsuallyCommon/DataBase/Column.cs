@@ -22,7 +22,7 @@ namespace Core.UsuallyCommon.DataBase
         public string CSharpType { get; set; }
         public bool IsIdentity { get; set; }
         public bool IsPrimarykey { get; set;}
-        public Int64? MaxLength { get; set; }
+        public int? MaxLength { get; set; }
         public bool IsRequire { get; set; } 
         public byte Scale { get; set; }
         public string DefaultValue { get; set; }

@@ -17,7 +17,7 @@ namespace VSBussinessExtenstion.Migrations
         protected override void Seed(VSBussinessExtenstion.DefaultSqlite context)
         {
 
-            return;
+            //return;
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

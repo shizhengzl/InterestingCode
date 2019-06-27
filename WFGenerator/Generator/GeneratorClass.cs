@@ -108,21 +108,25 @@ namespace WFGenerator
 
                 string url = DefaltPath + filename;
                 messages.AppendLine($"自动默认路径：{url}");
-                string generatorurl = ApplicationVsHelper.VsProjectPath.ToStringExtension()
-                          + snippet.OutputPath.Replace("/", "\\") + "\\" + filename;
-                messages.AppendLine($"生成到工程路劲：{generatorurl}");
-           
-
-                if (snippet.IsAutoFind && !string.IsNullOrEmpty(generatorurl))
+                string generatorurl = url; 
+                if(!string.IsNullOrEmpty(ApplicationVsHelper.VsProjectPath.ToStringExtension()))
                 {
-                    messages.AppendLine($"启用了自动查找文件{generatorurl.GetFileDirectory()}下的文件：{generatorurl.GetFileName() + generatorurl.GetFileExtension()}");
-                    List<string> list = new List<string>();
-                    IoHelper.GetFiles(generatorurl.GetFileDirectory(), generatorurl.GetFileName() + generatorurl.GetFileExtension(), ref list);
-                    if (list.Count > 0)
+                    generatorurl = ApplicationVsHelper.VsProjectPath.ToStringExtension()
+                          + snippet.OutputPath.Replace("/", "\\") + "\\" + filename;
+                    messages.AppendLine($"生成到工程路劲：{generatorurl}");
+
+
+                    if (snippet.IsAutoFind)
                     {
-                        generatorurl = list.FirstOrDefault();
-                        messages.AppendLine($"自动查找的路劲：{generatorurl}");
-                    }
+                        messages.AppendLine($"启用了自动查找文件{generatorurl.GetFileDirectory()}下的文件：{generatorurl.GetFileName() + generatorurl.GetFileExtension()}");
+                        List<string> list = new List<string>();
+                        IoHelper.GetFiles(generatorurl.GetFileDirectory(), generatorurl.GetFileName() + generatorurl.GetFileExtension(), ref list);
+                        if (list.Count > 0)
+                        {
+                            generatorurl = list.FirstOrDefault();
+                            messages.AppendLine($"自动查找的路劲：{generatorurl}");
+                        }
+                    } 
                 }
 
                 GeneratorFile(context, url);
