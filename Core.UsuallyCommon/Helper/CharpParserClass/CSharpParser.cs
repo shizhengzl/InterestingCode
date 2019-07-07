@@ -10,6 +10,8 @@ namespace Core.UsuallyCommon
 {
     public class CSharpParser
     {
+    
+
         public CSharpParser(String context)
         {
             root = CSharpSyntaxTree.ParseText(context).GetCompilationUnitRoot();
