@@ -11,15 +11,98 @@ using VSBussinessExtenstion;
 using ScriptCs.Engine;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Text.RegularExpressions;
 
 namespace Core.ConsoleLog
 { 
    
     class Program
     {
+
+
+
+
         static DefaultSqlite defaultSqlite = new DefaultSqlite();
         static void Main(string[] args)
         {
+            var tree = CSharpSyntaxTree.ParseText(@"
+// This is an xml doc comment 
+class C
+{
+}");
+            var root = (CompilationUnitSyntax)tree.GetRoot();
+            var classNode = (ClassDeclarationSyntax)(root.Members.First());
+
+            var trivias = classNode.GetLeadingTrivia();
+            var enumerator = trivias.GetEnumerator();
+
+
+            var compilation = CSharpCompilation.Create("test", syntaxTrees: new[] { tree });
+            var classSymbol = compilation.GlobalNamespace.GetTypeMembers("C").Single();
+            var docComment = classSymbol.GetDocumentationCommentXml();
+            Console.WriteLine(docComment);
+
+
+
+            while (enumerator.MoveNext())
+            {
+                var trivia = enumerator.Current;
+                if (trivia.Kind().Equals(SyntaxKind.MultiLineDocumentationCommentTrivia))
+                {
+                    var xml = trivia.GetStructure();
+                  
+                    Console.WriteLine(xml);
+                }
+            }
+       
+        var syntaxTree = CSharpSyntaxTree.ParseText(UsuallyCommon.IoHelper.FileReader(@"D:\Sources\Generator\Core.UsuallyCommon\Helper\CharpParserClass\Classs.cs"));// SyntaxTree.ParseFile(csFile);
+            var roots = syntaxTree.GetRoot();
+            // Get the first class from the syntax tree
+            var myClass = roots.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
+
+            foreach (var item in myClass.Members)
+            {
+                if(item is MethodDeclarationSyntax)
+                {
+                    MethodDeclarationSyntax methodDeclarationSyntax = (MethodDeclarationSyntax)item;
+                    var comment = methodDeclarationSyntax.GetLeadingTrivia().
+                     ToSyntaxTriviaList().Where(x =>
+                        x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
+                        || x.Kind() == SyntaxKind.SingleLineCommentTrivia
+                     ).FirstOrDefault();
+                    var comments = comment.GetStructure().GetText().ToString().Replace("///", string.Empty);
+                    comments = Regex.Replace(comments, @"<(.[^>]*)>", "", RegexOptions.IgnoreCase);
+                    comments = Regex.Replace(comments, @"([/r/n])[/s]+", "", RegexOptions.IgnoreCase);
+                   // Console.WriteLine($"Methid:{comments}");
+              
+                 
+                }
+
+                if(item is PropertyDeclarationSyntax)
+                {
+                    PropertyDeclarationSyntax propertyDeclarationSyntax = (PropertyDeclarationSyntax)item;
+                    if(propertyDeclarationSyntax.HasStructuredTrivia)
+                    { 
+                    var comment = propertyDeclarationSyntax.GetLeadingTrivia().
+                     ToSyntaxTriviaList().Where(x =>
+                        x.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
+                        || x.Kind() == SyntaxKind.SingleLineCommentTrivia
+                     ).FirstOrDefault(); 
+                        var comments = comment.GetStructure().GetText().ToString().Replace("///", string.Empty);
+                        comments = Regex.Replace(comments, @"<(.[^>]*)>", "", RegexOptions.IgnoreCase);
+                        comments = Regex.Replace(comments, @"\r\n", "", RegexOptions.IgnoreCase);
+                        Console.WriteLine($"Property:{comments}");
+                    } 
+                
+                }
+            }
+            Console.ReadLine();
+
+            return;
+
             List<Column> columns = new List<Column>();
             columns.Add(new Column() { ColumnName = "Name", IsRequire = true, IsIdentity = true, CSharpType = "String" });
             columns.Add(new Column() { ColumnName = "Age", IsRequire = false, IsIdentity = true, CSharpType = "Int32" });

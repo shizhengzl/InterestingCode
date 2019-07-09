@@ -8,6 +8,17 @@ namespace Core.UsuallyCommon
 {
     public class Classs
     {
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        /// <returns>ABD</returns> 
+        public List<string> GetMethod()
+        {
+            return null;
+
+        }
+
         public Classs()
         {
             Methods = new List<Method>();
@@ -16,7 +27,9 @@ namespace Core.UsuallyCommon
         public string ClassName { get; set; }
 
         public string ClassComment { get; set; }
-
+        /// <summary>
+        /// 命名空间
+        /// </summary>
         public string NameSpace { get; set; }
 
         public List<Method> Methods { get; set; }
