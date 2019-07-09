@@ -1,15 +1,16 @@
 ﻿namespace VSBussinessExtenstion
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
     using System.Linq;
     using Core.UsuallyCommon;
-    using Core.UsuallyCommon.DataBase; 
+    using Core.UsuallyCommon.DataBase;
     using MySql.Data.EntityFramework;
 
-    //[DbConfigurationType(typeof(MySqlEFConfiguration))]
+    [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class DefaultSqlite : DbContext
     {
         //您的上下文已配置为从您的应用程序的配置文件(App.config 或 Web.config)
@@ -49,24 +50,22 @@
         public virtual DbSet<Intellisence> Intellisences { get; set; }
 
         public virtual DbSet<Control> Controls { get; set; }
+
+
+        public virtual DbSet<CodeAppend> CodeAppends { get; set; }
     }
-    
-   
+
+
 
     public class Intellisence
     {
         [Key]
-        public int Id { get; set; }
-
-        public string StartChar { get; set; }
-
+        public int Id { get; set; } 
+        public string StartChar { get; set; } 
         public string DisplayText { get; set; }
         public string InsertionText { get; set; }
-        public string Description { get; set; }
-
-        public string DefinedSql { get; set; }
-
-
+        public string Description { get; set; } 
+        public string DefinedSql { get; set; } 
         public string ConnectionString { get; set; }
     }
 
@@ -79,23 +78,32 @@
 
         public Int32 ParentId { get; set; }
 
-        public DataSourceType DataSourceType { get; set; }
+        public DataSourceType DataSourceType { get; set; } 
+        public string Context { get; set; } 
+        public string OutputPath { get; set; } 
+        public string GeneratorFileName { get; set; } 
+        public bool IsFloder { get; set; } 
+        public bool IsEnabled { get; set; } 
+        public bool IsMergin { get; set; } 
+        public bool IsAutoFind { get; set; } 
+        public bool IsSelectGenerator { get; set; }  
+        public bool IsMultipleTable { get; set; } 
+        public bool IsAppendSnippet { get; set; } 
+    } 
 
-        public string Context { get; set; }
+    public class CodeAppend
+    { 
+        [Key]
+        public Int32 Id { get; set; } 
+        public bool IsAppend { get; set; }  
+        public bool IsMethod { get; set; } 
+        public bool IsProperty { get; set; }
+        public bool IsAnyCode { get; set; } 
+        public string AppendUrl { get; set; } 
+        public string AppendCode { get; set; } 
 
-        public string OutputPath { get; set; }
-
-        public string GeneratorFileName { get; set; }
-
-        public bool IsFloder { get; set; }
-
-        public bool IsEnabled { get; set; }
-
-        public bool IsMergin { get; set; }
-
-        public bool IsAutoFind { get; set; }
-
-        public bool IsSelectGenerator { get; set; }
+        public Int32 ParentSnippetId { get; set; }
+        public string ListSnippets { get; set; } 
     }
 
 
@@ -126,7 +134,7 @@
     public class DataTypeConfig
     {
         [Key]
-        public Int32 Id { get; set; } 
+        public Int32 Id { get; set; }
 
         public string SQLServerType { get; set; }
         public string MySqlType { get; set; }

@@ -215,8 +215,8 @@
             // 
             this.txtText.AcceptsTab = true;
             this.txtText.CaseSensitive = false;
-            this.txtText.ConfigFile = "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\VisualStudio\\15.0_6bad1949\\Project" +
-    "Assemblies\\nhdkjn3g01\\csharp.xml";
+            this.txtText.ConfigFile = "C:\\Users\\LYL\\AppData\\Local\\Microsoft\\VisualStudio\\16.0_bd9bec15\\ProjectAssemblies" +
+    "\\qy-sf5i201\\csharp.xml";
             this.txtText.FilterAutoComplete = true;
             this.txtText.Location = new System.Drawing.Point(12, 156);
             this.txtText.MaxUndoRedoSteps = 50;

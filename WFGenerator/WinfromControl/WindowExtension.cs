@@ -60,7 +60,7 @@ namespace WFGenerator
                 }
                 else
                 {
-                    if(proprety.Name.ToLower() == "outputpath" || proprety.Name.ToLower() == "appendcodeurl")
+                    if(proprety.Name.ToLower() == "outputpath" || proprety.Name.ToLower() == "appendcodeurl" ||   proprety.Name.ToLower() == "appendurl")
                     {
                         textBox = new TreeComboBox() { Name = $"{proprety.Name}", Text = val, Width = 400 }; 
                         textBox.ImageList = tools.imageList; 

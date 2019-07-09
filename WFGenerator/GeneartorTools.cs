@@ -80,6 +80,7 @@ namespace WFGenerator
             InitClass<Snippet>();
             InitClass<Intellisence>();
             InitClass<Core.UsuallyCommon.DataBase.Control>();
+            InitClass<CodeAppend>();
         }
 
         public void InitClass<T>() where T : class, new()

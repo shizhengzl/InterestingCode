@@ -13,7 +13,7 @@ namespace VSBussinessExtenstion.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201906231445376_initdatabase"; }
+            get { return "201907060548136_initdatabase"; }
         }
         
         string IMigrationMetadata.Source

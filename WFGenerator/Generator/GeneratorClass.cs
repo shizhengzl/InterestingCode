@@ -44,11 +44,11 @@ namespace WFGenerator
             {
                 columns = columns.Where(x => x.IsSelect).ToList();
                 string context = snippet.Context;
-                if (string.IsNullOrEmpty(snippet.OutputPath))
-                {
-                    snippet.OutputPath = DefaltPath;
-                    messages.AppendLine($"没有设置生成路劲，系统初始化路劲为：{snippet.OutputPath}");
-                }
+                //if (string.IsNullOrEmpty(snippet.OutputPath))
+                //{
+                //    //snippet.OutputPath = DefaltPath;
+                //    messages.AppendLine($"没有设置生成路劲，系统初始化路劲为：{snippet.OutputPath}");
+                //}
 
                 if (string.IsNullOrEmpty(snippet.GeneratorFileName))
                 {
@@ -109,7 +109,7 @@ namespace WFGenerator
                 string url = DefaltPath + filename;
                 messages.AppendLine($"自动默认路径：{url}");
                 string generatorurl = url; 
-                if(!string.IsNullOrEmpty(ApplicationVsHelper.VsProjectPath.ToStringExtension()))
+                if(!string.IsNullOrEmpty(ApplicationVsHelper.VsProjectPath.ToStringExtension()) && !string.IsNullOrEmpty(snippet.OutputPath))
                 {
                     generatorurl = ApplicationVsHelper.VsProjectPath.ToStringExtension()
                           + snippet.OutputPath.Replace("/", "\\") + "\\" + filename;
