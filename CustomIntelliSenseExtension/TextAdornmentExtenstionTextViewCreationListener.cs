@@ -17,13 +17,15 @@ using Microsoft.VisualStudio.Utilities;
 using System.Xml.XPath;
 using System.Xml.Linq;
 using VSBussinessExtenstion;
-
+using Microsoft.VisualStudio.Shell;
+using EnvDTE80;
+using EnvDTE;
 
 namespace CustomIntelliSenseExtension
 {
-    [Export(typeof(ICompletionSourceProvider))]
-    [ContentType("text")]
-    [Order(After = "default")]
+    [Export(typeof(ICompletionSourceProvider))]  
+ 
+    [ContentType("text")] 
     [Name("UeqtDynamicCompletion")]
     internal class UeqtDynamicCompletionSourceProvider : ICompletionSourceProvider
     {
@@ -35,6 +37,9 @@ namespace CustomIntelliSenseExtension
         internal ITextStructureNavigatorSelectorService NavigatorService { get; set; }
         [Import]
         internal IGlyphService GlyphService { get; set; }
+
+     
+
     }
 
     public class ListChar
@@ -76,6 +81,9 @@ namespace CustomIntelliSenseExtension
         {
             if (completionSets.Count != 0)
                 return;
+            ThreadHelper.ThrowIfNotOnUIThread();
+            DTE2 dte = (DTE2)ServiceProvider.GetGlobalServiceAsync(typeof(DTE)).Result;
+            var filename = dte.ActiveDocument.Name.Replace(".cs", string.Empty).Replace("Entity", string.Empty) ;
             string inputtext = session.TextView.Caret.Position.BufferPosition.GetContainingLine().GetText();
             var alltext = m_textBuffer.CurrentSnapshot.GetText();
             var inputlist = Core.UsuallyCommon.StringHelper.GetStringSingleColumn(inputtext);
@@ -100,8 +108,10 @@ namespace CustomIntelliSenseExtension
                         List<Intellisence> list = new List<Intellisence>();
                         list.AddRange(ListChar.listsnippet.Where(x => x.StartChar == item
                         && string.IsNullOrEmpty(x.DefinedSql)
-                        && StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText })
+                        && (  item == "^"  || StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText }))
                         ));
+
+                      
 
                         var sqllist = ListChar.listsnippet.Where(x => x.StartChar == item && !string.IsNullOrEmpty(x.DefinedSql));
                         
@@ -117,13 +127,16 @@ namespace CustomIntelliSenseExtension
                             defaultSqlite.Database.Connection.ConnectionString = sql.ConnectionString; 
                             list.AddRange(defaultSqlite.Database.SqlQuery< Intellisence>(sqls).ToList<Intellisence>());
                             defaultSqlite.Database.Connection.ConnectionString = DefaultSqlite.DefaultSqltiteConnection;
-                        } 
-
+                            list = list.Where(x => StringHelper.SearchWordExists(starttext, new string[] { x.DisplayText })
+                                           ||    StringHelper.SearchWordExists(starttext, new string[] { x.Description })
+                            ).ToList();
+                        }
+                       
                         foreach (var intellisences in list)
                         {
                             mCompList.Add(new Completion(
                            intellisences.DisplayText
-                           , intellisences.InsertionText
+                           , intellisences.InsertionText.Replace("@REPLACENAME", starttext).Replace("@TableName", filename)
                            , intellisences.Description
                            , m_sourceProvider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupProperty, StandardGlyphItem.GlyphItemPublic)
                            , "72"));
@@ -214,6 +227,11 @@ namespace CustomIntelliSenseExtension
         IVsEditorAdaptersFactoryService AdaptersFactory = null;
         [Import]
         ICompletionBroker CompletionBroker = null;
+
+        [Import]
+        internal SVsServiceProvider ServiceProvider = null;
+        //[Import(typeof(SVsServiceProvider))]
+        //internal Microsoft.VisualStudio.OLE.Interop.IServiceProvider ServiceProvider { get; set; }
 
         [Import]
         internal IEditorOperationsFactoryService EditorOperationsFactoryService
@@ -344,6 +362,9 @@ namespace CustomIntelliSenseExtension
 
                             if (ListChar.chars.Any(x => x == ch.ToString()) || ch == '.')
                             {
+
+                             
+                            
                                 //获取插入符号,也就是光标位置.
                                 SnapshotPoint caret = _TextView.Caret.Position.BufferPosition;
                                 //文本快照
@@ -352,15 +373,14 @@ namespace CustomIntelliSenseExtension
                                 ITrackingPoint trackingPoint = snapShot.CreateTrackingPoint(caret, PointTrackingMode.Positive);
                                 //由代理创建Completion会话
                                 _CurrentSession = _Broker.CreateCompletionSession(_TextView, trackingPoint, true);
-                                //启动该会话.
-                                _CurrentSession.Start();
-                                // _CurrentSession.SelectedCompletionSet.SelectionStatus = new  CompletionSelectionStatus(_CurrentSession.SelectedCompletionSet.Completions[0],true,true);
-
+                               
 
                                 //添加放弃事件
                                 _CurrentSession.Dismissed += (sender, args) => _CurrentSession = null;
+                                //启动该会话. 
+                                _CurrentSession.Start();
+                               // _CurrentSession.Filter();
 
-                                // _CurrentSession.Filter();
                             }
                             //if (ch == ' ')
                             //    StartSession();
